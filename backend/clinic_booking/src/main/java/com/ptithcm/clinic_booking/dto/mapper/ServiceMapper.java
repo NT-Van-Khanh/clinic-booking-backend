@@ -1,0 +1,42 @@
+package com.ptithcm.clinic_booking.dto.mapper;
+
+import com.ptithcm.clinic_booking.dto.ServiceDTO;
+import com.ptithcm.clinic_booking.model.Manager;
+import com.ptithcm.clinic_booking.model.MedicalSpecialty;
+import com.ptithcm.clinic_booking.model.Service;
+
+public class ServiceMapper {
+    public static ServiceDTO toServiceDTO(Service service){
+        if(service == null) return null;
+        ServiceDTO dto = new ServiceDTO();
+        dto.setId(service.getId());
+        dto.setCreatorId(service.getCreator().getId());
+        dto.setMedicalSpecialtyId(service.getMedicalSpecialty().getId());
+        dto.setName(service.getName());
+        dto.setDescription(service.getDescription());
+        dto.setStatus(service.getStatus());
+        dto.setCreatedAt(service.getCreatedAt());
+
+        return dto;
+    }
+
+    public static Service toService(ServiceDTO serviceDTO){
+        if(serviceDTO == null) return null;
+        Service service = new Service();
+        service.setId(serviceDTO.getId());
+
+        Manager creator = new Manager();
+        creator.setId(serviceDTO.getCreatorId());
+        service.setCreator(creator);
+
+        MedicalSpecialty specialty = new MedicalSpecialty();
+        specialty.setId(serviceDTO.getMedicalSpecialtyId());
+        service.setMedicalSpecialty(specialty);
+
+        service.setName(serviceDTO.getName());
+        service.setDescription(serviceDTO.getDescription());
+        service.setStatus(serviceDTO.getStatus());
+
+        return service;
+    }
+}
