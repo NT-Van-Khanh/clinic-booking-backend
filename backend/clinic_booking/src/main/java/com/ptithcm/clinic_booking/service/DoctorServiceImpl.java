@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class DoctorServiceImpl implements DoctorSerivce{
+public class DoctorServiceImpl implements DoctorService {
 
     private final DoctorRepository doctorRepository;
 
@@ -44,6 +44,24 @@ public class DoctorServiceImpl implements DoctorSerivce{
                 .collect(Collectors.toList());
     }
 
+//    @Override
+//    public List<DoctorDTO> getDoctorsByService(String serviceId) {
+//        List<Doctor> doctors = doctorRepository.findByService_Id(serviceId);
+//        if(doctors == null) throw new ResourceNotFoundException("Không lấy được danh sách bác sĩ theo dịch vụ có id: "+serviceId);
+//        return doctors.stream()
+//                .map(DoctorMapper::toDoctorDTO)
+//                .collect(Collectors.toList());
+//    }
+
+    @Override
+    public List<DoctorDTO> getDoctorsByMedicalSpecialty(String medicalSpecialtyId) {
+        List<Doctor> doctors = doctorRepository.findByMedicalSpecialty_Id(medicalSpecialtyId);
+        if(doctors == null) throw new ResourceNotFoundException("Không lấy được danh sách bác sĩ theo chuyên khoa có id: " + medicalSpecialtyId);
+        return doctors.stream()
+                .map(DoctorMapper::toDoctorDTO)
+                .collect(Collectors.toList());
+    }
+
     @Override
     public void addDoctor(DoctorDTO doctorDTO) {
         if( doctorDTO == null) throw new IllegalArgumentException("Dữ liệu bác sĩ không hợp lệ.");
@@ -63,11 +81,10 @@ public class DoctorServiceImpl implements DoctorSerivce{
 
     @Override
     public void updateDoctor(DoctorDTO doctorDTO) {
-        if( doctorDTO == null||doctorDTO.getId() == null) throw new IllegalArgumentException("Dữ liệu bác sĩ không hợp lệ hoặc thiếu ID");
-        Doctor existingDoctor = doctorRepository.findById( doctorDTO.getId()).orElse(null);
-        if (existingDoctor == null)
-            throw new ResourceNotFoundException("Không tìm thấy phòng khám với ID: " +  doctorDTO.getId());
-
+        if( doctorDTO == null||doctorDTO.getId() == null)
+            throw new IllegalArgumentException("Dữ liệu bác sĩ không hợp lệ hoặc thiếu ID");
+        doctorRepository.findById( doctorDTO.getId())
+           .orElseThrow(() ->new ResourceNotFoundException("Không tìm thấy phòng khám với ID: " +  doctorDTO.getId()));
         try{
             Doctor doctor = DoctorMapper.toDoctor(doctorDTO);
             doctorRepository.save(doctor);

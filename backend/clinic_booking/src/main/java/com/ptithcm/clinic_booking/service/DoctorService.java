@@ -4,10 +4,12 @@ import com.ptithcm.clinic_booking.dto.DoctorDTO;
 
 import java.util.List;
 
-public interface DoctorSerivce {
+public interface DoctorService {
     DoctorDTO getDoctorById(String id);
     List<DoctorDTO> getAllDoctors();
     List<DoctorDTO> getAllActiveDoctors();
+//    List<DoctorDTO> getDoctorsByService(String serviceId);
+    List<DoctorDTO> getDoctorsByMedicalSpecialty(String medicalSpecialtyId);
 
     void addDoctor(DoctorDTO doctor);
     void updateDoctor(DoctorDTO doctor);

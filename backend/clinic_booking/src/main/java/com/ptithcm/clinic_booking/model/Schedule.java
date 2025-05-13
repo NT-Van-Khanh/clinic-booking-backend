@@ -36,8 +36,10 @@ public class Schedule {
     @Column(name = "max_booking", nullable = false)
     private Short maxBooking;
 
+
+    @Enumerated(EnumType.STRING)  // Đảm bảo lưu enum dưới dạng String trong DB
     @Column(name = "status", nullable = false, length = 15)
-    private String status;
+    private ScheduleStatus status;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -105,11 +107,11 @@ public class Schedule {
         this.maxBooking = maxBooking;
     }
 
-    public String getStatus() {
+    public ScheduleStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(ScheduleStatus status) {
         this.status = status;
     }
 

@@ -9,4 +9,9 @@ import java.util.List;
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, String> {
     List<Doctor> findByStatus(String status);
+
+//    List<Doctor> findByService_Id(String serviceId);
+
+    // Lấy bác sĩ theo chuyên khoa (chuyên khoa của bác sĩ)
+    List<Doctor> findByMedicalSpecialty_Id(String medicalSpecialtyId);
 }

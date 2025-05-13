@@ -95,7 +95,7 @@ CREATE TABLE schedule(
     time_start time NOT NULL,
     time_end time NOT NULL,
     max_booking SMALLINT NOT NULL,
-    status VARCHAR(15) NOT NULL CHECK (status in ('ACTIVE', 'DELETING')),
+    status VARCHAR(15) NOT NULL CHECK (status in ('ACTIVE', 'ONGOING', 'DELETED', 'UPCOMING', 'PAUSED','EXPIRED', 'CANCELED' )),
     created_at datetime NOT NULL DEFAULT NOW(),
     FOREIGN KEY (doctor_id) REFERENCES doctor(id),
     FOREIGN KEY (clinic_id) REFERENCES clinic(id)
@@ -269,16 +269,16 @@ INSERT INTO clinic (id, name, address, description, phone, email, status) VALUES
 INSERT INTO schedule (id, doctor_id, clinic_id, date, time_start, time_end, max_booking, status)
 VALUES 
 ('SCHED016', 'D001', 'CL01', '2025-06-04', '08:00:00', '11:00:00', 10, 'ACTIVE'),
-('SCHED017', 'D002', 'CL02', '2025-06-04', '09:00:00', '12:00:00', 12, 'ACTIVE'),
-('SCHED018', 'D003', 'CL03', '2025-06-05', '10:00:00', '13:00:00', 8, 'ACTIVE'),
-('SCHED019', 'D004', 'CL04', '2025-06-06', '14:00:00', '17:00:00', 12, 'ACTIVE'),
-('SCHED020', 'D005', 'CL05', '2025-06-07', '08:30:00', '11:30:00', 10, 'ACTIVE'),
-('SCHED021', 'D001', 'CL06', '2025-06-08', '08:00:00', '11:00:00', 15, 'ACTIVE'),  -- D001 có lịch chung với CL06
-('SCHED022', 'D002', 'CL07', '2025-06-08', '08:00:00', '11:00:00', 15, 'ACTIVE'),  -- D002 cũng có lịch chung với CL06
-('SCHED023', 'D006', 'CL06', '2025-06-08', '09:00:00', '12:00:00', 10, 'ACTIVE'),
-('SCHED024', 'D007', 'CL07', '2025-06-09', '10:00:00', '13:00:00', 10, 'ACTIVE'),
-('SCHED025', 'D008', 'CL08', '2025-06-09', '08:00:00', '11:00:00', 12, 'ACTIVE'),
-('SCHED026', 'D009', 'CL09', '2025-06-10', '09:00:00', '12:00:00', 10, 'ACTIVE'),
+('SCHED017', 'D002', 'CL02', '2025-06-04', '09:00:00', '12:00:00', 12, 'UPCOMING'),
+('SCHED018', 'D003', 'CL03', '2025-06-05', '10:00:00', '13:00:00', 8, 'UPCOMING'),
+('SCHED019', 'D004', 'CL04', '2025-06-06', '14:00:00', '17:00:00', 12, 'UPCOMING'),
+('SCHED020', 'D005', 'CL05', '2025-06-07', '08:30:00', '11:30:00', 10, 'UPCOMING'),
+('SCHED021', 'D001', 'CL06', '2025-06-08', '08:00:00', '11:00:00', 15, 'UPCOMING'),  -- D001 có lịch chung với CL06
+('SCHED022', 'D002', 'CL07', '2025-06-08', '08:00:00', '11:00:00', 15, 'UPCOMING'),  -- D002 cũng có lịch chung với CL06
+('SCHED023', 'D006', 'CL06', '2025-06-08', '09:00:00', '12:00:00', 10, 'UPCOMING'),
+('SCHED024', 'D007', 'CL07', '2025-06-09', '10:00:00', '13:00:00', 10, 'UPCOMING'),
+('SCHED025', 'D008', 'CL08', '2025-06-09', '08:00:00', '11:00:00', 12, 'UPCOMING'),
+('SCHED026', 'D009', 'CL09', '2025-06-10', '09:00:00', '12:00:00', 10, 'UPCOMING'),
 ('SCHED027', 'D010', 'CL10', '2025-06-10', '14:00:00', '17:00:00', 15, 'ACTIVE'),
 ('SCHED028', 'D003', 'CL02', '2025-06-11', '08:00:00', '11:00:00', 8, 'ACTIVE'),  -- D003 có lịch riêng tại CL02
 ('SCHED029', 'D005', 'CL03', '2025-06-12', '10:00:00', '13:00:00', 12, 'ACTIVE'),
