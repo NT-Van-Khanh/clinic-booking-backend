@@ -1,7 +1,7 @@
 package com.ptithcm.clinic_booking.service;
 
 import com.ptithcm.clinic_booking.dto.ServiceDTO;
-import com.ptithcm.clinic_booking.dto.mapper.ServiceMapper;
+import com.ptithcm.clinic_booking.mapper.ServiceMapper;
 import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
 import com.ptithcm.clinic_booking.model.Service;
 import com.ptithcm.clinic_booking.repository.ServiceRepository;

@@ -1,9 +1,8 @@
 package com.ptithcm.clinic_booking.service;
 
 import com.ptithcm.clinic_booking.dto.ScheduleDTO;
-import com.ptithcm.clinic_booking.dto.mapper.ScheduleMapper;
+import com.ptithcm.clinic_booking.mapper.ScheduleMapper;
 import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
-import com.ptithcm.clinic_booking.model.Doctor;
 import com.ptithcm.clinic_booking.model.Schedule;
 import com.ptithcm.clinic_booking.model.ScheduleStatus;
 import com.ptithcm.clinic_booking.repository.ScheduleRepository;
@@ -12,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 

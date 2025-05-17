@@ -1,4 +1,4 @@
-package com.ptithcm.clinic_booking.dto.mapper;
+package com.ptithcm.clinic_booking.mapper;
 
 import com.ptithcm.clinic_booking.dto.DoctorDTO;
 import com.ptithcm.clinic_booking.model.Account;

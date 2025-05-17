@@ -2,13 +2,14 @@ package com.ptithcm.clinic_booking.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "appointment", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"customer_id", "schedule_id"}) })
-public class Appointment {
+@UniqueConstraint(columnNames = {"customer_id", "schedule_id"}) })
+public class Appointment extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,17 +37,15 @@ public class Appointment {
     @Column(name = "status", nullable = false, length = 15)
     private String status;
 
+    @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @Column(name = "updated_by", length = 50)
     private String updatedBy;
 
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
     public Appointment() {
+        super();
     }
 
     public Integer getId() {
@@ -121,11 +120,4 @@ public class Appointment {
         this.updatedBy = updatedBy;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 }

@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "account")
-public class Account {
+public class Account extends BaseEntity{
 
     @Id
     @Column(name = "username", length = 50)
@@ -22,10 +22,6 @@ public class Account {
 
     @Column(name = "status", nullable = false, length = 15)
     private String status;
-
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "DATETIME")
-    private LocalDateTime createdAt;
 
     public Account() {
     }
@@ -60,13 +56,5 @@ public class Account {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 }

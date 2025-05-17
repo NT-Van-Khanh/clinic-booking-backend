@@ -20,6 +20,10 @@ public class Role {
     public Role() {
     }
 
+    public Role(Short id) {
+        this.id = id;
+    }
+
     public Short getId() {
         return id;
     }

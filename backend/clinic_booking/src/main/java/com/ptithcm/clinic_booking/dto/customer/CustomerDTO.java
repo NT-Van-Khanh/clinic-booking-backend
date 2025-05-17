@@ -1,0 +1,102 @@
+package com.ptithcm.clinic_booking.dto.customer;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+import java.time.LocalDateTime;
+
+public class CustomerDTO {
+    private Integer id;
+
+    @NotBlank(message = "Tên khách hàng không được để trống.")
+    @Size(max = 100, message = "Tên khách hàng không được vượt quá 100 ký tự.")
+    private String name;
+
+    @NotBlank(message = "Số điện thoại không được để trống.")
+    @Size(max = 15, message = "Số điện thoại không được vượt quá 15 ký tự.")
+    private String phone;
+
+    @NotBlank(message = "Email không được để trống.")
+    @Email(message = "Email không hợp lệ.")
+    @Size(max = 100, message = "Email không được vượt quá 100 ký tự.")
+    private String email;
+
+    @Size(max = 255, message = "Địa chỉ không được vượt quá 255 ký tự.")
+    private String address;
+
+    private Boolean gender;
+
+    @NotBlank(message = "Trạng thái không được để trống.")
+    @Size(max = 15, message = "Trạng thái không được vượt quá 15 ký tự.")
+    private String status;
+
+    private LocalDateTime createdAt;
+
+    public CustomerDTO() {
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public @NotBlank(message = "Tên khách hàng không được để trống.") @Size(max = 100, message = "Tên khách hàng không được vượt quá 100 ký tự.") String getName() {
+        return name;
+    }
+
+    public void setName(@NotBlank(message = "Tên khách hàng không được để trống.") @Size(max = 100, message = "Tên khách hàng không được vượt quá 100 ký tự.") String name) {
+        this.name = name;
+    }
+
+    public @NotBlank(message = "Số điện thoại không được để trống.") @Size(max = 15, message = "Số điện thoại không được vượt quá 15 ký tự.") String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(@NotBlank(message = "Số điện thoại không được để trống.") @Size(max = 15, message = "Số điện thoại không được vượt quá 15 ký tự.") String phone) {
+        this.phone = phone;
+    }
+
+    public @NotBlank(message = "Email không được để trống.") @Email(message = "Email không hợp lệ.") @Size(max = 100, message = "Email không được vượt quá 100 ký tự.") String getEmail() {
+        return email;
+    }
+
+    public void setEmail(@NotBlank(message = "Email không được để trống.") @Email(message = "Email không hợp lệ.") @Size(max = 100, message = "Email không được vượt quá 100 ký tự.") String email) {
+        this.email = email;
+    }
+
+    public @Size(max = 255, message = "Địa chỉ không được vượt quá 255 ký tự.") String getAddress() {
+        return address;
+    }
+
+    public void setAddress(@Size(max = 255, message = "Địa chỉ không được vượt quá 255 ký tự.") String address) {
+        this.address = address;
+    }
+
+    public Boolean getGender() {
+        return gender;
+    }
+
+    public void setGender(Boolean gender) {
+        this.gender = gender;
+    }
+
+    public @NotBlank(message = "Trạng thái không được để trống.") @Size(max = 15, message = "Trạng thái không được vượt quá 15 ký tự.") String getStatus() {
+        return status;
+    }
+
+    public void setStatus(@NotBlank(message = "Trạng thái không được để trống.") @Size(max = 15, message = "Trạng thái không được vượt quá 15 ký tự.") String status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+}

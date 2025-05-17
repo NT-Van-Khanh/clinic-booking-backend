@@ -41,7 +41,7 @@ public class ClinicController {
     @PostMapping("/add")
     public ResponseEntity<ApiResponse<String>> addClinic(@RequestBody @Valid ClinicDTO clinic){
             clinicService.addClinic(clinic);
-            return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,"Theem phòng khám thành công."));
+            return ResponseEntity.ok(new ApiResponse<>(HttpStatus.CREATED,"Thêm phòng khám thành công."));
     }
 
     @PutMapping("/update")

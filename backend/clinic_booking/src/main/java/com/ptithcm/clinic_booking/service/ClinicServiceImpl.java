@@ -1,7 +1,7 @@
 package com.ptithcm.clinic_booking.service;
 
 import com.ptithcm.clinic_booking.dto.ClinicDTO;
-import com.ptithcm.clinic_booking.dto.mapper.ClinicMapper;
+import com.ptithcm.clinic_booking.mapper.ClinicMapper;
 import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
 import com.ptithcm.clinic_booking.model.Clinic;
 import com.ptithcm.clinic_booking.repository.ClinicRepository;
@@ -27,7 +27,6 @@ public class ClinicServiceImpl implements ClinicService{
 
     public List<ClinicDTO> getAllClinics(){
         List<Clinic> clinics = clinicRepository.findAll();
-        if(clinics == null) throw new ResourceNotFoundException("Không thể lấy danh sách phòng khám.");
 
         return clinics.stream()
                 .map(ClinicMapper::toClinicDTO)

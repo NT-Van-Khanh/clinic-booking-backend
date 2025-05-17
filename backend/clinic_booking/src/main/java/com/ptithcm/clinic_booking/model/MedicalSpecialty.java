@@ -20,6 +20,9 @@ public class MedicalSpecialty {
     @Column(name = "status", nullable = false, length = 15)
     private String status;
 
+    @Column(name="description")
+    private String description;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "DATETIME")
     private LocalDateTime createdAt;
@@ -79,5 +82,13 @@ public class MedicalSpecialty {
 
     public void setServices(List<Service> services) {
         this.services = services;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
