@@ -1,4 +1,4 @@
-package com.ptithcm.clinic_booking.service;
+package com.ptithcm.clinic_booking.service.impl;
 
 import com.ptithcm.clinic_booking.dto.AppointmentDTO;
 import com.ptithcm.clinic_booking.dto.customer.CustomerDTO;
@@ -9,7 +9,9 @@ import com.ptithcm.clinic_booking.model.Appointment;
 import com.ptithcm.clinic_booking.model.Customer;
 import com.ptithcm.clinic_booking.repository.AppointmentRepository;
 import com.ptithcm.clinic_booking.repository.CustomerRepository;
-import lombok.Data;
+import com.ptithcm.clinic_booking.service.CustomerService;
+import com.ptithcm.clinic_booking.service.EmailService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -63,33 +65,27 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void addCustomer(CustomerDTO customerDTO) {
-        if (customerDTO == null) {
-            throw new IllegalArgumentException("Dữ liệu khách hàng không hợp lệ");
-        }
-
         Customer customer = CustomerMapper.toCustomer(customerDTO);
         customer.setStatus("ACTIVE"); // hoặc trạng thái mặc định
         customerRepository.save(customer);
     }
 
+    @Transactional
     @Override
     public void updateCustomer(CustomerDTO customerDTO) {
-        if (customerDTO == null || customerDTO.getId() == null) {
-            throw new IllegalArgumentException("Dữ liệu khách hàng không hợp lệ hoặc thiếu ID");
-        }
-
-        Customer existingCustomer = customerRepository.findById(customerDTO.getId())
+        customerRepository.findById(customerDTO.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy khách hàng với ID: " + customerDTO.getId()));
+        Customer customer = CustomerMapper.toCustomer(customerDTO);
+        customerRepository.save(customer);
+    }
 
-        // Cập nhật các thông tin
-        existingCustomer.setName(customerDTO.getName());
-        existingCustomer.setPhone(customerDTO.getPhone());
-        existingCustomer.setEmail(customerDTO.getEmail());
-        existingCustomer.setAddress(customerDTO.getAddress());
-        existingCustomer.setGender(customerDTO.getGender());
-        existingCustomer.setStatus(customerDTO.getStatus());
-
-        customerRepository.save(existingCustomer);
+    @Transactional
+    @Override
+    public void softDeleteCustomer(String id) {
+        Customer customer = customerRepository.findById(Integer.valueOf(id))
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy khách hàng với ID: " + id));
+        customer.setStatus("DELETING");
+        customerRepository.save(customer);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.ptithcm.clinic_booking.service;
+package com.ptithcm.clinic_booking.service.impl;
 
 import com.ptithcm.clinic_booking.dto.ScheduleDTO;
 import com.ptithcm.clinic_booking.mapper.ScheduleMapper;
@@ -6,6 +6,7 @@ import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
 import com.ptithcm.clinic_booking.model.Schedule;
 import com.ptithcm.clinic_booking.model.ScheduleStatus;
 import com.ptithcm.clinic_booking.repository.ScheduleRepository;
+import com.ptithcm.clinic_booking.service.ScheduleService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ScheduleServiceImpl implements ScheduleService{
+public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
 
     public ScheduleServiceImpl(ScheduleRepository scheduleRepository) {

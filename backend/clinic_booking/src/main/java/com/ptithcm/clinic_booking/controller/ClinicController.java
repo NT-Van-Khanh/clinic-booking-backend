@@ -4,9 +4,11 @@ import com.ptithcm.clinic_booking.dto.ClinicDTO;
 import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
 import com.ptithcm.clinic_booking.model.ApiResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.ptithcm.clinic_booking.service.ClinicService;
 
@@ -14,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/clinic")
+@Validated
 public class ClinicController {
     private final ClinicService clinicService;
 
@@ -23,7 +26,7 @@ public class ClinicController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<ClinicDTO>> getClinicById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<ClinicDTO>> getClinicById(@PathVariable  @NotBlank String id) {
         ClinicDTO clinic = clinicService.getClinicById(id);
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, clinic));
     }
@@ -51,7 +54,7 @@ public class ClinicController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse<String>> softDeleteClinic(@PathVariable String id){
+    public ResponseEntity<ApiResponse<String>> softDeleteClinic(@PathVariable  @NotBlank String id){
         clinicService.softDeleteClinic(id);
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Phòng khám đã được xóa."));
     }

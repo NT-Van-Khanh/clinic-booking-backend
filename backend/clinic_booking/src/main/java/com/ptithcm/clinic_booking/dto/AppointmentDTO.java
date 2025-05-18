@@ -1,6 +1,7 @@
 package com.ptithcm.clinic_booking.dto;
 
 import com.ptithcm.clinic_booking.dto.customer.CustomerDTO;
+import com.ptithcm.clinic_booking.model.AppointmentStatus;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -31,7 +32,7 @@ public class AppointmentDTO {
 
     @NotBlank(message = "Trạng thái không được để trống.")
     @Size(max = 15, message = "Trạng thái không được vượt quá 15 ký tự.")
-    private String status;
+    private AppointmentStatus status;
 
     private LocalDateTime updatedAt;
 
@@ -91,11 +92,11 @@ public class AppointmentDTO {
         this.note = note;
     }
 
-    public @NotBlank(message = "Trạng thái không được để trống.") @Size(max = 15, message = "Trạng thái không được vượt quá 15 ký tự.") String getStatus() {
+    public @NotBlank(message = "Trạng thái không được để trống.") @Size(max = 15, message = "Trạng thái không được vượt quá 15 ký tự.") AppointmentStatus getStatus() {
         return status;
     }
 
-    public void setStatus(@NotBlank(message = "Trạng thái không được để trống.") @Size(max = 15, message = "Trạng thái không được vượt quá 15 ký tự.") String status) {
+    public void setStatus(@NotBlank(message = "Trạng thái không được để trống.") @Size(max = 15, message = "Trạng thái không được vượt quá 15 ký tự.") AppointmentStatus status) {
         this.status = status;
     }
 

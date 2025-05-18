@@ -4,15 +4,18 @@ import com.ptithcm.clinic_booking.dto.DoctorDTO;
 import com.ptithcm.clinic_booking.model.ApiResponse;
 import com.ptithcm.clinic_booking.service.DoctorService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RequestMapping("/api/doctor")
 @RestController
+@Validated
 public class DoctorController {
 
     private final DoctorService doctorService;
@@ -23,7 +26,7 @@ public class DoctorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<DoctorDTO>> getDoctorById(@PathVariable String id){
+    public ResponseEntity<ApiResponse<DoctorDTO>> getDoctorById(@PathVariable  @NotBlank String id){
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, doctorService.getDoctorById(id)));
     }
 
@@ -56,7 +59,7 @@ public class DoctorController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse<String>> softDeleteDoctor(@PathVariable String id){
+    public ResponseEntity<ApiResponse<String>> softDeleteDoctor(@PathVariable  @NotBlank String id){
         doctorService.softDeletingDoctor(id);
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Bác sĩ đã được xóa."));
     }

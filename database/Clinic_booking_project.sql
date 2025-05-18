@@ -132,7 +132,14 @@ CREATE TABLE appointment(
     FOREIGN KEY (customer_id) REFERENCES customer(id)
 );
 
-
+CREATE TABLE email_otp(
+	id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    email VARCHAR(100) NOT NULL,
+    otp VARCHAR(6) NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT NOW(),
+    exprise_at DATETIME NOT NULL,
+    is_verified BOOLEAN  NOT NULL DEFAULT FALSE
+);
 
 INSERT INTO role(name,status) VALUES
 ('ADMIN', 'ACTIVE'),

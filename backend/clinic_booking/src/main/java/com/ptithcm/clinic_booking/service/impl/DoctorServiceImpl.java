@@ -1,10 +1,11 @@
-package com.ptithcm.clinic_booking.service;
+package com.ptithcm.clinic_booking.service.impl;
 
 import com.ptithcm.clinic_booking.dto.DoctorDTO;
 import com.ptithcm.clinic_booking.mapper.DoctorMapper;
 import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
 import com.ptithcm.clinic_booking.model.Doctor;
 import com.ptithcm.clinic_booking.repository.DoctorRepository;
+import com.ptithcm.clinic_booking.service.DoctorService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

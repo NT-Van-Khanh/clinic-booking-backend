@@ -13,6 +13,7 @@ public interface CustomerService {
 
     void addCustomer(CustomerDTO customerDTO);
     void updateCustomer(CustomerDTO customerDTO);
+    void softDeleteCustomer(String id);
     void sendOtpToEmail(String email);
     void authEmail(String email, String otp);
     List<AppointmentDTO> getAppointmentsByCustomerId(String customerId);

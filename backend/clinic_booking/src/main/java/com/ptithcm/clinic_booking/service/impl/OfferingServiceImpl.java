@@ -1,16 +1,17 @@
-package com.ptithcm.clinic_booking.service;
+package com.ptithcm.clinic_booking.service.impl;
 
 import com.ptithcm.clinic_booking.dto.ServiceDTO;
 import com.ptithcm.clinic_booking.mapper.ServiceMapper;
 import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
 import com.ptithcm.clinic_booking.model.Service;
 import com.ptithcm.clinic_booking.repository.ServiceRepository;
+import com.ptithcm.clinic_booking.service.OfferingService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
-public class OfferingServiceImpl implements OfferingService{
+public class OfferingServiceImpl implements OfferingService {
 
     private final ServiceRepository serviceRepository;
 

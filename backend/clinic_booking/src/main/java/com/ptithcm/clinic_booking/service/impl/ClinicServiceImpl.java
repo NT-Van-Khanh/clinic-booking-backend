@@ -1,17 +1,18 @@
-package com.ptithcm.clinic_booking.service;
+package com.ptithcm.clinic_booking.service.impl;
 
 import com.ptithcm.clinic_booking.dto.ClinicDTO;
 import com.ptithcm.clinic_booking.mapper.ClinicMapper;
 import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
 import com.ptithcm.clinic_booking.model.Clinic;
 import com.ptithcm.clinic_booking.repository.ClinicRepository;
+import com.ptithcm.clinic_booking.service.ClinicService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 @Service
-public class ClinicServiceImpl implements ClinicService{
+public class ClinicServiceImpl implements ClinicService {
 
     private final ClinicRepository clinicRepository;
 
@@ -21,13 +22,12 @@ public class ClinicServiceImpl implements ClinicService{
 
     public ClinicDTO getClinicById(String id){
         Clinic clinic = clinicRepository.findById(id)
-                                    .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phòng khám với ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phòng khám với ID: " + id));
         return ClinicMapper.toClinicDTO(clinic);
     }
 
     public List<ClinicDTO> getAllClinics(){
         List<Clinic> clinics = clinicRepository.findAll();
-
         return clinics.stream()
                 .map(ClinicMapper::toClinicDTO)
                 .collect(Collectors.toList());
@@ -36,8 +36,6 @@ public class ClinicServiceImpl implements ClinicService{
     @Override
     public List<ClinicDTO> getAllActiveClinics() {
         List<Clinic> clinics = clinicRepository.findByStatus("ACTIVE");
-        if(clinics == null) throw new ResourceNotFoundException("Không thể lấy danh sách phòng khám.");
-
         return clinics.stream()
                 .map(ClinicMapper::toClinicDTO)
                 .collect(Collectors.toList());
@@ -47,13 +45,10 @@ public class ClinicServiceImpl implements ClinicService{
     public void addClinic(ClinicDTO clinicDTO) {
         if(clinicDTO == null)
             throw new IllegalArgumentException("Dữ liệu phòng khám không hợp lệ hoặc thiếu ID");
-        try {
-            Clinic clinic = ClinicMapper.toClinic(clinicDTO);
-            clinic.setId(createClinicId());
-            clinicRepository.save(clinic);
-        } catch (Exception e) {
-            throw new RuntimeException("Lỗi khi thêm phòng khám: " + e.getMessage(), e);
-        }
+
+        Clinic clinic = ClinicMapper.toClinic(clinicDTO);
+        clinic.setId(createClinicId());
+        clinicRepository.save(clinic);
     }
 
     private String createClinicId() {
@@ -63,31 +58,22 @@ public class ClinicServiceImpl implements ClinicService{
 
     @Override
     public void updateClinic(ClinicDTO clinicDTO) {
-        if (clinicDTO == null || clinicDTO.getId() == null)
+        if(clinicDTO == null|| clinicDTO.getId() == null)
             throw new IllegalArgumentException("Dữ liệu phòng khám không hợp lệ hoặc thiếu ID");
 
-        Clinic existingClinic = clinicRepository.findById(clinicDTO.getId()).orElse(null);
-        if (existingClinic == null)
-            throw new ResourceNotFoundException("Không tìm thấy phòng khám với ID: " + clinicDTO.getId());
+        clinicRepository.findById(clinicDTO.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phòng khám với ID: " + clinicDTO.getId()));
 
-        try{
-            Clinic clinic = ClinicMapper.toClinic(clinicDTO);
-            clinicRepository.save(clinic);
-        } catch (Exception e) {
-            throw new RuntimeException("Lỗi khi cập nhật phòng khám: " + e.getMessage(), e);
-        }
+        Clinic clinic = ClinicMapper.toClinic(clinicDTO);
+        clinicRepository.save(clinic);
     }
 
     @Transactional
     @Override
     public void softDeleteClinic(String clinicId) {
-        try{
-            Clinic c = clinicRepository.findById(clinicId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Không thể xóa. Không tìm thấy phòng khám với ID: " + clinicId));
-            c.setStatus("DELETING");
-            clinicRepository.save(c);
-        }catch (Exception e){
-            throw new RuntimeException("Lỗi khi xóa mềm phòng khám: " + e.getMessage(), e);
-        }
+        Clinic c = clinicRepository.findById(clinicId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không thể xóa. Không tìm thấy phòng khám với ID: " + clinicId));
+        c.setStatus("DELETING");
+        clinicRepository.save(c);
     }
 }

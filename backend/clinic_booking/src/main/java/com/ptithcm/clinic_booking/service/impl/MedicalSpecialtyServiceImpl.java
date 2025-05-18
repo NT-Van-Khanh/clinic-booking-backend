@@ -1,4 +1,4 @@
-package com.ptithcm.clinic_booking.service;
+package com.ptithcm.clinic_booking.service.impl;
 
 import com.ptithcm.clinic_booking.dto.specialty.BaseMedicalSpecialtyDTO;
 import com.ptithcm.clinic_booking.dto.specialty.MedicalSpecialtyRequestDTO;
@@ -7,13 +7,14 @@ import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
 import com.ptithcm.clinic_booking.mapper.MedicalSpecialtyMapper;
 import com.ptithcm.clinic_booking.model.MedicalSpecialty;
 import com.ptithcm.clinic_booking.repository.MedicalSpecialtyRepository;
+import com.ptithcm.clinic_booking.service.MedicalSpecialtyService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class MedicalSpecialtyServiceImpl implements  MedicalSpecialtyService{
+public class MedicalSpecialtyServiceImpl implements MedicalSpecialtyService {
     private final MedicalSpecialtyRepository specialtyRepository;
 
     public MedicalSpecialtyServiceImpl(MedicalSpecialtyRepository specialtyRepository) {

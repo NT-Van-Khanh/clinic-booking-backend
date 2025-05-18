@@ -34,8 +34,9 @@ public class Appointment extends BaseEntity{
     @Column(name = "note", nullable = false, length = 255)
     private String note;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 15)
-    private String status;
+    private AppointmentStatus status;
 
     @UpdateTimestamp
     @Column(name = "updated_at")
@@ -96,11 +97,11 @@ public class Appointment extends BaseEntity{
         this.note = note;
     }
 
-    public String getStatus() {
+    public AppointmentStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(AppointmentStatus status) {
         this.status = status;
     }
 

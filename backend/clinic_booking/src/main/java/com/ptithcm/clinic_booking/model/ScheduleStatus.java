@@ -3,26 +3,30 @@ package com.ptithcm.clinic_booking.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public enum ScheduleStatus {
-    @Schema(description = "Lịch đang diễn ra, cho phép đặt nếu trống")
-    ONGOING("Lịch đang diễn ra, cho phép đặt nếu trống"),
 
-    @Schema(description = "Lịch được đăng ký")
-    ACTIVE("Lịch được đăng ký"),
+    @Schema(description = "Lịch trình đã được tạo và đang chờ xác nhận từ hệ thống")
+    PENDING("Đang chờ xác nhận"),
 
-    @Schema(description = "Lịch sắp tới, cho phép đặt nếu trống")
-    UPCOMING("Lịch sắp tới, cho phép đặt nếu trống"),
+    @Schema(description = "Lịch trình làm việc đã được tạo")
+    ACTIVE("Đã xác nhận"),
 
-    @Schema(description = "Lịch tạm dừng (nghỉ phép đột xuất)")
-    PAUSED("Lịch tạm dừng (nghỉ phép đột xuất)"),
+    @Schema(description = "Lịch trình làm việc sắp tới, cho phép đặt nếu trống")
+    UPCOMING("Sắp diễn ra"),
 
-    @Schema(description = "Lịch đã quá hạn")
-    EXPIRED("Lịch đã quá hạn"),
+    @Schema(description = "Lịch trình làm việc đang diễn ra, cho phép đặt nếu trống")
+    ONGOING("Đang diễn ra"),
 
-    @Schema(description = "Lịch bị hủy bởi bác sĩ")
-    CANCELED("Lịch bị hủy bởi bác sĩ"),
+    @Schema(description = "Lịch trình làm việc đã tạm dừng (nghỉ phép đột xuất)")
+    PAUSED("Tạm dừng, nghỉ phép đột xuất"),
 
-    @Schema(description = "Lịch bị xóa")
-    DELETED("Lịch bị xóa.");
+    @Schema(description = "Lịch trình làm việc đã quá hạn")
+    EXPIRED("Đã quá hạn"),
+
+    @Schema(description = "Lịch trình làm việc bị hủy bởi bác sĩ")
+    CANCELED("Đã hủy"),
+
+    @Schema(description = "Lịch trình làm việc bị xóa")
+    DELETED("Đã xóa");
 
     private String label;
 
