@@ -1,6 +1,6 @@
 package com.ptithcm.clinic_booking.controller;
 
-import com.ptithcm.clinic_booking.dto.DoctorDTO;
+import com.ptithcm.clinic_booking.dto.doctor.DoctorDTO;
 import com.ptithcm.clinic_booking.model.ApiResponse;
 import com.ptithcm.clinic_booking.service.DoctorService;
 import jakarta.validation.Valid;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/api/doctor")
+@RequestMapping("/api/v1/doctor")
 @RestController
 @Validated
 public class DoctorController {

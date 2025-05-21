@@ -11,7 +11,7 @@ public class Account extends BaseEntity{
 
     @Id
     @Column(name = "username", length = 50)
-    String username;
+    private String username;
 
     @Column(name = "password", nullable = false, length = 255)
     private String password;

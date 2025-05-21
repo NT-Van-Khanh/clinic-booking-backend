@@ -147,21 +147,21 @@ INSERT INTO role(name,status) VALUES
 ('DOCTOR', 'ACTIVE');
 
 INSERT INTO account(username, password, role_id, status) VALUES
-('admin1', '12345678', 1, 'ACTIVE'),
-('manager1', '12345678', 2, 'ACTIVE'),
-('doctor0', '12345678', 1, 'BLOCKED'),
-('doctor1', '12345678', 1, 'ACTIVE'),
-('doctor2', '12345678', 1, 'ACTIVE'),
-('doctor3', '12345678', 1, 'ACTIVE'),
-('doctor4', '12345678', 1, 'ACTIVE'),
-('doctor5', '12345678', 1, 'ACTIVE'),
-('doctor6', '12345678', 1, 'ACTIVE'),
-('doctor7', '12345678', 1, 'ACTIVE'),
-('doctor8', '12345678', 1, 'ACTIVE'),
-('doctor9', '12345678', 1, 'ACTIVE'),
-('doctor10', '12345678', 1, 'ACTIVE'),
-('doctor11', '12345678', 1, 'ACTIVE'),
-('doctor12', '12345678', 1, 'ACTIVE');
+('admin1', '$2a$10$EzDLzuQ3s2nhRUjIp/lDieVFG8Nx/dAuxGT.d/A9h366yusDUzazm', 3, 'ACTIVE'),
+('manager1', '$2a$10$EzDLzuQ3s2nhRUjIp/lDieVFG8Nx/dAuxGT.d/A9h366yusDUzazm', 2, 'ACTIVE'),
+('doctor0', '$2a$10$EzDLzuQ3s2nhRUjIp/lDieVFG8Nx/dAuxGT.d/A9h366yusDUzazm', 3, 'BLOCKED'),
+('doctor1', '$2a$10$EzDLzuQ3s2nhRUjIp/lDieVFG8Nx/dAuxGT.d/A9h366yusDUzazm', 3, 'ACTIVE'),
+('doctor2', '$2a$10$EzDLzuQ3s2nhRUjIp/lDieVFG8Nx/dAuxGT.d/A9h366yusDUzazm', 3, 'ACTIVE'),
+('doctor3', '$2a$10$EzDLzuQ3s2nhRUjIp/lDieVFG8Nx/dAuxGT.d/A9h366yusDUzazm', 3, 'ACTIVE'),
+('doctor4', '$2a$10$EzDLzuQ3s2nhRUjIp/lDieVFG8Nx/dAuxGT.d/A9h366yusDUzazm', 3, 'ACTIVE'),
+('doctor5', '$2a$10$EzDLzuQ3s2nhRUjIp/lDieVFG8Nx/dAuxGT.d/A9h366yusDUzazm', 3, 'ACTIVE'),
+('doctor6', '$2a$10$EzDLzuQ3s2nhRUjIp/lDieVFG8Nx/dAuxGT.d/A9h366yusDUzazm', 3, 'ACTIVE'),
+('doctor7', '$2a$10$EzDLzuQ3s2nhRUjIp/lDieVFG8Nx/dAuxGT.d/A9h366yusDUzazm', 3, 'ACTIVE'),
+('doctor8', '$2a$10$EzDLzuQ3s2nhRUjIp/lDieVFG8Nx/dAuxGT.d/A9h366yusDUzazm', 3, 'ACTIVE'),
+('doctor9', '$2a$10$EzDLzuQ3s2nhRUjIp/lDieVFG8Nx/dAuxGT.d/A9h366yusDUzazm', 3, 'ACTIVE'),
+('doctor10', '$2a$10$EzDLzuQ3s2nhRUjIp/lDieVFG8Nx/dAuxGT.d/A9h366yusDUzazm', 3, 'ACTIVE'),
+('doctor11', '$2a$10$EzDLzuQ3s2nhRUjIp/lDieVFG8Nx/dAuxGT.d/A9h366yusDUzazm', 3, 'ACTIVE'),
+('doctor12', '$2a$10$EzDLzuQ3s2nhRUjIp/lDieVFG8Nx/dAuxGT.d/A9h366yusDUzazm', 3, 'ACTIVE');
 
 INSERT INTO medical_specialty(id, name, description, status) VALUES
 ('MS01', 'Tim mạch', 'Khám và điều trị các bệnh lý liên quan đến tim (Cardiology - Heart-related diseases)', 'ACTIVE'),

@@ -15,7 +15,7 @@ import com.ptithcm.clinic_booking.service.ClinicService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/clinic")
+@RequestMapping("/api/v1/clinic")
 @Validated
 public class ClinicController {
     private final ClinicService clinicService;

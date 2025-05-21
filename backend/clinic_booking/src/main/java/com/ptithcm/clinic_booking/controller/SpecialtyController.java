@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/medical-specialty")
+@RequestMapping("/api/v1/medical-specialty")
 @Validated
 public class SpecialtyController {
     private final MedicalSpecialtyService mSpecialtyService;

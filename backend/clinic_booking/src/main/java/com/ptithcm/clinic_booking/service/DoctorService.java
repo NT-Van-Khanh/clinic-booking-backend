@@ -1,6 +1,6 @@
 package com.ptithcm.clinic_booking.service;
 
-import com.ptithcm.clinic_booking.dto.DoctorDTO;
+import com.ptithcm.clinic_booking.dto.doctor.DoctorDTO;
 
 import java.util.List;
 

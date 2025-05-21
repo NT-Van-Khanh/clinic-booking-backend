@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/service")
+@RequestMapping("/api/v1/service")
 @Validated
 public class OfferingController {
     private final OfferingService offeringService;

@@ -1,10 +1,12 @@
 package com.ptithcm.clinic_booking.dto.account;
 
+import com.ptithcm.clinic_booking.dto.RoleDTO;
+
 import java.time.LocalDateTime;
 
 public class AccountResponseDTO {
     private String username;
-    private String roleName;
+    private RoleDTO role;
     private String status;
     private LocalDateTime createdAt;
 
@@ -19,12 +21,12 @@ public class AccountResponseDTO {
         this.username = username;
     }
 
-    public String getRoleName() {
-        return roleName;
+    public RoleDTO getRole() {
+        return role;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public void setRole(RoleDTO role) {
+        this.role = role;
     }
 
     public String getStatus() {

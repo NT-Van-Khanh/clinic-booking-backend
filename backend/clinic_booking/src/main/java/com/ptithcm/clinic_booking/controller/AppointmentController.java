@@ -21,7 +21,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Validated
-@RequestMapping("/api/appointment")
+@RequestMapping("/api/v1/appointment")
 @RestController
 public class AppointmentController {
 
