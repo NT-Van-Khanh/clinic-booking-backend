@@ -1,5 +1,6 @@
 package com.ptithcm.clinic_booking.dto.customer;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -20,6 +21,7 @@ public class CustomerDTO {
     @NotBlank(message = "Email không được để trống.")
     @Email(message = "Email không hợp lệ.")
     @Size(max = 100, message = "Email không được vượt quá 100 ký tự.")
+    @Schema(description = "Email liên hệ", example = "nguyenvana3@example.com")
     private String email;
 
     @Size(max = 255, message = "Địa chỉ không được vượt quá 255 ký tự.")

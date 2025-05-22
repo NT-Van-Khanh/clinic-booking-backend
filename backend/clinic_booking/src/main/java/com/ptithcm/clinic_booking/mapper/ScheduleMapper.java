@@ -11,7 +11,7 @@ public class ScheduleMapper {
         if (schedule == null) return null;
         ScheduleDTO dto = new ScheduleDTO();
         dto.setId(schedule.getId());
-        dto.setDoctor(DoctorMapper.toDoctorDTO(schedule.getDoctor()));
+        dto.setDoctor(DoctorMapper.toDoctorSimpleDTO(schedule.getDoctor()));
         dto.setClinic(ClinicMapper.toClinicDTO(schedule.getClinic()));
         dto.setDate(schedule.getDate());
         dto.setTimeStart(schedule.getTimeStart());

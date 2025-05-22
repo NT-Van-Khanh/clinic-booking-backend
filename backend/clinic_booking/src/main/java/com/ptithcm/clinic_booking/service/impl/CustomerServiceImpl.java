@@ -7,13 +7,16 @@ import com.ptithcm.clinic_booking.mapper.AppointmentMapper;
 import com.ptithcm.clinic_booking.mapper.CustomerMapper;
 import com.ptithcm.clinic_booking.model.Appointment;
 import com.ptithcm.clinic_booking.model.Customer;
+import com.ptithcm.clinic_booking.model.EmailOtp;
 import com.ptithcm.clinic_booking.repository.AppointmentRepository;
 import com.ptithcm.clinic_booking.repository.CustomerRepository;
 import com.ptithcm.clinic_booking.service.CustomerService;
+import com.ptithcm.clinic_booking.service.EmailOtpService;
 import com.ptithcm.clinic_booking.service.EmailService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,11 +24,14 @@ import java.util.stream.Collectors;
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final EmailService emailService;
+    private final EmailOtpService emailOtpService;
     private final AppointmentRepository appointmentRepository;
 
-    public CustomerServiceImpl(CustomerRepository customerRepository, EmailService emailService, AppointmentRepository appointmentRepository) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, EmailService emailService,
+                               EmailOtpService emailOtpService, AppointmentRepository appointmentRepository) {
         this.customerRepository = customerRepository;
         this.emailService = emailService;
+        this.emailOtpService = emailOtpService;
         this.appointmentRepository = appointmentRepository;
     }
 
@@ -90,19 +96,15 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void sendOtpToEmail(String email) {
-        String otp = generateOtp();
+        String otp = emailService.generateOtp();
         String content = "Mã OTP của bạn là: " + otp + ". Vui lòng không chia sẻ mã này với người khác.";
+        emailOtpService.saveEmailOtp(email, otp, EmailOtp.OtpPurpose.APPOINTMENT);
         emailService.sendMail(email,"Đặt lịch khám bệnh - Mã OTP xác minh email",content);
-    }
-
-    private String generateOtp() {
-        int randomOtp = (int)(Math.random() * 900000) + 100000; // Tạo số 6 chữ số ngẫu nhiên
-        return String.valueOf(randomOtp);
     }
 
     @Override
     public void authEmail(String email, String otp) {
-
+        emailOtpService.checkEmailOtp(email, otp, EmailOtp.OtpPurpose.APPOINTMENT);
     }
 
     @Override

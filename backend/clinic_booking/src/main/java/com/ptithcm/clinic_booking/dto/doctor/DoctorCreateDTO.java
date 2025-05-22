@@ -1,19 +1,21 @@
 package com.ptithcm.clinic_booking.dto.doctor;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ptithcm.clinic_booking.dto.account.AccountRequestDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
-public class DoctorDTO {
+public class DoctorCreateDTO {
     private String id;
 
-    @NotBlank(message = "Không được để trống mã tài khoản")
-    @Schema(description = "Mã tài khoản bác sĩ", example = "acc123")
-    private String accountId;
+    @NotNull(message = "Không được để trống mã tài khoản")
+    @Schema(description = "Tài khoản đăng nhập hệ thống")
+    private AccountRequestDTO account;
 
     @NotBlank(message = "Không được để trống mã chuyên khoa")
     @Schema(description = "Mã chuyên khoa", example = "med456")
@@ -51,7 +53,7 @@ public class DoctorDTO {
     @Schema(description = "Thời gian tạo", example = "2025-05-22T10:15:30")
     private LocalDateTime createdAt;
 
-    public DoctorDTO() {
+    public DoctorCreateDTO() {
     }
 
     public String getId() {
@@ -62,51 +64,53 @@ public class DoctorDTO {
         this.id = id;
     }
 
-    public @NotBlank(message = "Không được để trống mã tài khoản") String getAccountId() {
-        return accountId;
+
+    public AccountRequestDTO getAccount() {
+        return account;
     }
 
-    public void setAccountId(@NotBlank(message = "Không được để trống mã tài khoản") String accountId) {
-        this.accountId = accountId;
+    public void setAccount(AccountRequestDTO account) {
+        this.account = account;
     }
 
-    public @NotBlank(message = "Không được để trống mã chuyên khoa") String getMedicalSpecialtyId() {
+
+    public String getMedicalSpecialtyId() {
         return medicalSpecialtyId;
     }
 
-    public void setMedicalSpecialtyId(@NotBlank(message = "Không được để trống mã chuyên khoa") String medicalSpecialtyId) {
+    public void setMedicalSpecialtyId(String medicalSpecialtyId) {
         this.medicalSpecialtyId = medicalSpecialtyId;
     }
 
-    public @NotBlank(message = "Không được để trống họ tên") @Size(max = 100, message = "Họ tên tối đa 100 ký tự") String getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(@NotBlank(message = "Không được để trống họ tên") @Size(max = 100, message = "Họ tên tối đa 100 ký tự") String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public @NotBlank(message = "Không được để trống số điện thoại") @Size(max = 15, message = "Số điện thoại tối đa 15 ký tự") String getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(@NotBlank(message = "Không được để trống số điện thoại") @Size(max = 15, message = "Số điện thoại tối đa 15 ký tự") String phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    public @NotBlank(message = "Không được để trống email") @Email(message = "Email không hợp lệ") @Size(max = 100, message = "Email tối đa 100 ký tự") String getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(@NotBlank(message = "Không được để trống email") @Email(message = "Email không hợp lệ") @Size(max = 100, message = "Email tối đa 100 ký tự") String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public @Size(max = 255, message = "Địa chỉ tối đa 255 ký tự") String getAddress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setAddress(@Size(max = 255, message = "Địa chỉ tối đa 255 ký tự") String address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 
@@ -118,11 +122,11 @@ public class DoctorDTO {
         this.gender = gender;
     }
 
-    public @NotBlank(message = "Không được để trống trạng thái") @Size(max = 15, message = "Trạng thái tối đa 15 ký tự") String getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(@NotBlank(message = "Không được để trống trạng thái") @Size(max = 15, message = "Trạng thái tối đa 15 ký tự") String status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

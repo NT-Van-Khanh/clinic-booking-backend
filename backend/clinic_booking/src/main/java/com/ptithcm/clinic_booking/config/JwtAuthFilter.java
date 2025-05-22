@@ -25,8 +25,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private UserDetailsService userDetailsService;
 
     private static final List<String> PROTECTED_URLS = List.of(
-            "/api/v1/manager/",
-            "/api/v1/doctor/"
+            "/api/v1/m/",
+            "/api/v1/d/",
+            "/api/v1/sh/"
             // thêm các endpoint cần bảo vệ khác vào đây
     );
     @Override

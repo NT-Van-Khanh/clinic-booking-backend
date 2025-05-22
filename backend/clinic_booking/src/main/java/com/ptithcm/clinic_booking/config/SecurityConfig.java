@@ -26,8 +26,9 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/api/v1/manager/**").hasRole("MANAGER")
-                        .requestMatchers("/api/v1/doctor/**").hasAnyRole("DOCTOR")
+                        .requestMatchers("/api/v1/m/**").hasRole("MANAGER")
+                        .requestMatchers("/api/v1/d/**").hasAnyRole("DOCTOR")
+                        .requestMatchers("/api/v1/sh/**").hasAnyRole("MANAGER","DOCTOR")
                         .requestMatchers("/api/v1/p/**").permitAll()
                         .anyRequest().permitAll()
                 )

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/service")
+@RequestMapping("/api/v1/p/services")
 @Validated
 public class OfferingController {
     private final OfferingService offeringService;
@@ -32,31 +32,8 @@ public class OfferingController {
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, service));
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<ApiResponse<List<ServiceDTO>>> getAllService() {
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, offeringService.getAllServices()));
-    }
-
     @GetMapping("/active")
     public ResponseEntity<ApiResponse<List<ServiceDTO>>> getAllActiveServices() {
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, offeringService.getAllActiveServices()));
-    }
-
-    @PostMapping("/add")
-    public ResponseEntity<ApiResponse<String>> addService(@RequestBody @Valid ServiceDTO serviceDTO) {
-        offeringService.addService(serviceDTO);
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Thêm dịch vụ thành công."));
-    }
-
-    @PutMapping("/update")
-    public ResponseEntity<ApiResponse<String>> updateService(@RequestBody @Valid ServiceDTO serviceDTO) {
-        offeringService.updateService(serviceDTO);
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Cập nhật dịch vụ thành công."));
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse<String>> softDeleteService(@PathVariable  @NotBlank String id) {
-        offeringService.softDeleteService(id);
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Dịch vụ đã được xóa."));
     }
 }

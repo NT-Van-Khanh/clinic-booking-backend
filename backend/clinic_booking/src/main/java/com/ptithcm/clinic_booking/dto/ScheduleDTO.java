@@ -1,6 +1,6 @@
 package com.ptithcm.clinic_booking.dto;
 
-import com.ptithcm.clinic_booking.dto.doctor.DoctorDTO;
+import com.ptithcm.clinic_booking.dto.doctor.DoctorSimpleResponseDTO;
 import com.ptithcm.clinic_booking.model.ScheduleStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.FutureOrPresent;
@@ -16,7 +16,7 @@ public class ScheduleDTO {
 
     @NotNull(message = "Thông tin bác sĩ không được để trống")
     @Schema(description = "Thông tin bác sĩ")
-    private DoctorDTO doctor;
+    private DoctorSimpleResponseDTO doctor;
 
     @NotNull(message = "Thông tin phòng khám không được để trống")
     @Schema(description = "Thông tin phòng khám")
@@ -57,11 +57,11 @@ public class ScheduleDTO {
         this.id = id;
     }
 
-    public @NotNull(message = "Thông tin bác sĩ không được để trống") DoctorDTO getDoctor() {
+    public @NotNull(message = "Thông tin bác sĩ không được để trống") DoctorSimpleResponseDTO getDoctor() {
         return doctor;
     }
 
-    public void setDoctor(@NotNull(message = "Thông tin bác sĩ không được để trống") DoctorDTO doctor) {
+    public void setDoctor(@NotNull(message = "Thông tin bác sĩ không được để trống") DoctorSimpleResponseDTO doctor) {
         this.doctor = doctor;
     }
 

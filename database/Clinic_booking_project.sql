@@ -137,8 +137,9 @@ CREATE TABLE email_otp(
     email VARCHAR(100) NOT NULL,
     otp VARCHAR(6) NOT NULL,
     created_at DATETIME NOT NULL DEFAULT NOW(),
-    exprise_at DATETIME NOT NULL,
-    is_verified BOOLEAN  NOT NULL DEFAULT FALSE
+    expire_at DATETIME NOT NULL,
+    is_verified BOOLEAN  NOT NULL DEFAULT FALSE,
+    purpose VARCHAR(15) NOT NULL CHECK (purpose IN ('ACCOUNT_VERIFY', 'APPOINTMENT'))
 );
 
 INSERT INTO role(name,status) VALUES
@@ -184,7 +185,7 @@ VALUES
 'Bác sĩ tim mạch với hơn 10 năm kinh nghiệm trong điều trị bệnh tim, đã thực hiện hàng trăm ca phẫu thuật thành công.',
 'ACTIVE'),
 -- Bác sĩ 2 - Da liễu
-('D002', 'doctor2', 'MS02', 'Trần Thị B', '0907654321', 'tranthib@example.com', '1990-08-20', FALSE, 'Hồ Chí Minh', 
+('D002', 'doctor2', 'MS02', 'Trần Thị B', '0907654321', 'ntvk137@gmail.com', '1990-08-20', FALSE, 'Hồ Chí Minh', 
 'Bác sĩ Chuyên khoa I',
 'Bác sĩ da liễu chuyên điều trị các bệnh về da như mụn, nám, và thẩm mỹ da. Có kỹ năng trong việc tư vấn chăm sóc da.',
 'ACTIVE'),

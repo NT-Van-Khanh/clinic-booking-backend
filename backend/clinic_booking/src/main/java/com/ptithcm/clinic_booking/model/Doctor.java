@@ -3,6 +3,7 @@ package com.ptithcm.clinic_booking.model;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,11 +32,23 @@ public class Doctor {
     @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
+    @Column(name = "birthday", nullable = false)
+    private LocalDate birthday;
+
     @Column(name = "address", length = 255)
     private String address;
 
     @Column(name = "gender")
     private Boolean gender;
+
+    @Column(name = "qualification", columnDefinition = "TEXT")
+    private String qualification;
+
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
+
+    @Column(name = "image_link", length = 255)
+    private String imageLink;
 
     @Column(name = "status", nullable = false, length = 15)
     private String status;
@@ -136,5 +149,37 @@ public class Doctor {
 
     public void setSchedules(List<Schedule> schedules) {
         this.schedules = schedules;
+    }
+
+    public LocalDate getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getQualification() {
+        return qualification;
+    }
+
+    public void setQualification(String qualification) {
+        this.qualification = qualification;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
     }
 }

@@ -24,9 +24,14 @@ public class EmailServiceImpl implements EmailService {
         message.setText(content);
         try {
             javaMailSender.send(message);
-            System.out.println("Email sent successfully to " + to);
         }catch(Exception e){
             throw new MailSendException("Gửi email thất bại đến " + to, e);
         }
+    }
+
+    @Override
+    public String generateOtp() {
+        int randomOtp = (int)(Math.random() * 900000) + 100000;
+        return String.valueOf(randomOtp);
     }
 }

@@ -17,15 +17,31 @@ public class EmailOtp {
     @Column(length = 6, nullable = false)
     private String otp;
 
-    @CreationTimestamp
     @Column(name = "created_at", nullable = false, columnDefinition = "DATETIME")
     private LocalDateTime createdAt;
 
-    @Column(name = "expires_at", nullable = false, columnDefinition = "DATETIME")
-    private LocalDateTime expiresAt;
+    @Column(name = "expire_at", nullable = false, columnDefinition = "DATETIME")
+    private LocalDateTime expireAt;
 
     @Column(name = "is_verified", nullable = false)
     private boolean isVerified;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "purpose", length = 15, nullable = false)
+    private OtpPurpose purpose;
+
+    public OtpPurpose getPurpose() {
+        return purpose;
+    }
+
+    public void setPurpose(OtpPurpose purpose) {
+        this.purpose = purpose;
+    }
+
+    public enum OtpPurpose {
+        ACCOUNT_VERIFY,
+        APPOINTMENT
+    }
 
     public EmailOtp() {
     }
@@ -62,12 +78,13 @@ public class EmailOtp {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getExpiresAt() {
-        return expiresAt;
+
+    public LocalDateTime getExpireAt() {
+        return expireAt;
     }
 
-    public void setExpiresAt(LocalDateTime expiresAt) {
-        this.expiresAt = expiresAt;
+    public void setExpireAt(LocalDateTime expireAt) {
+        this.expireAt = expireAt;
     }
 
     public boolean isVerified() {

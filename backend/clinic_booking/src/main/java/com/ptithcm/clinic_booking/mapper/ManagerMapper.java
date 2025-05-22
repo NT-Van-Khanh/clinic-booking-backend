@@ -21,7 +21,7 @@ public class ManagerMapper {
         dto.setCreatedAt(manager.getCreatedAt());
         return dto;
     }
-    public static Manager toEntity(ManagerRequestDTO dto) {
+    public static Manager toManager(ManagerRequestDTO dto) {
         if(dto == null) return null;
         Manager manager = new Manager();
         manager.setId(dto.getId());

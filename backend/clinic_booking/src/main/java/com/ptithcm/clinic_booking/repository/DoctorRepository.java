@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface DoctorRepository extends JpaRepository<Doctor, String> {
     List<Doctor> findByStatus(String status);
     Optional<Doctor> findByAccountUsername(String username);
+    Optional<Doctor> findByEmail(String email);
 //    List<Doctor> findByService_Id(String serviceId);
 
     // Lấy bác sĩ theo chuyên khoa (chuyên khoa của bác sĩ)

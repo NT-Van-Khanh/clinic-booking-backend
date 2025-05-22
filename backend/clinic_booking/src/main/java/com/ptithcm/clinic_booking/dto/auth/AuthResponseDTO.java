@@ -1,6 +1,6 @@
-package com.ptithcm.clinic_booking.dto.account;
+package com.ptithcm.clinic_booking.dto.auth;
 
-public class AuthResponse {
+public class AuthResponseDTO {
     private String token;
     private Object user;
 

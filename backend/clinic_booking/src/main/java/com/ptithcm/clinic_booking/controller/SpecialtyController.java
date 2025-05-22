@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/medical-specialty")
+@RequestMapping("/api/v1/p/medical-specialties")
 @Validated
 public class SpecialtyController {
     private final MedicalSpecialtyService mSpecialtyService;
@@ -24,13 +24,6 @@ public class SpecialtyController {
     @Autowired
     public SpecialtyController(MedicalSpecialtyService mSpecialtyService) {
         this.mSpecialtyService = mSpecialtyService;
-
-    }
-
-    @GetMapping("/all")
-    public ResponseEntity<ApiResponse<List<MedicalSpecialtyResponseDTO>>> getAllMSpecialties(){
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,
-                mSpecialtyService.getAllMSpecialties()));
     }
 
     @GetMapping("/all/active")
@@ -44,23 +37,4 @@ public class SpecialtyController {
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,
                 mSpecialtyService.getMSpecialtyById(id)));
     }
-
-    @PutMapping("/update")
-    public ResponseEntity<ApiResponse<String>> updateMSpecialty(@RequestBody @Valid MedicalSpecialtyRequestDTO specialtyRequestDTO){
-        mSpecialtyService.updateMSpecialty(specialtyRequestDTO);
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,"Cập nhật chuyên khoa thành công."));
-    }
-
-    @PostMapping("/add")
-    public ResponseEntity<ApiResponse<String>> addMSpecialty(@RequestBody @Valid MedicalSpecialtyRequestDTO specialtyRequestDTO){
-        mSpecialtyService.addMSpecialty(specialtyRequestDTO);
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.CREATED,"Thêm chuyên khoa thành công."));
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse<String>> softDeleteSpecialty(@PathVariable @NotBlank String id){
-        mSpecialtyService.softDeleteMSpecialty(id);
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Chuyên khoa đã được xóa."));
-    }
-
 }
