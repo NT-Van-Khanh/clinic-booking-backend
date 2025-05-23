@@ -9,14 +9,14 @@ USE clinic_booking;
 CREATE TABLE role(
 	id SMALLINT PRIMARY KEY  AUTO_INCREMENT,
     name VARCHAR(50) UNIQUE NOT NULL ,
-	status VARCHAR(15) NOT NULL CHECK (status IN ('ACTIVE', 'DELETING'))
+	status VARCHAR(15) NOT NULL CHECK (status IN ('ACTIVE', 'DELETED'))
 );  
 
 CREATE TABLE account(
     username VARCHAR(50) PRIMARY KEY,
     password VARCHAR(255) NOT NULL,
     role_id SMALLINT NOT NULL,
-    status VARCHAR(15) NOT NULL CHECK (status IN ('ACTIVE', 'BLOCKED', 'DELETING')),
+    status VARCHAR(15) NOT NULL CHECK (status IN ('ACTIVE', 'BLOCKED', 'DELETED')),
     created_at DATETIME NOT NULL DEFAULT NOW(),
     
     FOREIGN KEY (role_id) REFERENCES role(id)
@@ -26,7 +26,7 @@ CREATE TABLE medical_specialty(
 	id VARCHAR(10) PRIMARY KEY,
     name VARCHAR(100) UNIQUE NOT NULL,
     description TEXT,
-    status VARCHAR(15) NOT NULL CHECK ( status IN ('ACTIVE', 'DELETING')),
+    status VARCHAR(15) NOT NULL CHECK ( status IN ('ACTIVE', 'DELETED')),
     created_at DATETIME NOT NULL DEFAULT NOW()
 );
 
@@ -43,7 +43,7 @@ CREATE TABLE doctor(
     qualification TEXT,
     description TEXT,
     image_link VARCHAR(255),
-    status VARCHAR(15) NOT NULL CHECK (status in ('ACTIVE', 'DELETING')),
+    status VARCHAR(15) NOT NULL CHECK (status in ('ACTIVE', 'DELETED')),
     created_at DATETIME NOT NULL DEFAULT NOW(),
     
     FOREIGN KEY (account_id) REFERENCES account(username),
@@ -58,7 +58,7 @@ CREATE TABLE manager(
     email VARCHAR(100) UNIQUE NOT NULL,
     address VARCHAR(255),
     gender BOOLEAN,
-    status VARCHAR(15) NOT NULL CHECK (status in ('ACTIVE', 'DELETING')),
+    status VARCHAR(15) NOT NULL CHECK (status in ('ACTIVE', 'DELETED')),
     created_at datetime NOT NULL DEFAULT NOW(),
     
     FOREIGN KEY (account_id) REFERENCES account(username)
@@ -72,7 +72,7 @@ CREATE TABLE customer(
     email VARCHAR(100) NOT NULL,
     address VARCHAR(255),
     gender BOOLEAN,
-    status VARCHAR(15) NOT NULL CHECK (status IN ('ACTIVE', 'DELETING')),
+    status VARCHAR(15) NOT NULL CHECK (status IN ('ACTIVE', 'DELETED')),
     created_at DATETIME NOT NULL DEFAULT NOW()
 );
 
@@ -83,7 +83,7 @@ CREATE TABLE clinic(
     description TEXT NOT NULL,
     phone CHAR(13) NOT NULL,
     email VARCHAR(255) NOT NULL,
-    status VARCHAR(15) NOT NULL CHECK (status IN ('ACTIVE', 'DELETING')),
+    status VARCHAR(15) NOT NULL CHECK (status IN ('ACTIVE', 'DELETED')),
     created_at DATETIME NOT NULL DEFAULT NOW()
 );
 
@@ -107,7 +107,7 @@ CREATE TABLE service(
     creator_id VARCHAR(10) NOT NULL,
     name VARCHAR(100) UNIQUE NOT NULL,
 	description TEXT,
-    status VARCHAR(15) NOT NULL CHECK (status in ('ACTIVE', 'DELETING')),
+    status VARCHAR(15) NOT NULL CHECK (status in ('ACTIVE', 'DELETED')),
     created_at DATETIME NOT NULL DEFAULT NOW(),
     
     FOREIGN KEY (creator_id) REFERENCES manager(id),
@@ -121,7 +121,7 @@ CREATE TABLE appointment(
     customer_id INT NOT NULL,
     numerical_order SMALLINT NOT NULL CHECK (numerical_order > 0),
     note VARCHAR(255) NOT NULL,
-    status VARCHAR(15) NOT NULL CHECK (status in ('PENDING', 'CONFIRMED', 'IN_PROGRESS' , 'COMPLETED', 'CANCELLED', 'NO_SHOW', 'DELETING')),
+    status VARCHAR(15) NOT NULL CHECK (status in ('PENDING', 'CONFIRMED', 'IN_PROGRESS' , 'COMPLETED', 'CANCELLED', 'NO_SHOW', 'DELETED')),
     updated_at DATETIME DEFAULT NULL,
     updated_by VARCHAR(50) DEFAULT NULL,
     created_at DATETIME NOT NULL DEFAULT NOW(),
@@ -167,7 +167,7 @@ INSERT INTO account(username, password, role_id, status) VALUES
 INSERT INTO medical_specialty(id, name, description, status) VALUES
 ('MS01', 'Tim mạch', 'Khám và điều trị các bệnh lý liên quan đến tim (Cardiology - Heart-related diseases)', 'ACTIVE'),
 ('MS02', 'Da liễu', 'Chẩn đoán và điều trị các bệnh về da, tóc và móng (Dermatology - Skin, hair, and nail diseases)', 'ACTIVE'),
-('MS03', 'Nhi khoa', 'Chăm sóc sức khỏe cho trẻ sơ sinh và trẻ nhỏ (Pediatrics - Healthcare for children)', 'DELETING'),
+('MS03', 'Nhi khoa', 'Chăm sóc sức khỏe cho trẻ sơ sinh và trẻ nhỏ (Pediatrics - Healthcare for children)', 'DELETED'),
 ('MS04', 'Tai Mũi Họng', 'Khám và điều trị các bệnh lý tai, mũi, họng (Otolaryngology - Ear, nose, and throat)', 'ACTIVE'),
 ('MS05', 'Nội tổng quát', 'Khám chữa bệnh nội khoa không cần phẫu thuật (Internal Medicine - Non-surgical treatment of internal diseases)', 'ACTIVE'),
 ('MS06', 'Ngoại tổng quát', 'Phẫu thuật điều trị các bệnh lý thông thường (General Surgery - Common surgical treatment)', 'ACTIVE'),
@@ -203,7 +203,7 @@ VALUES
 ('D005', 'doctor5', 'MS07', 'Lê Thị E', '0902233445', 'lethie@example.com', '1985-03-25', FALSE, 'Hà Nội', 
 'Bác sĩ Chuyên khoa II', 
 'Chuyên gia sản phụ khoa, chuyên tư vấn và điều trị các vấn đề sinh sản, chăm sóc bà mẹ mang thai.',
-'DELETING'),
+'DELETED'),
 -- Bác sĩ 6 - Mắt
 ('D006', 'doctor6', 'MS09', 'Nguyễn Thị F', '0905566778', 'nguyenthif@example.com', '1980-11-12', FALSE, 'Đà Nẵng', 
 'Bác sĩ Chuyên khoa I', 
@@ -233,12 +233,12 @@ VALUES
 ('D011', 'doctor11', 'MS03', 'Nguyễn Tiến K', '0901122324', 'nguyentienk@example.com', '1995-05-10', TRUE, 'Hà Nội', 
 'Bác sĩ Chuyên khoa I', 
 'Bác sĩ nhi khoa chuyên chăm sóc và điều trị bệnh cho trẻ sơ sinh và trẻ nhỏ.',
-'DELETING'),
+'DELETED'),
 -- Bác sĩ 12 - Tim mạch
 ('D012', 'doctor12', 'MS01', 'Lê Quốc L', '0903344566', 'lequocl@example.com', '1980-01-30', TRUE, 'Hồ Chí Minh', 
 'Bác sĩ Chuyên khoa II', 
 'Bác sĩ chuyên điều trị các bệnh về tim mạch và can thiệp tim mạch.',
-'DELETING');
+'DELETED');
 
 INSERT INTO manager (id, account_id, name, phone, email, address, gender, status) VALUES 
 ('M001', 'manager1', 'Anna Brown', '0987654321', 'anna.brown@clinic.com', '456 Manager Blvd', 0, 'ACTIVE');
@@ -251,7 +251,7 @@ INSERT INTO service (id, medical_specialty_id, creator_id, name, description, st
 VALUES 
 ('SV001', 'MS01', 'M001', 'Khám tim mạch', 'Đánh giá và điều trị các bệnh lý tim mạch (Cardiovascular checkup and treatment)', 'ACTIVE'),
 ('SV002', 'MS02', 'M001', 'Điều trị Da liễu', 'Khám và điều trị các bệnh về da như mụn, eczema (Skin treatments including acne and eczema)', 'ACTIVE'),
-('SV003', 'MS03', 'M001', 'Chăm sóc Nhi khoa', 'Khám và chăm sóc sức khỏe cho trẻ em (Pediatric care for children)', 'DELETING'),
+('SV003', 'MS03', 'M001', 'Chăm sóc Nhi khoa', 'Khám và chăm sóc sức khỏe cho trẻ em (Pediatric care for children)', 'DELETED'),
 ('SV004', 'MS04', 'M001', 'Điều trị Tai Mũi Họng', 'Khám và điều trị các bệnh về tai, mũi, họng (Ear, nose, and throat treatment)', 'ACTIVE'),
 ('SV005', 'MS05', 'M001', 'Khám Nội tổng quát', 'Chẩn đoán và điều trị bệnh nội khoa (General internal medicine diagnosis and treatment)', 'ACTIVE'),
 ('SV006', 'MS06', 'M001', 'Phẫu thuật Ngoại tổng quát', 'Phẫu thuật điều trị các bệnh lý thông thường (General surgery for common disorders)', 'ACTIVE'),
@@ -264,7 +264,7 @@ VALUES
 INSERT INTO clinic (id, name, address, description, phone, email, status) VALUES 
 ('CL01', 'Phòng khám Tim mạch', '101 Main St.', 'Khám và điều trị các bệnh lý liên quan đến tim (Cardiology - Heart-related diseases)', '02812345678', 'info@downtownclinic.com', 'ACTIVE'),
 ('CL02', 'Phòng khám Da liễu', '101 Main St.', 'Chẩn đoán và điều trị các bệnh về da, tóc và móng (Dermatology - Skin, hair, and nail diseases)', '02898765432', 'contact@cityhealthcenter.com', 'ACTIVE'),
-('CL03', 'Phòng khám Nhi khoa', '101 Main St.', 'Chăm sóc sức khỏe cho trẻ sơ sinh và trẻ nhỏ (Pediatrics - Healthcare for children)', '02811223344', 'support@healthplusclinic.com', 'DELETING'),
+('CL03', 'Phòng khám Nhi khoa', '101 Main St.', 'Chăm sóc sức khỏe cho trẻ sơ sinh và trẻ nhỏ (Pediatrics - Healthcare for children)', '02811223344', 'support@healthplusclinic.com', 'DELETED'),
 ('CL04', 'Phòng khám Tai Mũi Họng', '101 Main St.', 'Khám và điều trị các bệnh lý tai, mũi, họng (Otolaryngology - Ear, nose, and throat)', '02822334455', 'info@sunriseclinic.com', 'ACTIVE'),
 ('CL05', 'Phòng khám Nội tổng quát', '101 Main St.', 'Khám chữa bệnh nội khoa không cần phẫu thuật (Internal Medicine - Non-surgical treatment of internal diseases)', '02833445566', 'contact@centralclinic.com', 'ACTIVE'),
 ('CL06', 'Phòng khám Ngoại tổng quát', '101 Main St.', 'Phẫu thuật điều trị các bệnh lý thông thường (General Surgery - Common surgical treatment)', '02844556677', 'info@medicenter.com', 'ACTIVE'),
@@ -298,56 +298,59 @@ VALUES
 
 
 
--- DELIMITER $$
--- 	CREATE EVENT IF NOT EXISTS EVT_schedule_status_auto_update
--- 	ON SCHEDULE EVERY 60 MINUTE
--- 	DO
--- 	BEGIN
-
--- 		UPDATE schedule
--- 		SET status = 'EXPIRED'
--- 		WHERE end_time < NOW()
--- 		  AND status NOT IN ('CANCELED', 'DELETED', 'EXPIRED', 'PAUSED');
-
-
--- 		UPDATE schedule
--- 		SET status = 'ONGOING'
--- 		WHERE start_time <= NOW() AND end_time >= NOW()
--- 		  AND status NOT IN ('CANCELED', 'DELETED', 'ONGOING', 'PAUSED');
-
-
--- 		UPDATE schedule
--- 		SET status = 'UPCOMING'
--- 		WHERE start_time > NOW()
--- 		  AND status NOT IN ('CANCELED', 'DELETED', 'UPCOMING', 'PAUSED');
--- 	END$$
--- DELIMITER ;
--- SET GLOBAL event_scheduler = ON;
-
--- SHOW VARIABLES LIKE 'event_scheduler';
-
-
 DELIMITER $$
+	CREATE EVENT IF NOT EXISTS EVT_schedule_status_auto_update
+	ON SCHEDULE EVERY 60 MINUTE
+	DO
+	BEGIN
 
-CREATE PROCEDURE sp_get_schedule_and_update_status()
-BEGIN
+		UPDATE schedule
+		SET status = 'EXPIRED'
+		WHERE end_time < NOW()
+		  AND status NOT IN ('CANCELED', 'DELETED', 'EXPIRED', 'PAUSED');
 
-    UPDATE schedule
-    SET status = 'EXPIRED'
-    WHERE end_time < NOW()
-      AND status NOT IN ('CANCELED', 'DELETED', 'EXPIRED', 'PAUSED');
 
-    UPDATE schedule
-    SET status = 'ONGOING'
-    WHERE start_time <= NOW() AND end_time >= NOW()
-      AND status NOT IN ('CANCELED', 'DELETED', 'ONGOING', 'PAUSED');
+		UPDATE schedule
+		SET status = 'ONGOING'
+		WHERE start_time <= NOW() AND end_time >= NOW()
+		  AND status NOT IN ('CANCELED', 'DELETED', 'ONGOING', 'PAUSED');
 
-    UPDATE schedule
-    SET status = 'UPCOMING'
-    WHERE start_time > NOW()
-      AND status NOT IN ('CANCELED', 'DELETED', 'UPCOMING', 'PAUSED');
 
-    SELECT * FROM schedule;
-END$$
+		UPDATE schedule
+		SET status = 'UPCOMING'
+		WHERE start_time > NOW()
+		  AND status NOT IN ('CANCELED', 'DELETED', 'UPCOMING', 'PAUSED');
+	END$$
 DELIMITER ;
-CALL sp_get_schedule_and_update_status();
+SET GLOBAL event_scheduler = ON;
+
+SHOW VARIABLES LIKE 'event_scheduler';
+
+
+-- DELIMITER $$
+
+-- CREATE PROCEDURE sp_get_schedule_and_update_status()
+-- BEGIN
+
+--     UPDATE schedule
+--     SET status = 'EXPIRED'
+-- 	WHERE time_end < NOW()
+-- 	  AND status NOT IN ('CANCELED', 'DELETED', 'EXPIRED', 'PAUSED')
+-- 	  AND id IS NOT NULL;
+
+--     UPDATE schedule
+--     SET status = 'ONGOING'
+--     WHERE time_start <= NOW() AND time_end >= NOW()
+--       AND status NOT IN ('CANCELED', 'DELETED', 'ONGOING', 'PAUSED')
+-- 	  AND id IS NOT NULL;
+
+--     UPDATE schedule
+--     SET status = 'UPCOMING'
+--     WHERE start_time > NOW()
+--       AND status NOT IN ('CANCELED', 'DELETED', 'UPCOMING', 'PAUSED')
+-- 	  AND id IS NOT NULL;
+
+--     SELECT * FROM schedule;
+-- END$$
+-- DELIMITER ;
+-- CALL sp_get_schedule_and_update_status();

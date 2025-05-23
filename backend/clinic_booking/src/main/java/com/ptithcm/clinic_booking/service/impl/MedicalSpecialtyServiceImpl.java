@@ -71,7 +71,7 @@ public class MedicalSpecialtyServiceImpl implements MedicalSpecialtyService {
         MedicalSpecialty specialty = specialtyRepository.findById(specialtyId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không thể xóa. Không tìm thấy chuyên khoa với ID: " + specialtyId));
 
-        specialty.setStatus("DELETING");
+        specialty.setStatus("DELETED");
         specialtyRepository.save(specialty);
     }
 

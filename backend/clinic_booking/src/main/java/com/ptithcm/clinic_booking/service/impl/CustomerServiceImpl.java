@@ -90,7 +90,7 @@ public class CustomerServiceImpl implements CustomerService {
     public void softDeleteCustomer(String id) {
         Customer customer = customerRepository.findById(Integer.valueOf(id))
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy khách hàng với ID: " + id));
-        customer.setStatus("DELETING");
+        customer.setStatus("DELETED");
         customerRepository.save(customer);
     }
 

@@ -69,7 +69,7 @@ public class ClinicServiceImpl implements ClinicService {
     public void softDeleteClinic(String clinicId) {
         Clinic c = clinicRepository.findById(clinicId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không thể xóa. Không tìm thấy phòng khám với ID: " + clinicId));
-        c.setStatus("DELETING");
+        c.setStatus("DELETED");
         clinicRepository.save(c);
     }
 }

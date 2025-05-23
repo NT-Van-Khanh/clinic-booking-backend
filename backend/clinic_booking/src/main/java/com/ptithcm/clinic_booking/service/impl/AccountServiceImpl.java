@@ -8,6 +8,7 @@ import com.ptithcm.clinic_booking.mapper.AccountMapper;
 import com.ptithcm.clinic_booking.model.Account;
 import com.ptithcm.clinic_booking.repository.AccountRepository;
 import com.ptithcm.clinic_booking.service.AccountService;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -51,11 +52,16 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.save(existingAccount);
     }
 
+    @Transactional
     @Override
     public void softDeleteAccount(String username) {
-
+        Account account = accountRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy tài khoản cần cập nhật"));
+        account.setStatus("DELETED");
+        accountRepository.save(account);
     }
 
+    @Transactional
     @Override
     public void changePassword(String username, String currentPassword, String newPassword) {
         Account account = accountRepository.findByUsernameAndPassword(username, passwordEncoder.encode(currentPassword))

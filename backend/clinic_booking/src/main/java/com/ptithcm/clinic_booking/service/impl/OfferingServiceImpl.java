@@ -77,7 +77,7 @@ public class OfferingServiceImpl implements OfferingService {
         Service service = serviceRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dịch vụ có id: "+ id));
 
-            service.setStatus("DELETING");
+            service.setStatus("DELETED");
             serviceRepository.save(service);
     }
 }
