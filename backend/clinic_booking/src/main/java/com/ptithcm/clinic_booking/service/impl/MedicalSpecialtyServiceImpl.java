@@ -8,6 +8,7 @@ import com.ptithcm.clinic_booking.mapper.MedicalSpecialtyMapper;
 import com.ptithcm.clinic_booking.model.MedicalSpecialty;
 import com.ptithcm.clinic_booking.repository.MedicalSpecialtyRepository;
 import com.ptithcm.clinic_booking.service.MedicalSpecialtyService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,15 +40,9 @@ public class MedicalSpecialtyServiceImpl implements MedicalSpecialtyService {
 
     @Override
     public void addMSpecialty(MedicalSpecialtyRequestDTO specialtyRequestDTO) {
-        if (specialtyRequestDTO == null)
-            throw new IllegalArgumentException("Dữ liệu chuyên khoa không hợp lệ");
-        try {
-            MedicalSpecialty specialty = MedicalSpecialtyMapper.toEntity(specialtyRequestDTO);
-            specialty.setId(createSpecialtyId());
-            specialtyRepository.save(specialty);
-        } catch (Exception e) {
-            throw new RuntimeException("Lỗi khi thêm chuyên khoa: " + e.getMessage(), e);
-        }
+        MedicalSpecialty specialty = MedicalSpecialtyMapper.toEntity(specialtyRequestDTO);
+        specialty.setId(createSpecialtyId());
+        specialtyRepository.save(specialty);
     }
 
     private String createSpecialtyId() {
@@ -55,37 +50,29 @@ public class MedicalSpecialtyServiceImpl implements MedicalSpecialtyService {
         return String.format("CL%04d", countClinic);
     }
 
+    @Transactional
     @Override
     public void updateMSpecialty(MedicalSpecialtyRequestDTO specialtyRequestDTO) {
-        if (specialtyRequestDTO == null || specialtyRequestDTO.getId() == null)
-            throw new IllegalArgumentException("Dữ liệu chuyên khoa không hợp lệ hoặc thiếu ID");
 
         MedicalSpecialty existingSpecialty = specialtyRepository.findById(specialtyRequestDTO.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy chuyên khoa với ID: " + specialtyRequestDTO.getId()));
 
-        try {
-            // Cập nhật các trường cần thiết
-            existingSpecialty.setName(specialtyRequestDTO.getName());
-            existingSpecialty.setStatus(specialtyRequestDTO.getStatus());
-            existingSpecialty.setDescription(specialtyRequestDTO.getDescription());
+        existingSpecialty.setName(specialtyRequestDTO.getName());
+        existingSpecialty.setStatus(specialtyRequestDTO.getStatus());
+        existingSpecialty.setDescription(specialtyRequestDTO.getDescription());
 
-            specialtyRepository.save(existingSpecialty);
-        } catch (Exception e) {
-            throw new RuntimeException("Lỗi khi cập nhật chuyên khoa: " + e.getMessage(), e);
-        }
+        specialtyRepository.save(existingSpecialty);
     }
 
+    @Transactional
     @Override
     public void softDeleteMSpecialty(String specialtyId) {
-        try {
-            MedicalSpecialty specialty = specialtyRepository.findById(specialtyId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Không thể xóa. Không tìm thấy chuyên khoa với ID: " + specialtyId));
 
-            specialty.setStatus("DELETING");
-            specialtyRepository.save(specialty);
-        } catch (Exception e) {
-            throw new RuntimeException("Lỗi khi xóa mềm chuyên khoa: " + e.getMessage(), e);
-        }
+        MedicalSpecialty specialty = specialtyRepository.findById(specialtyId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không thể xóa. Không tìm thấy chuyên khoa với ID: " + specialtyId));
+
+        specialty.setStatus("DELETING");
+        specialtyRepository.save(specialty);
     }
 
     @Override

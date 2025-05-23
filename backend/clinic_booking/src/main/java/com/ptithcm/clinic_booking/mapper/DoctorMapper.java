@@ -54,6 +54,10 @@ public class DoctorMapper {
         d.setAddress(doctorDTO.getAddress());
         d.setGender(doctorDTO.getGender());
         d.setStatus(doctorDTO.getStatus());
+//        d.setImageLink(doctorDTO.getImageLink());
+        d.setBirthday(doctorDTO.getBirthday());
+        d.setDescription(doctorDTO.getDescription());
+        d.setQualification(doctorDTO.getQualification());
         return d;
     }
 

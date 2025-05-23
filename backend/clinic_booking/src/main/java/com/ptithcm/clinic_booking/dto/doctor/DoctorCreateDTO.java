@@ -7,7 +7,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class DoctorCreateDTO {
@@ -52,6 +54,52 @@ public class DoctorCreateDTO {
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Schema(description = "Thời gian tạo", example = "2025-05-22T10:15:30")
     private LocalDateTime createdAt;
+
+    @Schema(description = "Ảnh đại diện (file upload)", type = "string", format = "binary")
+    private MultipartFile imageFile;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Schema(description = "Ngày sinh", example = "1980-11-12")
+    private LocalDate birthday;
+
+    @Schema(description = "Mô tả chi tiết",
+            example = "Chuyên gia về điều trị các bệnh lý về mắt, từ các bệnh thông thường đến các bệnh lý nghiêm trọng về mắt.")
+    private String description;
+
+    @Schema(description = "Trình độ chuyên môn", example = "Bác sĩ Chuyên khoa I")
+    private String qualification;
+
+    public MultipartFile getImageFile() {
+        return imageFile;
+    }
+
+    public void setImageFile(MultipartFile imageFile) {
+        this.imageFile = imageFile;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getQualification() {
+        return qualification;
+    }
+
+    public void setQualification(String qualification) {
+        this.qualification = qualification;
+    }
+
+    public LocalDate getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
+    }
 
     public DoctorCreateDTO() {
     }

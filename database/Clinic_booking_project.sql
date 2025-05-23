@@ -295,3 +295,59 @@ VALUES
 ('SCHED032', 'D001', 'CL09', '2025-06-14', '09:00:00', '12:00:00', 10, 'ACTIVE'),  -- D001 có lịch riêng tại CL09
 ('SCHED033', 'D006', 'CL05', '2025-06-14', '09:00:00', '12:00:00', 10, 'ACTIVE'),
 ('SCHED034', 'D010', 'CL06', '2025-06-15', '08:00:00', '11:00:00', 12, 'ACTIVE');
+
+
+
+-- DELIMITER $$
+-- 	CREATE EVENT IF NOT EXISTS EVT_schedule_status_auto_update
+-- 	ON SCHEDULE EVERY 60 MINUTE
+-- 	DO
+-- 	BEGIN
+
+-- 		UPDATE schedule
+-- 		SET status = 'EXPIRED'
+-- 		WHERE end_time < NOW()
+-- 		  AND status NOT IN ('CANCELED', 'DELETED', 'EXPIRED', 'PAUSED');
+
+
+-- 		UPDATE schedule
+-- 		SET status = 'ONGOING'
+-- 		WHERE start_time <= NOW() AND end_time >= NOW()
+-- 		  AND status NOT IN ('CANCELED', 'DELETED', 'ONGOING', 'PAUSED');
+
+
+-- 		UPDATE schedule
+-- 		SET status = 'UPCOMING'
+-- 		WHERE start_time > NOW()
+-- 		  AND status NOT IN ('CANCELED', 'DELETED', 'UPCOMING', 'PAUSED');
+-- 	END$$
+-- DELIMITER ;
+-- SET GLOBAL event_scheduler = ON;
+
+-- SHOW VARIABLES LIKE 'event_scheduler';
+
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_get_schedule_and_update_status()
+BEGIN
+
+    UPDATE schedule
+    SET status = 'EXPIRED'
+    WHERE end_time < NOW()
+      AND status NOT IN ('CANCELED', 'DELETED', 'EXPIRED', 'PAUSED');
+
+    UPDATE schedule
+    SET status = 'ONGOING'
+    WHERE start_time <= NOW() AND end_time >= NOW()
+      AND status NOT IN ('CANCELED', 'DELETED', 'ONGOING', 'PAUSED');
+
+    UPDATE schedule
+    SET status = 'UPCOMING'
+    WHERE start_time > NOW()
+      AND status NOT IN ('CANCELED', 'DELETED', 'UPCOMING', 'PAUSED');
+
+    SELECT * FROM schedule;
+END$$
+DELIMITER ;
+CALL sp_get_schedule_and_update_status();

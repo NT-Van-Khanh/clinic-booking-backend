@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +35,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public List<ScheduleDTO> getAllSchedules() {
         List<Schedule> schedules = scheduleRepository.findAll();
-        if(schedules == null) throw new ResourceNotFoundException("Không lấy được danh sách lịch trình.");
+
         return schedules.stream()
                 .map(ScheduleMapper::toScheduleDTO)
                 .collect(Collectors.toList());
@@ -42,7 +44,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public List<ScheduleDTO> getAllSchedules(Pageable pageable) {
         Page<Schedule> schedules = scheduleRepository.findAll(pageable);
-        if(schedules == null) throw new ResourceNotFoundException("Không lấy được danh sách lịch trình.");
+
         return schedules.getContent()
                 .stream()
                 .map(ScheduleMapper::toScheduleDTO)
@@ -67,25 +69,14 @@ public class ScheduleServiceImpl implements ScheduleService {
                 .collect(Collectors.toList());
     }
 
-//    @Override
-//    public List<ScheduleDTO> getSchedulesByService(String serviceId) {
-//        List<Schedule> schedules = scheduleRepository.findByServiceId(serviceId);
-//        if(schedules == null) throw new ResourceNotFoundException("Không lấy được danh sách lịch trình theo bác sĩ có id:"+ serviceId);
-//        return schedules.stream()
-//                .map(ScheduleMapper::toScheduleDTO)
-//                .collect(Collectors.toList());
-//    }
-
     @Override
     public void addSchedule(ScheduleDTO scheduleDTO) {
+
         if(scheduleDTO == null) throw new IllegalArgumentException("Dữ liệu lịch trình không hợp lệ.");
-        try{
-            Schedule schedule = ScheduleMapper.toSchedule(scheduleDTO);
-            schedule.setId(createScheduleId());
-            scheduleRepository.save(schedule);
-        }catch( Exception e){
-            throw new RuntimeException("Lỗi khi thêm lịch trình: " + e.getMessage(), e);
-        }
+
+        Schedule schedule = ScheduleMapper.toSchedule(scheduleDTO);
+        schedule.setId(createScheduleId());
+        scheduleRepository.save(schedule);
     }
 
     private String createScheduleId() {
@@ -95,32 +86,75 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public void updateSchedule(ScheduleDTO scheduleDTO) {
-        if(scheduleDTO == null )
-                throw new IllegalArgumentException("Dữ liệu lịch trình không hợp lệ.");
-        String scheduleId = scheduleDTO.getId();
-        if(scheduleId == null ||scheduleId.isBlank())
-            throw new IllegalArgumentException("Dữ liệu lịch trình thiếu ID.");
-        scheduleRepository.findById(scheduleId)
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lịch trình với ID: " + scheduleId));
-        try{
-            Schedule schedule = ScheduleMapper.toSchedule(scheduleDTO);
-            scheduleRepository.save(schedule);
-        }catch( Exception e){
-            throw new RuntimeException("Lỗi khi cập nhật lịch trình: " + e.getMessage(), e);
+
+        scheduleRepository.findById(scheduleDTO.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lịch trình với ID: " + scheduleDTO.getId()));
+
+        Schedule schedule = ScheduleMapper.toSchedule(scheduleDTO);
+        scheduleRepository.save(schedule);
+    }
+
+    @Override
+    public void changeStatusSchedule(String id, ScheduleStatus status) {
+
+        Schedule s = scheduleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không thể xóa. Không tìm thấy lịch trình với ID: " + id));
+
+        status = checkScheduleStatus(s, status);
+        s.setStatus(status);
+        scheduleRepository.save(s);
+    }
+
+    private ScheduleStatus checkScheduleStatus(Schedule schedule, ScheduleStatus newStatus){
+        ScheduleStatus currentStatus = schedule.getStatus();
+        if(currentStatus == ScheduleStatus.EXPIRED)
+            throw new IllegalStateException("Lịch đã hết hạn.");
+
+        LocalDateTime startDateTime = LocalDateTime.of(schedule.getDate(), schedule.getTimeStart());
+        LocalDateTime endDateTime = LocalDateTime.of(schedule.getDate(), schedule.getTimeEnd());
+        LocalDateTime now = LocalDateTime.now();
+
+
+        switch(newStatus) {
+            case CANCELED:
+                if (now.isAfter(endDateTime)){
+                    throw new IllegalStateException("Không thể hủy lịch đã quá hạn.");
+                }
+                return ScheduleStatus.CANCELED;
+            case PAUSED:
+                if (now.isAfter(endDateTime)) {
+                    throw new IllegalStateException("Không thể tạm dừng lịch đã quá hạn.");
+                }
+                if (currentStatus == ScheduleStatus.PAUSED) {
+                    throw new IllegalStateException("Lịch đã tạm dừng rồi.");
+                }
+                return ScheduleStatus.PAUSED;
+            case ACTIVE: // Resume từ PAUSED
+                if (currentStatus == ScheduleStatus.CANCELED) {
+                    throw new IllegalStateException("Không thể thay đổi trạng thái vì lịch trình này đã bị hủy.");
+                }
+                if(currentStatus == ScheduleStatus.DELETED){
+                    throw new IllegalStateException("Không thể thay đổi trạng thái vì lịch trình này đã bị xóa.");
+                }
+                // Tự động tính lại trạng thái theo thời gian
+                if (now.isBefore(startDateTime)) {
+                    return ScheduleStatus.UPCOMING;
+                } else if (now.isAfter(endDateTime)) {
+                    return ScheduleStatus.EXPIRED;
+                } else {
+                    return ScheduleStatus.ONGOING;
+                }
+            default:
+                return newStatus;
         }
     }
 
     @Override
     public void softDeleteSchedule(String id) {
-        if(id == null || id.isBlank())
-            throw new IllegalArgumentException(" ID lịch trình không hợp lệ.");
-        try{
-            Schedule s = scheduleRepository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("Không thể xóa. Không tìm thấy lịch trình với ID: " + id));
-            s.setStatus(ScheduleStatus.DELETED);
-        }catch( Exception e){
-            throw new RuntimeException("Lỗi khi xóa lịch trình: " + e.getMessage(), e);
-        }
+        Schedule s = scheduleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không thể xóa. Không tìm thấy lịch trình với ID: " + id));
+        s.setStatus(ScheduleStatus.DELETED);
+        scheduleRepository.save(s);
     }
 
     @Override

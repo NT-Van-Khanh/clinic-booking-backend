@@ -43,8 +43,6 @@ public class ClinicServiceImpl implements ClinicService {
 
     @Override
     public void addClinic(ClinicDTO clinicDTO) {
-        if(clinicDTO == null)
-            throw new IllegalArgumentException("Dữ liệu phòng khám không hợp lệ hoặc thiếu ID");
 
         Clinic clinic = ClinicMapper.toClinic(clinicDTO);
         clinic.setId(createClinicId());
@@ -56,11 +54,9 @@ public class ClinicServiceImpl implements ClinicService {
         return String.format("CL%04d", countClinic);
     }
 
+    @Transactional
     @Override
     public void updateClinic(ClinicDTO clinicDTO) {
-        if(clinicDTO == null|| clinicDTO.getId() == null)
-            throw new IllegalArgumentException("Dữ liệu phòng khám không hợp lệ hoặc thiếu ID");
-
         clinicRepository.findById(clinicDTO.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phòng khám với ID: " + clinicDTO.getId()));
 

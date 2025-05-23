@@ -7,6 +7,7 @@ import com.ptithcm.clinic_booking.mapper.ManagerMapper;
 import com.ptithcm.clinic_booking.model.Manager;
 import com.ptithcm.clinic_booking.repository.ManagerRepository;
 import com.ptithcm.clinic_booking.service.ManagerService;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,17 +21,10 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public void addManager(ManagerRequestDTO managerRequestDTO) {
-        if (managerRequestDTO == null) {
-            throw new IllegalArgumentException("Dữ liệu quản lý không hợp lệ.");
-        }
-        try {
-            Manager manager = ManagerMapper.toManager(managerRequestDTO);
-            manager.setId(createManagerId());
-            manager.setStatus("ACTIVE");
-            managerRepository.save(manager);
-        } catch (Exception e) {
-            throw new RuntimeException("Lỗi khi thêm quản lý: " + e.getMessage(), e);
-        }
+        Manager manager = ManagerMapper.toManager(managerRequestDTO);
+        manager.setId(createManagerId());
+        manager.setStatus("ACTIVE");
+        managerRepository.save(manager);
     }
 
     private String createManagerId() {
@@ -38,12 +32,9 @@ public class ManagerServiceImpl implements ManagerService {
         return String.format("MN%03d", count + 1);
     }
 
+    @Transactional
     @Override
     public void updateManager(ManagerRequestDTO managerRequestDTO) {
-        if (managerRequestDTO == null || managerRequestDTO.getId() == null) {
-            throw new IllegalArgumentException("Dữ liệu quản lý không hợp lệ hoặc thiếu ID.");
-        }
-
         Manager existing = managerRepository.findById(managerRequestDTO.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy quản lý với ID: " + managerRequestDTO.getId()));
 
@@ -52,10 +43,12 @@ public class ManagerServiceImpl implements ManagerService {
         managerRepository.save(updated);
     }
 
+    @Transactional
     @Override
     public void softDeleteManager(String id) {
         Manager manager = managerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy quản lý với ID: " + id));
+
         manager.setStatus("DELETED");
         managerRepository.save(manager);
     }

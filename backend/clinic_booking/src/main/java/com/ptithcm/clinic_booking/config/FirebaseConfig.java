@@ -24,16 +24,17 @@ public class FirebaseConfig {
     @PostConstruct
     public void initialize(){
         try{
-            InputStream serviceAccount = getClass().getClassLoader().getResourceAsStream(firebaseCredentialsPath);
+            InputStream serviceAccount = getClass().getClassLoader()
+                                                    .getResourceAsStream(firebaseCredentialsPath);
             if (serviceAccount == null) {
                 throw new RuntimeException("Firebase service account key file not found in classpath");
             }
-            FirebaseOptions options = new FirebaseOptions.Builder().
-                    setCredentials(GoogleCredentials.fromStream(serviceAccount))
+            FirebaseOptions options = FirebaseOptions.builder()
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .setStorageBucket(firebaseStorageBucketName)
                     .build();
 
-            // Chỉ khởi tạo FirebaseApp nếu chưa có
+
             if(FirebaseApp.getApps().isEmpty()){
                 FirebaseApp.initializeApp(options);
             }

@@ -46,27 +46,10 @@ public class ScheduleController {
     public ResponseEntity<ApiResponse<List<ScheduleDTO>>> getAllSchedulesByStatus(@PathVariable ScheduleStatus status){
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, scheduleService.getSchedulesByStatus(status)));
     }
+
     @GetMapping("/by_doctor/{doctorId}")
     public ResponseEntity<ApiResponse<List<ScheduleDTO>>> getAllSchedulesByDoctor(@PathVariable @NotBlank String doctorId){
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, scheduleService.getSchedulesByDoctor(doctorId)));
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<ApiResponse<String>> addSchedule(@RequestBody @Valid ScheduleDTO schedule){
-        scheduleService.addSchedule(schedule);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new ApiResponse<>(HttpStatus.CREATED,"Thêm lịch trình thành công."));
-    }
-
-    @PutMapping("/update")
-    public ResponseEntity<ApiResponse<String>> updateSchedule(@RequestBody @Valid ScheduleDTO schedule){
-        scheduleService.updateSchedule(schedule);
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,"Cập nhật lịch trình thành công."));
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse<String>> softDeleteSchedule(@PathVariable @NotBlank String id) {
-        scheduleService.softDeleteSchedule(id);
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,"Xóa lịch trình thành công."));
-    }
 }

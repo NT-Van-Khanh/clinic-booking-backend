@@ -18,6 +18,7 @@ public interface ScheduleService {
 
     void addSchedule(ScheduleDTO scheduleDTO);
     void updateSchedule(ScheduleDTO scheduleDTO);
+    void changeStatusSchedule(String id, ScheduleStatus status);
     void softDeleteSchedule(String id);
 
     boolean isDoctorAvailable(String doctorId, LocalDate date);

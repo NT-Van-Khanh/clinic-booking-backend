@@ -9,8 +9,12 @@ import com.ptithcm.clinic_booking.model.Doctor;
 import com.ptithcm.clinic_booking.model.MedicalSpecialty;
 import com.ptithcm.clinic_booking.repository.DoctorRepository;
 import com.ptithcm.clinic_booking.service.DoctorService;
+import com.ptithcm.clinic_booking.service.FirebaseService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,9 +22,11 @@ import java.util.stream.Collectors;
 public class DoctorServiceImpl implements DoctorService {
 
     private final DoctorRepository doctorRepository;
-
-    public DoctorServiceImpl(DoctorRepository doctorRepository) {
+    private final FirebaseService firebaseService;
+    public DoctorServiceImpl(DoctorRepository doctorRepository,
+                             FirebaseService firebaseService) {
         this.doctorRepository = doctorRepository;
+        this.firebaseService = firebaseService;
     }
 
     @Override
@@ -38,7 +44,7 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public List<DoctorResponseDTO> getAllDoctors() {
         List<Doctor> doctors = doctorRepository.findAll();
-        if(doctors == null) throw new ResourceNotFoundException("Không lấy được danh sách bác sĩ.");
+
         return doctors.stream()
                 .map(DoctorMapper::toDoctorDTO)
                 .collect(Collectors.toList());
@@ -47,7 +53,7 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public List<DoctorSimpleResponseDTO> getAllActiveDoctors() {
         List<Doctor> doctors = doctorRepository.findByStatus("ACTIVE");
-        if(doctors == null) throw new ResourceNotFoundException("Không lấy được danh sách bác sĩ.");
+
         return doctors.stream()
                 .map(DoctorMapper::toDoctorSimpleDTO)
                 .collect(Collectors.toList());
@@ -65,7 +71,7 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public List<DoctorSimpleResponseDTO> getDoctorsByMedicalSpecialty(String medicalSpecialtyId) {
         List<Doctor> doctors = doctorRepository.findByMedicalSpecialty_Id(medicalSpecialtyId);
-        if(doctors == null) throw new ResourceNotFoundException("Không lấy được danh sách bác sĩ theo chuyên khoa có id: " + medicalSpecialtyId);
+
         return doctors.stream()
                 .map(DoctorMapper::toDoctorSimpleDTO)
                 .collect(Collectors.toList());
@@ -73,14 +79,13 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public void addDoctor(DoctorCreateDTO doctorDTO) {
-        if( doctorDTO == null) throw new IllegalArgumentException("Dữ liệu bác sĩ không hợp lệ.");
-        try{
-            Doctor doctor = DoctorMapper.toDoctor(doctorDTO);
-            doctor.setId(createDoctorId());
-            doctorRepository.save(doctor);
-        } catch (Exception e) {
-            throw new RuntimeException("Lỗi khi thêm bác sĩ: " + e.getMessage(), e);
-        }
+        Doctor doctor = DoctorMapper.toDoctor(doctorDTO);
+        doctor.setId(createDoctorId());
+        MultipartFile imageFile = doctorDTO.getImageFile();
+
+        String imageUrl = addDoctorImage(imageFile, doctor.getId());
+        doctor.setImageLink(imageUrl);
+        doctorRepository.save(doctor);
     }
 
     private String createDoctorId() {
@@ -88,13 +93,29 @@ public class DoctorServiceImpl implements DoctorService {
         return String.format("DC%03d", countDoctor);
     }
 
+    private String addDoctorImage(MultipartFile imageFile, String fileName) {
+        if (imageFile == null || !imageFile.isEmpty()) return null;
+        String originalFilename = imageFile.getOriginalFilename();
+        String extension = "";
+        if (originalFilename != null && originalFilename.contains(".")) {
+            extension = originalFilename.substring(originalFilename.lastIndexOf('.'));
+        }
+        fileName = "doctors/" + fileName + extension;
+
+        try {
+            firebaseService.uploadObject(fileName, imageFile.getInputStream(), imageFile.getContentType());
+            String imageUrl = firebaseService.getObjectUrl(fileName);
+            return imageUrl;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Transactional
     @Override
     public void updateDoctor(DoctorSimpleResponseDTO doctorDTO) {
-        if( doctorDTO == null||doctorDTO.getId() == null)
-            throw new IllegalArgumentException("Dữ liệu bác sĩ không hợp lệ hoặc thiếu ID");
         Doctor doctor = doctorRepository.findById( doctorDTO.getId())
            .orElseThrow(() ->new ResourceNotFoundException("Không tìm thấy phòng khám với ID: " +  doctorDTO.getId()));
-        try{
 //            Doctor doctor = DoctorMapper.toDoctor(doctorDTO);
             MedicalSpecialty specialty = new MedicalSpecialty();
             specialty.setId(doctorDTO.getMedicalSpecialtyId());
@@ -106,32 +127,24 @@ public class DoctorServiceImpl implements DoctorService {
             doctor.setGender(doctorDTO.getGender());
             doctor.setStatus(doctorDTO.getStatus());
             doctorRepository.save(doctor);
-        } catch (Exception e) {
-            throw new RuntimeException("Lỗi khi thêm bác sĩ: " + e.getMessage(), e);
-        }
     }
 
+    @Transactional
     @Override
     public void blockDoctor(String id) {
-        try{
             Doctor d = doctorRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Không thể xóa. Không tìm thấy phòng khám với ID: " + id));
             d.setStatus("BLOCKED");
+
             doctorRepository.save(d);
-        }catch (Exception e){
-            throw new RuntimeException("Lỗi khi xóa mềm phòng khám: " + e.getMessage(), e);
-        }
     }
 
+    @Transactional
     @Override
     public void softDeletingDoctor(String id) {
-        try{
-            Doctor d = doctorRepository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("Không thể xóa. Không tìm thấy phòng khám với ID: " + id));
-            d.setStatus("DELETING");
-            doctorRepository.save(d);
-        }catch (Exception e){
-            throw new RuntimeException("Lỗi khi xóa phòng khám: " + e.getMessage(), e);
-        }
+        Doctor d = doctorRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không thể xóa. Không tìm thấy phòng khám với ID: " + id));
+        d.setStatus("DELETED");
+        doctorRepository.save(d);
     }
 }

@@ -6,6 +6,7 @@ import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
 import com.ptithcm.clinic_booking.model.Service;
 import com.ptithcm.clinic_booking.repository.ServiceRepository;
 import com.ptithcm.clinic_booking.service.OfferingService;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,8 +31,6 @@ public class OfferingServiceImpl implements OfferingService {
     @Override
     public List<ServiceDTO> getAllServices() {
         List<Service> services = serviceRepository.findAll();
-        if(services == null)
-            throw new ResourceNotFoundException("Không thể lấy được danh sách dịch vụ.");
         return services.stream()
                 .map(ServiceMapper::toServiceDTO)
                 .collect(Collectors.toList());
@@ -49,14 +48,10 @@ public class OfferingServiceImpl implements OfferingService {
 
     @Override
     public void addService(ServiceDTO serviceDTO) {
-        if(serviceDTO == null) throw new IllegalArgumentException("Dữ liệu dịch vụ không hợp lệ.");
-        try{
-            Service service = ServiceMapper.toService(serviceDTO);
-            service.setId(createdServiceId());
-            serviceRepository.save(service);
-        }catch (Exception e){
-            throw new RuntimeException("Lỗi khi thêm dịch vụ: " + e.getMessage(), e);
-        }
+        Service service = ServiceMapper.toService(serviceDTO);
+        service.setId(createdServiceId());
+        serviceRepository.save(service);
+
     }
 
     private String createdServiceId() {
@@ -64,31 +59,25 @@ public class OfferingServiceImpl implements OfferingService {
         return String.format("SV%05d", countService + 1);
     }
 
+    @Transactional
     @Override
     public void updateService(ServiceDTO serviceDTO) {
-        if(serviceDTO == null || serviceDTO.getId() == null)
-            throw new IllegalArgumentException("Dữ liệu dịch vụ không hợp lệ hoặc thiếu ID.");
         Service existingService = serviceRepository.findById( serviceDTO.getId()).orElse(null);
         if(existingService == null)
             throw  new ResourceNotFoundException("Không tìm thấy dịch vụ với ID: " + serviceDTO.getId());
-        try{
-            Service service = ServiceMapper.toService(serviceDTO);
-            serviceRepository.save(service);
-        }catch (Exception e){
-            throw new RuntimeException("Lỗi khi thêm dịch vụ: " + e.getMessage(), e);
-        }
+
+        Service service = ServiceMapper.toService(serviceDTO);
+        serviceRepository.save(service);
+
     }
 
-
+    @Transactional
     @Override
     public void softDeleteService(String id) {
         Service service = serviceRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dịch vụ có id: "+ id));
-        try{
+
             service.setStatus("DELETING");
             serviceRepository.save(service);
-        }catch( Exception e){
-            throw new RuntimeException("Lỗi khi xóa dịch vụ" + e.getMessage(), e);
-        }
     }
 }

@@ -1,5 +1,6 @@
 package com.ptithcm.clinic_booking.exception;
 
+import com.google.firebase.auth.FirebaseAuthException;
 import com.ptithcm.clinic_booking.model.ApiResponse;
 import jakarta.validation.ValidationException;
 import org.apache.coyote.BadRequestException;
@@ -9,6 +10,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -91,6 +95,28 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceAlreadyExistsException.class)
     public ResponseEntity<ApiResponse<String>> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex) {
+        ApiResponse<String> response = new ApiResponse<>(HttpStatus.CONFLICT, ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(FileNotFoundException.class)
+    public ResponseEntity<ApiResponse<String>> handleFileNotFound(FileNotFoundException ex) {
+        ApiResponse<String> response = new ApiResponse<>(HttpStatus.NOT_FOUND, ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(FirebaseAuthException.class)
+    public ResponseEntity<ApiResponse<String>> handleFirebaseAuth(FirebaseAuthException ex) {
+        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.FORBIDDEN, "Permission Denied: " + ex.getMessage()), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<ApiResponse<String>> handleFirebaseIOException(IOException ex) {
+        return new ResponseEntity<>(new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "Firebase Error: " + ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(FirebaseStorageException.class)
+    public ResponseEntity<ApiResponse<String>> handleFirebaseStorageException(FirebaseStorageException ex) {
         ApiResponse<String> response = new ApiResponse<>(HttpStatus.CONFLICT, ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }

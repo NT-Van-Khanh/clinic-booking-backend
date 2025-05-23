@@ -109,7 +109,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<AppointmentDTO> getAppointmentsByCustomerId(String customerId) {
-        Integer id;
+        int id;
         try {
             id = Integer.parseInt(customerId);
         } catch (NumberFormatException e) {
