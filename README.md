@@ -38,3 +38,35 @@ For testing purposes, the following user accounts are available:
 |----------|-----------|-----------|
 | Manager  | manager1  | 12345678  |
 | Doctor   | doctor1   | 12345678  |
+
+##Running with Docker
+
+This project includes Docker support to quickly set up and run the backend with a MySQL database
+
+### Accessing MySQL Database
+
+When running MySQL inside Docker, you can connect to the database using the following credentials:
+
+- **Port:** 3306 (mapped from the container)
+- **Username:** root
+- **Password:** 123456
+- **Database:** clinic_booking
+
+## Notes
+###  The **source code does NOT include the `application.properties` file**
+
+- You need to create and configure `application.properties` manually in your project under `src/main/resources/`.  
+- The main configurations you should include in your `application.properties` are:
+
+  - Application settings (e.g.,`server.port`)
+  - Database connection (e.g., `spring.datasource.url`, `spring.datasource.username`, `spring.datasource.password`, `spring.datasource.driverClassName`)
+  - JPA/Hibernate settings (e.g., `spring.jpa.show-sql`, `spring.jpa.hibernate.ddl-auto`, `spring.jpa.database-platform`, logging levels)
+  - Spring Security (e.g., default user and password for development)
+  - Firebase credentials and storage bucket configurations
+  - File upload settings (`spring.servlet.multipart.*`)
+  - DevTools and debugging options (`spring.devtools.restart.enabled`, `spring.devtools.livereload.enabled`, `debug`)
+  - Mail server configurations (`spring.mail.host`, `spring.mail.port`, etc.)
+###  The **source code does NOT include the `firebasekey.json' file**
+
+- You need to provide your own `firebasekey.json` file with Firebase service account credentials.
+- Place this file in the path configured by `firebase.credentials-path` (e.g., `firebase/firebase-key.json`).
