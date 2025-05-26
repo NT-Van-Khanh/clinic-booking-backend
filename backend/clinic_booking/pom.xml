@@ -151,6 +151,23 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>3.3.1</version>
+				<configuration>
+					<to>
+						<image>ntvk137/clinic-backend:latest</image>
+					</to>
+					<!-- Tùy chọn thêm, ví dụ đặt ports -->
+					<container>
+						<ports>
+							<port>8089</port>
+						</ports>
+						<mainClass>com.ptithcm.clinic_booking.ClinicBookingApplication</mainClass>
+					</container>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
