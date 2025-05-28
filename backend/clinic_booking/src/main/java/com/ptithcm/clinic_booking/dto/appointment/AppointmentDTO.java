@@ -1,6 +1,8 @@
-package com.ptithcm.clinic_booking.dto;
+package com.ptithcm.clinic_booking.dto.appointment;
 
+import com.ptithcm.clinic_booking.dto.service.ServiceDTO;
 import com.ptithcm.clinic_booking.dto.customer.CustomerDTO;
+import com.ptithcm.clinic_booking.dto.schedule.ScheduleDTO;
 import com.ptithcm.clinic_booking.model.AppointmentStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
@@ -11,6 +13,7 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 public class AppointmentDTO {
+    @Schema(description = "Id cuộc hẹn", example = "10001")
     private Integer id;
 
     @NotNull(message = "Dịch vụ không được để trống.")
@@ -37,7 +40,7 @@ public class AppointmentDTO {
 
     @NotBlank(message = "Trạng thái không được để trống.")
     @Size(max = 15, message = "Trạng thái không được vượt quá 15 ký tự.")
-    @Schema(description = "Trạng thái lịch hẹn", example = "confirmed")
+    @Schema(description = "Trạng thái lịch hẹn", example = "PENDING")
     private AppointmentStatus status;
 
     @Schema(description = "Thời gian cập nhật", example = "2025-05-22T15:30:00")

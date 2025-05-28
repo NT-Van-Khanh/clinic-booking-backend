@@ -1,9 +1,11 @@
 package com.ptithcm.clinic_booking.dto.specialty;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class BaseMedicalSpecialtyDTO {
+    @Schema(description = "Mã chuyên khoa", example = "MS01")
     private String id;
 
     @NotNull(message = "Tên chuyên khoa không được để trống.")

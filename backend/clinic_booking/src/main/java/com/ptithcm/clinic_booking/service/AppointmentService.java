@@ -1,6 +1,7 @@
 package com.ptithcm.clinic_booking.service;
 
-import com.ptithcm.clinic_booking.dto.AppointmentDTO;
+import com.ptithcm.clinic_booking.dto.appointment.AppointmentCreateDTO;
+import com.ptithcm.clinic_booking.dto.appointment.AppointmentDTO;
 import com.ptithcm.clinic_booking.model.AppointmentStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,13 +21,13 @@ public interface AppointmentService {
     void softDeleteAppointment(String appointmentId);
 
     // Khách hàng-public
-    AppointmentDTO getAppointmentByCustomerInfo(String email, String phone, String scheduleId);
-    void addAppointment(AppointmentDTO appointmentDTO);
+    AppointmentDTO getAppointmentByCustomerInfo(String email, String phone, Integer scheduleId);
+    void addAppointment(AppointmentCreateDTO appointmentDTO);
     void updateAppointment(AppointmentDTO appointmentDTO);
 
     // Bác sĩ- Quan lý
-    List<AppointmentDTO> getAppointmentsBySchedule(String scheduleId);
-    int countAppointmentsBySchedule(String scheduleId);
+    List<AppointmentDTO> getAppointmentsBySchedule(Integer scheduleId);
+    int countAppointmentsBySchedule(Integer scheduleId);
     void changeAppointmentStatus(String id, AppointmentStatus status);
     }
 

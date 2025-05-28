@@ -5,11 +5,14 @@ import com.ptithcm.clinic_booking.dto.doctor.DoctorSimpleResponseDTO;
 import com.ptithcm.clinic_booking.dto.doctor.DoctorResponseDTO;
 import com.ptithcm.clinic_booking.mapper.DoctorMapper;
 import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
+import com.ptithcm.clinic_booking.model.Account;
 import com.ptithcm.clinic_booking.model.Doctor;
 import com.ptithcm.clinic_booking.model.MedicalSpecialty;
 import com.ptithcm.clinic_booking.repository.DoctorRepository;
+import com.ptithcm.clinic_booking.service.AccountService;
 import com.ptithcm.clinic_booking.service.DoctorService;
 import com.ptithcm.clinic_booking.service.FirebaseService;
+import com.ptithcm.clinic_booking.service.MedicalSpecialtyService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,11 +25,16 @@ import java.util.stream.Collectors;
 public class DoctorServiceImpl implements DoctorService {
 
     private final DoctorRepository doctorRepository;
+    private final AccountService accountService;
     private final FirebaseService firebaseService;
-    public DoctorServiceImpl(DoctorRepository doctorRepository,
-                             FirebaseService firebaseService) {
+    private final MedicalSpecialtyService specialtyService;
+
+    public DoctorServiceImpl(DoctorRepository doctorRepository, AccountService accountService,
+                             FirebaseService firebaseService, MedicalSpecialtyService specialtyService) {
         this.doctorRepository = doctorRepository;
+        this.accountService = accountService;
         this.firebaseService = firebaseService;
+        this.specialtyService = specialtyService;
     }
 
     @Override
@@ -77,14 +85,19 @@ public class DoctorServiceImpl implements DoctorService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public void addDoctor(DoctorCreateDTO doctorDTO) {
         Doctor doctor = DoctorMapper.toDoctor(doctorDTO);
         doctor.setId(createDoctorId());
-        MultipartFile imageFile = doctorDTO.getImageFile();
+        specialtyService.getMSpecialtyById(doctorDTO.getMedicalSpecialtyId());
+        accountService.addAccount(doctorDTO.getAccount());
 
-        String imageUrl = addDoctorImage(imageFile, doctor.getId());
-        doctor.setImageLink(imageUrl);
+//        MultipartFile imageFile = doctorDTO.getImageFile();
+//        if(imageFile!=null&& !imageFile.isEmpty()){
+//            String imageUrl = addDoctorImage(imageFile, doctor.getId());
+//            doctor.setImageLink(imageUrl);
+//        }
         doctorRepository.save(doctor);
     }
 

@@ -1,6 +1,7 @@
 package com.ptithcm.clinic_booking.service.impl;
 
-import com.ptithcm.clinic_booking.dto.ServiceDTO;
+import com.ptithcm.clinic_booking.dto.service.ServiceCreateDTO;
+import com.ptithcm.clinic_booking.dto.service.ServiceDTO;
 import com.ptithcm.clinic_booking.mapper.ServiceMapper;
 import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
 import com.ptithcm.clinic_booking.model.Service;
@@ -47,7 +48,7 @@ public class OfferingServiceImpl implements OfferingService {
     }
 
     @Override
-    public void addService(ServiceDTO serviceDTO) {
+    public void addService(ServiceCreateDTO serviceDTO) {
         Service service = ServiceMapper.toService(serviceDTO);
         service.setId(createdServiceId());
         serviceRepository.save(service);

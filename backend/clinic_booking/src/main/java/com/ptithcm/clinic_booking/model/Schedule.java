@@ -14,7 +14,7 @@ public class Schedule {
 
     @Id
     @Column(name ="id", length = 15)
-    String id;
+    int id;
 
     @ManyToOne
     @JoinColumn(name = "doctor_id", nullable = false)
@@ -51,11 +51,14 @@ public class Schedule {
     public Schedule() {
     }
 
-    public String getId() {
+    public Schedule(Integer scheduleId) {
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

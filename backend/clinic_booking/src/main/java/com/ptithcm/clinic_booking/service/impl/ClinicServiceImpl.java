@@ -1,6 +1,7 @@
 package com.ptithcm.clinic_booking.service.impl;
 
-import com.ptithcm.clinic_booking.dto.ClinicDTO;
+import com.ptithcm.clinic_booking.dto.clinic.ClinicDTO;
+import com.ptithcm.clinic_booking.dto.clinic.ClinicCreateDTO;
 import com.ptithcm.clinic_booking.mapper.ClinicMapper;
 import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
 import com.ptithcm.clinic_booking.model.Clinic;
@@ -42,7 +43,7 @@ public class ClinicServiceImpl implements ClinicService {
     }
 
     @Override
-    public void addClinic(ClinicDTO clinicDTO) {
+    public void addClinic(ClinicCreateDTO clinicDTO) {
 
         Clinic clinic = ClinicMapper.toClinic(clinicDTO);
         clinic.setId(createClinicId());

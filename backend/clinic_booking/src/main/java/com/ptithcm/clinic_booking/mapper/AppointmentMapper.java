@@ -1,7 +1,10 @@
 package com.ptithcm.clinic_booking.mapper;
 
-import com.ptithcm.clinic_booking.dto.AppointmentDTO;
+import com.ptithcm.clinic_booking.dto.appointment.AppointmentCreateDTO;
+import com.ptithcm.clinic_booking.dto.appointment.AppointmentDTO;
 import com.ptithcm.clinic_booking.model.Appointment;
+import com.ptithcm.clinic_booking.model.Schedule;
+import com.ptithcm.clinic_booking.model.Service;
 
 public class AppointmentMapper {
     public static Appointment toAppointment(AppointmentDTO dto){
@@ -36,5 +39,23 @@ public class AppointmentMapper {
         dto.setCreatedAt(appointment.getCreatedAt());
 
         return dto;
+    }
+
+    public static Appointment toAppointment(AppointmentCreateDTO dto){
+        if (dto == null) return null;
+        Appointment appointment = new Appointment();
+
+        Service service = new Service(dto.getServiceId());
+        appointment.setService(service);
+
+        Schedule schedule = new Schedule(dto.getScheduleId());
+        appointment.setSchedule(schedule);
+
+        appointment.setCustomer(CustomerMapper.toCustomer(dto.getCustomer()));
+        appointment.setNumericalOrder(dto.getNumericalOrder());
+        appointment.setNote(dto.getNote());
+        appointment.setStatus(dto.getStatus());
+        appointment.setUpdatedBy(dto.getUpdatedByUser());
+        return appointment;
     }
 }

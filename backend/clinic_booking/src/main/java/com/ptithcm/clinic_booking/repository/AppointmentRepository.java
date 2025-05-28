@@ -17,12 +17,12 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
 
     Page<Appointment> findByScheduleDate(LocalDate date, Pageable pageable);
     Page<Appointment> findByStatus(AppointmentStatus status, Pageable pageable);
-    List<Appointment> findByScheduleId(String scheduleId);
-    int countByScheduleId(String scheduleId);
+    List<Appointment> findByScheduleId(Integer scheduleId);
+    int countByScheduleId(Integer scheduleId);
 
     @Query("SELECT a FROM Appointment a WHERE a.note LIKE %:keyword% OR a.customer.name LIKE %:keyword%")
     Page<Appointment> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
-    Optional<Appointment> findByCustomerEmailAndCustomerPhoneAndScheduleId(String email, String phone, String scheduleId);
+    Optional<Appointment> findByCustomerEmailAndCustomerPhoneAndScheduleId(String email, String phone, Integer scheduleId);
 
 //    Page<Appointment> findByScheduleDoctorId(String doctorId, Pageable pageable);
 //    Page<Appointment> findByScheduleIdAndScheduleDoctorId(String scheduleId, String doctorId, Pageable pageable);

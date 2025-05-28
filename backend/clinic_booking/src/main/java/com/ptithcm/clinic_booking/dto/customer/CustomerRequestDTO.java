@@ -7,10 +7,7 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
-public class CustomerDTO {
-    @Schema(description = "ID khách hàng", example = "10001")
-    private Integer id;
-
+public class CustomerRequestDTO {
     @NotBlank(message = "Tên khách hàng không được để trống.")
     @Size(max = 100, message = "Tên khách hàng không được vượt quá 100 ký tự.")
     private String name;
@@ -26,26 +23,14 @@ public class CustomerDTO {
     private String email;
 
     @Size(max = 255, message = "Địa chỉ không được vượt quá 255 ký tự.")
+    @Schema(description = "Địa chỉ liên hệ", example = "123 Đường ABC, Quận 1, TP.HCM")
     private String address;
-
+    @Schema(description = "Giới tính", example = "true")
     private Boolean gender;
 
-    @NotBlank(message = "Trạng thái không được để trống.")
-    @Size(max = 15, message = "Trạng thái không được vượt quá 15 ký tự.")
-    private String status;
-
-    private LocalDateTime createdAt;
-
-    public CustomerDTO() {
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
+//    @NotBlank(message = "Trạng thái không được để trống.")
+//    @Size(max = 15, message = "Trạng thái không được vượt quá 15 ký tự.")
+//    private String status;
 
     public @NotBlank(message = "Tên khách hàng không được để trống.") @Size(max = 100, message = "Tên khách hàng không được vượt quá 100 ký tự.") String getName() {
         return name;
@@ -87,19 +72,11 @@ public class CustomerDTO {
         this.gender = gender;
     }
 
-    public @NotBlank(message = "Trạng thái không được để trống.") @Size(max = 15, message = "Trạng thái không được vượt quá 15 ký tự.") String getStatus() {
-        return status;
-    }
-
-    public void setStatus(@NotBlank(message = "Trạng thái không được để trống.") @Size(max = 15, message = "Trạng thái không được vượt quá 15 ký tự.") String status) {
-        this.status = status;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+//    public @NotBlank(message = "Trạng thái không được để trống.") @Size(max = 15, message = "Trạng thái không được vượt quá 15 ký tự.") String getStatus() {
+//        return status;
+//    }
+//
+//    public void setStatus(@NotBlank(message = "Trạng thái không được để trống.") @Size(max = 15, message = "Trạng thái không được vượt quá 15 ký tự.") String status) {
+//        this.status = status;
+//    }
 }

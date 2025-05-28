@@ -1,12 +1,23 @@
 package com.ptithcm.clinic_booking.service.impl;
 
-import com.ptithcm.clinic_booking.dto.AppointmentDTO;
+import com.ptithcm.clinic_booking.dto.appointment.AppointmentCreateDTO;
+import com.ptithcm.clinic_booking.dto.appointment.AppointmentDTO;
+import com.ptithcm.clinic_booking.dto.customer.CustomerDTO;
+import com.ptithcm.clinic_booking.dto.customer.CustomerRequestDTO;
 import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
 import com.ptithcm.clinic_booking.mapper.AppointmentMapper;
+import com.ptithcm.clinic_booking.mapper.CustomerMapper;
 import com.ptithcm.clinic_booking.model.Appointment;
 import com.ptithcm.clinic_booking.model.AppointmentStatus;
+import com.ptithcm.clinic_booking.model.Customer;
+import com.ptithcm.clinic_booking.model.Schedule;
 import com.ptithcm.clinic_booking.repository.AppointmentRepository;
+import com.ptithcm.clinic_booking.repository.ScheduleRepository;
 import com.ptithcm.clinic_booking.service.AppointmentService;
+import com.ptithcm.clinic_booking.service.CustomerService;
+import com.ptithcm.clinic_booking.service.OfferingService;
+import com.ptithcm.clinic_booking.service.ScheduleService;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,9 +29,16 @@ import java.util.stream.Collectors;
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
     private final AppointmentRepository appointmentRepository;
+    private final CustomerService customerService;
+    private final OfferingService offeringService;
+    private final ScheduleRepository scheduleRepository;
 
-    public AppointmentServiceImpl(AppointmentRepository appointmentRepository) {
+    public AppointmentServiceImpl(AppointmentRepository appointmentRepository, CustomerService customerService,
+                                  OfferingService offeringService, ScheduleRepository scheduleRepository) {
         this.appointmentRepository = appointmentRepository;
+        this.customerService = customerService;
+        this.offeringService = offeringService;
+        this.scheduleRepository = scheduleRepository;
     }
 
     @Override
@@ -55,21 +73,34 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public AppointmentDTO getAppointmentByCustomerInfo(String email, String phone, String scheduleId) {
+    public AppointmentDTO getAppointmentByCustomerInfo(String email, String phone, Integer scheduleId) {
         Appointment appointment = appointmentRepository
                 .findByCustomerEmailAndCustomerPhoneAndScheduleId(email, phone, scheduleId)
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment not found with given customer info"));
         return AppointmentMapper.toAppointmentDTO(appointment);
     }
 
+    @Transactional
     @Override
-    public void addAppointment(AppointmentDTO appointmentDTO) {
+    public void addAppointment(AppointmentCreateDTO appointmentDTO) {
+        offeringService.getServiceById(appointmentDTO.getServiceId());
+
+        Schedule schedule = scheduleRepository.findById(appointmentDTO.getScheduleId())
+                .orElseThrow(() -> new RuntimeException("Schedule not found"));
+
         Appointment appointment = AppointmentMapper.toAppointment(appointmentDTO);
+        appointment.setSchedule(schedule);
+        CustomerDTO savedCustomer = customerService.addCustomer(appointmentDTO.getCustomer());
+
+        System.err.println("thêm cus thành công");
+        appointment.setCustomer(CustomerMapper.toCustomer(savedCustomer));
+        appointment.setStatus(AppointmentStatus.CONFIRMED);
         appointmentRepository.save(appointment);
+        System.err.println("save thành công");
     }
 
     @Override
-    public List<AppointmentDTO> getAppointmentsBySchedule(String scheduleId) {
+    public List<AppointmentDTO> getAppointmentsBySchedule(Integer scheduleId) {
         List<Appointment> appointments = appointmentRepository.findByScheduleId(scheduleId);
         return appointments.stream()
                 .map(AppointmentMapper::toAppointmentDTO)
@@ -77,7 +108,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public int countAppointmentsBySchedule(String scheduleId) {
+    public int countAppointmentsBySchedule(Integer scheduleId) {
         return appointmentRepository.countByScheduleId(scheduleId);
     }
 

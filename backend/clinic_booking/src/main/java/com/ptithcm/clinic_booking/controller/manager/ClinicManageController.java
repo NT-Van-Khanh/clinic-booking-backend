@@ -1,6 +1,7 @@
 package com.ptithcm.clinic_booking.controller.manager;
 
-import com.ptithcm.clinic_booking.dto.ClinicDTO;
+import com.ptithcm.clinic_booking.dto.clinic.ClinicDTO;
+import com.ptithcm.clinic_booking.dto.clinic.ClinicCreateDTO;
 import com.ptithcm.clinic_booking.model.ApiResponse;
 import com.ptithcm.clinic_booking.service.ClinicService;
 import jakarta.validation.Valid;
@@ -30,7 +31,7 @@ public class ClinicManageController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse<String>> addClinic(@RequestBody @Valid ClinicDTO clinic){
+    public ResponseEntity<ApiResponse<String>> addClinic(@RequestBody @Valid ClinicCreateDTO clinic){
         clinicService.addClinic(clinic);
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.CREATED,"Thêm phòng khám thành công."));
     }

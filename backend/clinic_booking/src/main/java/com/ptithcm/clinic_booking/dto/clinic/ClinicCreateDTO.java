@@ -1,16 +1,15 @@
-package com.ptithcm.clinic_booking.dto;
+package com.ptithcm.clinic_booking.dto.clinic;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
-public class ClinicDTO {
-    @Schema(description = "Id phòng khám", example = "CL01")
-    private String id;
-
+@Builder
+public class ClinicCreateDTO {
     @NotNull(message = "Tên phòng khám không được để trống.")
     @Size(min = 3, max = 100, message = "Tên phòng khám phải có độ dài từ 3 đến 100 ký tự")
     @Schema(description = "Tên phòng khám", example = "Phòng khám Đa khoa ABC")
@@ -32,36 +31,41 @@ public class ClinicDTO {
     private String description = "Phòng khám chuyên khoa đa dạng, phục vụ 24/7";
 
     @Schema(description = "Trạng thái phòng khám", example = "active")
-    private String status = "active";
+    private String status = "ACTIVE";
 
-    @Schema(description = "Thời gian tạo", example = "2025-05-22T10:15:30")
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    public ClinicDTO() {
+    public ClinicCreateDTO() {
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
+    public @NotNull(message = "Tên phòng khám không được để trống.") @Size(min = 3, max = 100, message = "Tên phòng khám phải có độ dài từ 3 đến 100 ký tự") String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(@NotNull(message = "Tên phòng khám không được để trống.") @Size(min = 3, max = 100, message = "Tên phòng khám phải có độ dài từ 3 đến 100 ký tự") String name) {
         this.name = name;
     }
 
-    public String getAddress() {
+    public @NotNull(message = "Địa chỉ không được để trống.") String getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(@NotNull(message = "Địa chỉ không được để trống.") String address) {
         this.address = address;
+    }
+
+    public @NotNull(message = "Số điện thoại không được để trống.") String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(@NotNull(message = "Số điện thoại không được để trống.") String phone) {
+        this.phone = phone;
+    }
+
+    public @Email(message = "Email không hợp lệ.") String getEmail() {
+        return email;
+    }
+
+    public void setEmail(@Email(message = "Email không hợp lệ.") String email) {
+        this.email = email;
     }
 
     public String getDescription() {
@@ -72,22 +76,6 @@ public class ClinicDTO {
         this.description = description;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -96,11 +84,4 @@ public class ClinicDTO {
         this.status = status;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 }

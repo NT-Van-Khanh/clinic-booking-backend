@@ -36,11 +36,6 @@ public class AuthController {
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, authResponse));
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<ApiResponse<String>> logout(){
-        accountService.logout();
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Đăng xuất thành công"));
-    }
 
     @PostMapping("/reset-password/send-otp/email")
     public ResponseEntity<ApiResponse<String>> sendOtpToEmail(@RequestBody @Valid EmailRequestDTO email){

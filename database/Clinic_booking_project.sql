@@ -90,7 +90,7 @@ CREATE TABLE clinic(
 );
 
 CREATE TABLE schedule(
-	id VARCHAR(15) PRIMARY KEY,
+	id INT PRIMARY KEY AUTO_INCREMENT,
     doctor_id VARCHAR(10) NOT NULL,
     clinic_id VARCHAR(10) NOT NULL,
     date date NOT NULL,
@@ -119,7 +119,7 @@ CREATE TABLE service(
 CREATE TABLE appointment(
 	id INT PRIMARY KEY AUTO_INCREMENT,
     service_id VARCHAR(10) NOT NULL,
-    schedule_id VARCHAR(15) NOT NULL,
+    schedule_id int NOT NULL,
     customer_id INT NOT NULL,
     numerical_order SMALLINT NOT NULL CHECK (numerical_order > 0),
     note VARCHAR(255) NOT NULL,
@@ -129,6 +129,7 @@ CREATE TABLE appointment(
     created_at DATETIME NOT NULL DEFAULT NOW(),
     
     UNIQUE (customer_id, schedule_id),
+    UNIQUE (schedule_id, numerical_order),
     FOREIGN KEY (schedule_id) REFERENCES schedule(id),
     FOREIGN KEY (service_id) REFERENCES service(id),
     FOREIGN KEY (customer_id) REFERENCES customer(id)
@@ -276,28 +277,48 @@ INSERT INTO clinic (id, name, address, description, phone, email, status) VALUES
 ('CL10', 'Phòng khám Thần kinh', '101 Main St.', 'Khám và điều trị các bệnh hệ thần kinh (Neurology - Nervous system disorders)', '02888990011', 'info@neuroclinic.com', 'ACTIVE'),
 ('CL11', 'Phòng khám Tâm lý học', '101 Main St.', 'Khám và điều trị các vấn đề về sức khỏe tinh thần, tư vấn tâm lý (Psychology - Mental health counseling and therapy)', '02899001122', 'support@mindcareclinic.com', 'ACTIVE');
 
-INSERT INTO schedule (id, doctor_id, clinic_id, date, time_start, time_end, max_booking, status)
+-- INSERT INTO schedule (id, doctor_id, clinic_id, date, time_start, time_end, max_booking, status)
+-- VALUES 
+-- (016, 'D001', 'CL01', '2025-06-04', '08:00:00', '11:00:00', 10, 'ACTIVE'),
+-- (017, 'D002', 'CL02', '2025-06-04', '09:00:00', '12:00:00', 12, 'UPCOMING'),
+-- (018, 'D003', 'CL03', '2025-06-05', '10:00:00', '13:00:00', 8, 'UPCOMING'),
+-- (019, 'D004', 'CL04', '2025-06-06', '14:00:00', '17:00:00', 12, 'UPCOMING'),
+-- (020, 'D005', 'CL05', '2025-06-07', '08:30:00', '11:30:00', 10, 'UPCOMING'),
+-- (021, 'D001', 'CL06', '2025-06-08', '08:00:00', '11:00:00', 15, 'UPCOMING'),  -- D001 có lịch chung với CL06
+-- (022, 'D002', 'CL07', '2025-06-08', '08:00:00', '11:00:00', 15, 'UPCOMING'),  -- D002 cũng có lịch chung với CL06
+-- (023, 'D006', 'CL06', '2025-06-08', '09:00:00', '12:00:00', 10, 'UPCOMING'),
+-- (024, 'D007', 'CL07', '2025-06-09', '10:00:00', '13:00:00', 10, 'UPCOMING'),
+-- (025, 'D008', 'CL08', '2025-06-09', '08:00:00', '11:00:00', 12, 'UPCOMING'),
+-- (026, 'D009', 'CL09', '2025-06-10', '09:00:00', '12:00:00', 10, 'UPCOMING'),
+-- (027, 'D010', 'CL10', '2025-06-10', '14:00:00', '17:00:00', 15, 'ACTIVE'),
+-- (028, 'D003', 'CL02', '2025-06-11', '08:00:00', '11:00:00', 8, 'ACTIVE'),  -- D003 có lịch riêng tại CL02
+-- (029, 'D005', 'CL03', '2025-06-12', '10:00:00', '13:00:00', 12, 'ACTIVE'),
+-- (030, 'D007', 'CL07', '2025-06-12', '08:00:00', '11:00:00', 10, 'ACTIVE'),
+-- (031, 'D008', 'CL08', '2025-06-13', '14:00:00', '17:00:00', 15, 'ACTIVE'),
+-- (032, 'D001', 'CL09', '2025-06-14', '09:00:00', '12:00:00', 10, 'ACTIVE'),  -- D001 có lịch riêng tại CL09
+-- (033, 'D006', 'CL05', '2025-06-14', '09:00:00', '12:00:00', 10, 'ACTIVE'),
+-- (034, 'D010', 'CL06', '2025-06-15', '08:00:00', '11:00:00', 12, 'ACTIVE');
+INSERT INTO schedule (doctor_id, clinic_id, date, time_start, time_end, max_booking, status)
 VALUES 
-('SCHED016', 'D001', 'CL01', '2025-06-04', '08:00:00', '11:00:00', 10, 'ACTIVE'),
-('SCHED017', 'D002', 'CL02', '2025-06-04', '09:00:00', '12:00:00', 12, 'UPCOMING'),
-('SCHED018', 'D003', 'CL03', '2025-06-05', '10:00:00', '13:00:00', 8, 'UPCOMING'),
-('SCHED019', 'D004', 'CL04', '2025-06-06', '14:00:00', '17:00:00', 12, 'UPCOMING'),
-('SCHED020', 'D005', 'CL05', '2025-06-07', '08:30:00', '11:30:00', 10, 'UPCOMING'),
-('SCHED021', 'D001', 'CL06', '2025-06-08', '08:00:00', '11:00:00', 15, 'UPCOMING'),  -- D001 có lịch chung với CL06
-('SCHED022', 'D002', 'CL07', '2025-06-08', '08:00:00', '11:00:00', 15, 'UPCOMING'),  -- D002 cũng có lịch chung với CL06
-('SCHED023', 'D006', 'CL06', '2025-06-08', '09:00:00', '12:00:00', 10, 'UPCOMING'),
-('SCHED024', 'D007', 'CL07', '2025-06-09', '10:00:00', '13:00:00', 10, 'UPCOMING'),
-('SCHED025', 'D008', 'CL08', '2025-06-09', '08:00:00', '11:00:00', 12, 'UPCOMING'),
-('SCHED026', 'D009', 'CL09', '2025-06-10', '09:00:00', '12:00:00', 10, 'UPCOMING'),
-('SCHED027', 'D010', 'CL10', '2025-06-10', '14:00:00', '17:00:00', 15, 'ACTIVE'),
-('SCHED028', 'D003', 'CL02', '2025-06-11', '08:00:00', '11:00:00', 8, 'ACTIVE'),  -- D003 có lịch riêng tại CL02
-('SCHED029', 'D005', 'CL03', '2025-06-12', '10:00:00', '13:00:00', 12, 'ACTIVE'),
-('SCHED030', 'D007', 'CL07', '2025-06-12', '08:00:00', '11:00:00', 10, 'ACTIVE'),
-('SCHED031', 'D008', 'CL08', '2025-06-13', '14:00:00', '17:00:00', 15, 'ACTIVE'),
-('SCHED032', 'D001', 'CL09', '2025-06-14', '09:00:00', '12:00:00', 10, 'ACTIVE'),  -- D001 có lịch riêng tại CL09
-('SCHED033', 'D006', 'CL05', '2025-06-14', '09:00:00', '12:00:00', 10, 'ACTIVE'),
-('SCHED034', 'D010', 'CL06', '2025-06-15', '08:00:00', '11:00:00', 12, 'ACTIVE');
-
+( 'D001', 'CL01', '2025-06-04', '08:00:00', '11:00:00', 10, 'ACTIVE'),
+('D002', 'CL02', '2025-06-04', '09:00:00', '12:00:00', 12, 'UPCOMING'),
+( 'D003', 'CL03', '2025-06-05', '10:00:00', '13:00:00', 8, 'UPCOMING'),
+( 'D004', 'CL04', '2025-06-06', '14:00:00', '17:00:00', 12, 'UPCOMING'),
+( 'D005', 'CL05', '2025-06-07', '08:30:00', '11:30:00', 10, 'UPCOMING'),
+( 'D001', 'CL06', '2025-06-08', '08:00:00', '11:00:00', 15, 'UPCOMING'),  -- D001 có lịch chung với CL06
+( 'D002', 'CL07', '2025-06-08', '08:00:00', '11:00:00', 15, 'UPCOMING'),  -- D002 cũng có lịch chung với CL06
+('D006', 'CL06', '2025-06-08', '09:00:00', '12:00:00', 10, 'UPCOMING'),
+('D007', 'CL07', '2025-06-09', '10:00:00', '13:00:00', 10, 'UPCOMING'),
+('D008', 'CL08', '2025-06-09', '08:00:00', '11:00:00', 12, 'UPCOMING'),
+('D009', 'CL09', '2025-06-10', '09:00:00', '12:00:00', 10, 'UPCOMING'),
+('D010', 'CL10', '2025-06-10', '14:00:00', '17:00:00', 15, 'ACTIVE'),
+('D003', 'CL02', '2025-06-11', '08:00:00', '11:00:00', 8, 'ACTIVE'),  -- D003 có lịch riêng tại CL02
+('D005', 'CL03', '2025-06-12', '10:00:00', '13:00:00', 12, 'ACTIVE'),
+('D007', 'CL07', '2025-06-12', '08:00:00', '11:00:00', 10, 'ACTIVE'),
+('D008', 'CL08', '2025-06-13', '14:00:00', '17:00:00', 15, 'ACTIVE'),
+('D001', 'CL09', '2025-06-14', '09:00:00', '12:00:00', 10, 'ACTIVE'),  -- D001 có lịch riêng tại CL09
+('D006', 'CL05', '2025-06-14', '09:00:00', '12:00:00', 10, 'ACTIVE'),
+('D010', 'CL06', '2025-06-15', '08:00:00', '11:00:00', 12, 'ACTIVE');
 
 
 DELIMITER $$

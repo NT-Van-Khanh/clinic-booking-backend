@@ -1,5 +1,6 @@
-package com.ptithcm.clinic_booking.dto;
+package com.ptithcm.clinic_booking.dto.schedule;
 
+import com.ptithcm.clinic_booking.dto.clinic.ClinicDTO;
 import com.ptithcm.clinic_booking.dto.doctor.DoctorSimpleResponseDTO;
 import com.ptithcm.clinic_booking.model.ScheduleStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class ScheduleDTO {
-    private String id;
+    private int id;
 
     @NotNull(message = "Thông tin bác sĩ không được để trống")
     @Schema(description = "Thông tin bác sĩ")
@@ -49,11 +50,11 @@ public class ScheduleDTO {
     public ScheduleDTO() {
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "doctor")
-public class Doctor {
+public class Doctor  extends Person{
 
     @Id
     @Column(name = "id", length = 10)
@@ -19,27 +19,27 @@ public class Doctor {
     @JoinColumn(name = "account_id", nullable = false, unique = true)
     private Account account;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medical_specialty_id", nullable = false)
     private MedicalSpecialty medicalSpecialty;
 
-    @Column(name = "name", nullable = false, length = 100)
-    private String name;
-
-    @Column(name = "phone", nullable = false, unique = true, length = 15)
-    private String phone;
-
-    @Column(name = "email", nullable = false, unique = true, length = 100)
-    private String email;
-
+//    @Column(name = "name", nullable = false, length = 100)
+//    private String name;
+//
+//    @Column(name = "phone", nullable = false, unique = true, length = 15)
+//    private String phone;
+//
+//    @Column(name = "email", nullable = false, unique = true, length = 100)
+//    private String email;
+//
     @Column(name = "birthday", nullable = false)
     private LocalDate birthday;
-
-    @Column(name = "address", length = 255)
-    private String address;
-
-    @Column(name = "gender")
-    private Boolean gender;
+//
+//    @Column(name = "address", length = 255)
+//    private String address;
+//
+//    @Column(name = "gender")
+//    private Boolean gender;
 
     @Column(name = "qualification", columnDefinition = "TEXT")
     private String qualification;
@@ -53,14 +53,20 @@ public class Doctor {
     @Column(name = "status", nullable = false, length = 15)
     private String status;
 
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "DATETIME")
-    private LocalDateTime createdAt;
+//    @CreationTimestamp
+//    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "DATETIME")
+//    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "doctor")
     private List<Schedule> schedules;
 
     public Doctor() {
+        super();
+    }
+
+    public Doctor(String id) {
+        super();
+        this.id = id;
     }
 
     public String getId() {
@@ -87,45 +93,45 @@ public class Doctor {
         this.medicalSpecialty = medicalSpecialty;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public Boolean getGender() {
-        return gender;
-    }
-
-    public void setGender(Boolean gender) {
-        this.gender = gender;
-    }
+//    public String getName() {
+//        return name;
+//    }
+//
+//    public void setName(String name) {
+//        this.name = name;
+//    }
+//
+//    public String getPhone() {
+//        return phone;
+//    }
+//
+//    public void setPhone(String phone) {
+//        this.phone = phone;
+//    }
+//
+//    public String getEmail() {
+//        return email;
+//    }
+//
+//    public void setEmail(String email) {
+//        this.email = email;
+//    }
+//
+//    public String getAddress() {
+//        return address;
+//    }
+//
+//    public void setAddress(String address) {
+//        this.address = address;
+//    }
+//
+//    public Boolean getGender() {
+//        return gender;
+//    }
+//
+//    public void setGender(Boolean gender) {
+//        this.gender = gender;
+//    }
 
     public String getStatus() {
         return status;
@@ -135,13 +141,13 @@ public class Doctor {
         this.status = status;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+//    public LocalDateTime getCreatedAt() {
+//        return createdAt;
+//    }
+//
+//    public void setCreatedAt(LocalDateTime createdAt) {
+//        this.createdAt = createdAt;
+//    }
 
     public List<Schedule> getSchedules() {
         return schedules;

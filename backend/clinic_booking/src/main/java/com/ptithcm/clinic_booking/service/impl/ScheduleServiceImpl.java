@@ -1,19 +1,20 @@
 package com.ptithcm.clinic_booking.service.impl;
 
-import com.ptithcm.clinic_booking.dto.ScheduleDTO;
+import com.ptithcm.clinic_booking.dto.schedule.ScheduleCreateDTO;
+import com.ptithcm.clinic_booking.dto.schedule.ScheduleDTO;
 import com.ptithcm.clinic_booking.mapper.ScheduleMapper;
 import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
 import com.ptithcm.clinic_booking.model.Schedule;
 import com.ptithcm.clinic_booking.model.ScheduleStatus;
 import com.ptithcm.clinic_booking.repository.ScheduleRepository;
 import com.ptithcm.clinic_booking.service.ScheduleService;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +27,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public ScheduleDTO getScheduleById(String id) {
+    public ScheduleDTO getScheduleById(Integer id) {
         Schedule schedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lịch trình với ID: " + id));
         return ScheduleMapper.toScheduleDTO(schedule);
@@ -69,20 +70,20 @@ public class ScheduleServiceImpl implements ScheduleService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
-    public void addSchedule(ScheduleDTO scheduleDTO) {
+    public void addSchedule(ScheduleCreateDTO scheduleDTO) {
 
         if(scheduleDTO == null) throw new IllegalArgumentException("Dữ liệu lịch trình không hợp lệ.");
-
         Schedule schedule = ScheduleMapper.toSchedule(scheduleDTO);
-        schedule.setId(createScheduleId());
+//        schedule.setId(createScheduleId());
         scheduleRepository.save(schedule);
     }
 
-    private String createScheduleId() {
-        long countSchedule = scheduleRepository.count();
-        return String.format("SCHE%010d",countSchedule + 1);
-    }
+//    private String createScheduleId() {
+//        long countSchedule = scheduleRepository.count();
+//        return String.format("SCHE%010d",countSchedule + 1);
+//    }
 
     @Override
     public void updateSchedule(ScheduleDTO scheduleDTO) {
@@ -95,7 +96,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public void changeStatusSchedule(String id, ScheduleStatus status) {
+    public void changeStatusSchedule(Integer id, ScheduleStatus status) {
 
         Schedule s = scheduleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không thể xóa. Không tìm thấy lịch trình với ID: " + id));
@@ -150,7 +151,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public void softDeleteSchedule(String id) {
+    public void softDeleteSchedule(Integer id) {
         Schedule s = scheduleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không thể xóa. Không tìm thấy lịch trình với ID: " + id));
         s.setStatus(ScheduleStatus.DELETED);

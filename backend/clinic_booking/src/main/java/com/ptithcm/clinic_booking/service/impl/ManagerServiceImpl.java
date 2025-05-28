@@ -6,6 +6,7 @@ import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
 import com.ptithcm.clinic_booking.mapper.ManagerMapper;
 import com.ptithcm.clinic_booking.model.Manager;
 import com.ptithcm.clinic_booking.repository.ManagerRepository;
+import com.ptithcm.clinic_booking.service.AccountService;
 import com.ptithcm.clinic_booking.service.ManagerService;
 import jakarta.transaction.Transactional;
 
@@ -14,15 +15,18 @@ import java.util.stream.Collectors;
 
 public class ManagerServiceImpl implements ManagerService {
     private final ManagerRepository managerRepository;
-
-    public ManagerServiceImpl(ManagerRepository managerRepository) {
+    private final AccountService accountService;
+    public ManagerServiceImpl(ManagerRepository managerRepository, AccountService accountService) {
         this.managerRepository = managerRepository;
+        this.accountService = accountService;
     }
 
+    @Transactional
     @Override
     public void addManager(ManagerRequestDTO managerRequestDTO) {
         Manager manager = ManagerMapper.toManager(managerRequestDTO);
         manager.setId(createManagerId());
+        accountService.addAccount(managerRequestDTO.getAccount());
         manager.setStatus("ACTIVE");
         managerRepository.save(manager);
     }

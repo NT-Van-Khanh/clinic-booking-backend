@@ -1,7 +1,8 @@
 package com.ptithcm.clinic_booking.service.impl;
 
-import com.ptithcm.clinic_booking.dto.AppointmentDTO;
+import com.ptithcm.clinic_booking.dto.appointment.AppointmentDTO;
 import com.ptithcm.clinic_booking.dto.customer.CustomerDTO;
+import com.ptithcm.clinic_booking.dto.customer.CustomerRequestDTO;
 import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
 import com.ptithcm.clinic_booking.mapper.AppointmentMapper;
 import com.ptithcm.clinic_booking.mapper.CustomerMapper;
@@ -16,7 +17,6 @@ import com.ptithcm.clinic_booking.service.EmailService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,10 +70,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void addCustomer(CustomerDTO customerDTO) {
+    public CustomerDTO addCustomer(CustomerRequestDTO customerDTO) {
         Customer customer = CustomerMapper.toCustomer(customerDTO);
         customer.setStatus("ACTIVE"); // hoặc trạng thái mặc định
         customerRepository.save(customer);
+        return CustomerMapper.toCustomerDTO(customer);
     }
 
     @Transactional

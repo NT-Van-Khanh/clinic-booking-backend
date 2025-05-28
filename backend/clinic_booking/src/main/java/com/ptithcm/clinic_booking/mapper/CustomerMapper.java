@@ -1,6 +1,7 @@
 package com.ptithcm.clinic_booking.mapper;
 
 import com.ptithcm.clinic_booking.dto.customer.CustomerDTO;
+import com.ptithcm.clinic_booking.dto.customer.CustomerRequestDTO;
 import com.ptithcm.clinic_booking.model.Customer;
 
 public class CustomerMapper {
@@ -31,6 +32,19 @@ public class CustomerMapper {
         customer.setAddress(dto.getAddress());
         customer.setGender(dto.getGender());
         customer.setStatus(dto.getStatus());
+
+        return customer;
+    }
+
+    public static Customer toCustomer(CustomerRequestDTO dto){
+        if (dto == null) return null;
+
+        Customer customer = new Customer();
+        customer.setName(dto.getName());
+        customer.setPhone(dto.getPhone());
+        customer.setEmail(dto.getEmail());
+        customer.setAddress(dto.getAddress());
+        customer.setGender(dto.getGender());
 
         return customer;
     }

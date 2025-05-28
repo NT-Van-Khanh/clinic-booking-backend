@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-public interface ScheduleRepository extends JpaRepository<Schedule, String> {
+public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
     List<Schedule> findByStatus(ScheduleStatus status);
 
     List<Schedule> findByDoctorId(String doctorId);

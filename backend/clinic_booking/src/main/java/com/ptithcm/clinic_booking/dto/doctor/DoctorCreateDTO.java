@@ -3,24 +3,21 @@ package com.ptithcm.clinic_booking.dto.doctor;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ptithcm.clinic_booking.dto.account.AccountRequestDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class DoctorCreateDTO {
-    private String id;
+
 
     @NotNull(message = "Không được để trống mã tài khoản")
     @Schema(description = "Tài khoản đăng nhập hệ thống")
     private AccountRequestDTO account;
 
     @NotBlank(message = "Không được để trống mã chuyên khoa")
-    @Schema(description = "Mã chuyên khoa", example = "med456")
+    @Schema(description = "Mã chuyên khoa", example = "MS01")
     private String medicalSpecialtyId;
 
     @NotBlank(message = "Không được để trống họ tên")
@@ -49,14 +46,15 @@ public class DoctorCreateDTO {
     @NotBlank(message = "Không được để trống trạng thái")
     @Size(max = 15, message = "Trạng thái tối đa 15 ký tự")
     @Schema(description = "Trạng thái bác sĩ", example = "ACTIVE")
+    @Pattern(regexp = "^(ACTIVE|BLOCKED|DELETED)$", message = "Trạng thái phải là ACTIVE, BLOCKED hoặc DELETED")
     private String status;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    @Schema(description = "Thời gian tạo", example = "2025-05-22T10:15:30")
-    private LocalDateTime createdAt;
+//    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+//    @Schema(description = "Thời gian tạo", example = "2025-05-22T10:15:30")
+//    private LocalDateTime createdAt;
 
-    @Schema(description = "Ảnh đại diện (file upload)", type = "string", format = "binary")
-    private MultipartFile imageFile;
+//    @Schema(description = "Ảnh đại diện (file upload)", type = "string", format = "binary")
+//    private MultipartFile imageFile;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Schema(description = "Ngày sinh", example = "1980-11-12")
@@ -68,14 +66,14 @@ public class DoctorCreateDTO {
 
     @Schema(description = "Trình độ chuyên môn", example = "Bác sĩ Chuyên khoa I")
     private String qualification;
-
-    public MultipartFile getImageFile() {
-        return imageFile;
-    }
-
-    public void setImageFile(MultipartFile imageFile) {
-        this.imageFile = imageFile;
-    }
+//
+//    public MultipartFile getImageFile() {
+//        return imageFile;
+//    }
+//
+//    public void setImageFile(MultipartFile imageFile) {
+//        this.imageFile = imageFile;
+//    }
 
     public String getDescription() {
         return description;
@@ -102,14 +100,6 @@ public class DoctorCreateDTO {
     }
 
     public DoctorCreateDTO() {
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
 
@@ -178,11 +168,11 @@ public class DoctorCreateDTO {
         this.status = status;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+//    public LocalDateTime getCreatedAt() {
+//        return createdAt;
+//    }
+//
+//    public void setCreatedAt(LocalDateTime createdAt) {
+//        this.createdAt = createdAt;
+//    }
 }

@@ -1,6 +1,7 @@
 package com.ptithcm.clinic_booking.mapper;
 
-import com.ptithcm.clinic_booking.dto.ScheduleDTO;
+import com.ptithcm.clinic_booking.dto.schedule.ScheduleCreateDTO;
+import com.ptithcm.clinic_booking.dto.schedule.ScheduleDTO;
 import com.ptithcm.clinic_booking.model.Clinic;
 import com.ptithcm.clinic_booking.model.Doctor;
 import com.ptithcm.clinic_booking.model.Schedule;
@@ -21,6 +22,7 @@ public class ScheduleMapper {
         dto.setCreatedAt(schedule.getCreatedAt());
         return dto;
     }
+
     public static Schedule toSchedule(ScheduleDTO dto) {
         if (dto == null) return null;
         Schedule schedule = new Schedule();
@@ -40,6 +42,23 @@ public class ScheduleMapper {
             clinic.setId(dto.getClinic().getId());
             schedule.setClinic(clinic);
         }
+        return schedule;
+    }
+
+    public static Schedule toSchedule(ScheduleCreateDTO dto) {
+        if (dto == null) return null;
+        Schedule schedule = new Schedule();
+        schedule.setDate(dto.getDate());
+        schedule.setTimeStart(dto.getTimeStart());
+        schedule.setTimeEnd(dto.getTimeEnd());
+        schedule.setMaxBooking(dto.getMaxBooking());
+        schedule.setStatus(dto.getStatus() != null ? dto.getStatus() : ScheduleStatus.UPCOMING);
+
+        Doctor doctor = new Doctor(dto.getDoctorId());
+        schedule.setDoctor(doctor);
+
+        Clinic clinic = new Clinic(dto.getClinicId());
+        schedule.setClinic(clinic);
         return schedule;
     }
 }

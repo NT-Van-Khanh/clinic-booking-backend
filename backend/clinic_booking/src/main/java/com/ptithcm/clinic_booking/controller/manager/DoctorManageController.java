@@ -41,7 +41,7 @@ public class DoctorManageController {
     @PostMapping("/add")
     public ResponseEntity<ApiResponse<String>> addDoctor(@RequestBody @Valid DoctorCreateDTO doctor){
         doctorService.addDoctor(doctor);
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Cập nhật bác sĩ thành công"));
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Thêm bác sĩ thành công"));
     }
 
     @PutMapping("/update")

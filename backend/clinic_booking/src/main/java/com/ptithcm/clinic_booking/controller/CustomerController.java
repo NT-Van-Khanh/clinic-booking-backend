@@ -1,6 +1,6 @@
 package com.ptithcm.clinic_booking.controller;
 
-import com.ptithcm.clinic_booking.dto.AppointmentDTO;
+import com.ptithcm.clinic_booking.dto.appointment.AppointmentDTO;
 import com.ptithcm.clinic_booking.dto.customer.CustomerDTO;
 import com.ptithcm.clinic_booking.model.ApiResponse;
 import com.ptithcm.clinic_booking.service.CustomerService;

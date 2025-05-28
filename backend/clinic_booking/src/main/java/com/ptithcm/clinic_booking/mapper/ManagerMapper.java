@@ -32,14 +32,7 @@ public class ManagerMapper {
         manager.setGender(dto.getGender());
         manager.setStatus(dto.getStatus());
 
-        Account account = new Account();
-        account.setUsername(dto.getUsername());
-
-        Role role = new Role();
-        role.setName(dto.getRole());
-        account.setRole(role);
-
-        manager.setAccount(account);
+        manager.setAccount(AccountMapper.toAccount(dto.getAccount()));
         return manager;
     }
 }

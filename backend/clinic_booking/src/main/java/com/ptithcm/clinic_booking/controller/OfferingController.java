@@ -1,11 +1,8 @@
 package com.ptithcm.clinic_booking.controller;
 
-import com.ptithcm.clinic_booking.dto.ClinicDTO;
-import com.ptithcm.clinic_booking.dto.ServiceDTO;
+import com.ptithcm.clinic_booking.dto.service.ServiceDTO;
 import com.ptithcm.clinic_booking.model.ApiResponse;
-import com.ptithcm.clinic_booking.model.Service;
 import com.ptithcm.clinic_booking.service.OfferingService;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

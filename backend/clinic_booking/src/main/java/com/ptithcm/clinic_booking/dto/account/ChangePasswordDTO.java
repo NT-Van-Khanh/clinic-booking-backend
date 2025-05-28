@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 
 public class ChangePasswordDTO {
     @Schema(description = "Tên đăng nhập của tài khoản",
-            example = "manager123", minLength = 8, maxLength = 100)
+            example = "manager1", minLength = 8, maxLength = 100)
     @NotBlank(message = "Tên đăng nhập không được để trống.")
     @Size(min = 8, max = 100, message = "Tên đăng nhập phải từ 8 đến 50 ký tự")
     private String username;

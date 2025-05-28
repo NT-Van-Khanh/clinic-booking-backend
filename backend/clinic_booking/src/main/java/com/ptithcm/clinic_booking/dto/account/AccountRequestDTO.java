@@ -19,7 +19,7 @@ public class AccountRequestDTO {
     @Size(min = 8, max = 255, message = "Mật khẩu phải có ít nhất 8 ký tự")
     private String password;
 
-    @Schema( description = "Vai trò của tài khoản (chỉ cho phép MANAGER)", example = "1")
+    @Schema( description = "Vai trò của tài khoản (chỉ cho phép MANAGER và DOCTOR)", example = "2")
     @NotNull(message = "Vai trò không được để trống.")
     private Short roleId;
 

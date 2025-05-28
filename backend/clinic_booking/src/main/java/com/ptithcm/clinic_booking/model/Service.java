@@ -41,6 +41,10 @@ public class Service {
     public Service() {
     }
 
+    public Service(String id) {
+        this.id = id;
+    }
+
     public String getId() {
         return id;
     }

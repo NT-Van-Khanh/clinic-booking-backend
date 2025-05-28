@@ -1,10 +1,9 @@
 package com.ptithcm.clinic_booking.controller;
 
-import com.ptithcm.clinic_booking.dto.ScheduleDTO;
+import com.ptithcm.clinic_booking.dto.schedule.ScheduleDTO;
 import com.ptithcm.clinic_booking.model.ApiResponse;
 import com.ptithcm.clinic_booking.model.ScheduleStatus;
 import com.ptithcm.clinic_booking.service.ScheduleService;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +26,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<ScheduleDTO>> getScheduleById(@PathVariable @NotBlank String id){
+    public ResponseEntity<ApiResponse<ScheduleDTO>> getScheduleById(@PathVariable @NotBlank Integer id){
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, scheduleService.getScheduleById(id)));
     }
 

@@ -1,9 +1,7 @@
 package com.ptithcm.clinic_booking.controller;
 
-import com.ptithcm.clinic_booking.dto.ClinicDTO;
-import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
+import com.ptithcm.clinic_booking.dto.clinic.ClinicDTO;
 import com.ptithcm.clinic_booking.model.ApiResponse;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

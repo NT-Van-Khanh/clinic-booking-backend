@@ -1,6 +1,7 @@
 package com.ptithcm.clinic_booking.controller.doctor;
 
-import com.ptithcm.clinic_booking.dto.ScheduleDTO;
+import com.ptithcm.clinic_booking.dto.schedule.ScheduleCreateDTO;
+import com.ptithcm.clinic_booking.dto.schedule.ScheduleDTO;
 import com.ptithcm.clinic_booking.model.ApiResponse;
 import com.ptithcm.clinic_booking.model.ScheduleStatus;
 import com.ptithcm.clinic_booking.service.ScheduleService;
@@ -22,7 +23,7 @@ public class DoctorScheduleController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse<String>> addSchedule(@RequestBody @Valid ScheduleDTO schedule){
+    public ResponseEntity<ApiResponse<String>> addSchedule(@RequestBody @Valid ScheduleCreateDTO schedule){
         scheduleService.addSchedule(schedule);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ApiResponse<>(HttpStatus.CREATED,"Thêm lịch trình thành công."));
@@ -35,19 +36,19 @@ public class DoctorScheduleController {
     }
 
     @PutMapping("/cancel/{id}")
-    public ResponseEntity<ApiResponse<String>> cancelSchedule(@PathVariable @NotBlank String id) {
+    public ResponseEntity<ApiResponse<String>> cancelSchedule(@PathVariable @NotBlank Integer id) {
         scheduleService.changeStatusSchedule(id, ScheduleStatus.CANCELED);
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,"Hủy lịch trình thành công."));
     }
 
     @PutMapping("/pause/{id}")
-    public ResponseEntity<ApiResponse<String>> pauseSchedule(@PathVariable @NotBlank String id) {
+    public ResponseEntity<ApiResponse<String>> pauseSchedule(@PathVariable @NotBlank Integer id) {
         scheduleService.changeStatusSchedule(id, ScheduleStatus.CANCELED);
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,"Tạm hoãn lịch trình thành công."));
     }
 
     @PutMapping("/resume/{id}")
-    public ResponseEntity<ApiResponse<String>> resumeSchedule(@PathVariable @NotBlank String id) {
+    public ResponseEntity<ApiResponse<String>> resumeSchedule(@PathVariable @NotBlank Integer id) {
         scheduleService.changeStatusSchedule(id, ScheduleStatus.ACTIVE);
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,"Mở lại lịch trình thành công."));
     }

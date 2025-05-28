@@ -42,6 +42,10 @@ public class Clinic {
     public Clinic() {
     }
 
+    public Clinic(String id) {
+        this.id = id;
+    }
+
     public String getId() {
         return id;
     }
