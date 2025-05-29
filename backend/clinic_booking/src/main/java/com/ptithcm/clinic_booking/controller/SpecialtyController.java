@@ -1,5 +1,8 @@
 package com.ptithcm.clinic_booking.controller;
 
+import com.google.api.Page;
+import com.ptithcm.clinic_booking.dto.PageResponse;
+import com.ptithcm.clinic_booking.dto.PaginationRequest;
 import com.ptithcm.clinic_booking.dto.specialty.BaseMedicalSpecialtyDTO;
 import com.ptithcm.clinic_booking.dto.specialty.MedicalSpecialtyRequestDTO;
 import com.ptithcm.clinic_booking.dto.specialty.MedicalSpecialtyResponseDTO;
@@ -26,10 +29,16 @@ public class SpecialtyController {
         this.mSpecialtyService = mSpecialtyService;
     }
 
-    @GetMapping("/all/active")
+    @GetMapping("/active/all")
     public ResponseEntity<ApiResponse<List<BaseMedicalSpecialtyDTO>>> getAllActiveMSpecialties(){
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,
                 mSpecialtyService.getAllActiveMSpecialties()));
+    }
+
+    @GetMapping("/active/page")
+    public ResponseEntity<ApiResponse<PageResponse<BaseMedicalSpecialtyDTO>>> getPageActiveMSpecialties(@ModelAttribute @Valid PaginationRequest pageRequest){
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,
+                mSpecialtyService.getPageActiveMSpecialties(pageRequest)));
     }
 
     @GetMapping("/{id}")

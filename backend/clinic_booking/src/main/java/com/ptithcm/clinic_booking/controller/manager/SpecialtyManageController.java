@@ -1,6 +1,8 @@
 package com.ptithcm.clinic_booking.controller.manager;
 
 
+import com.ptithcm.clinic_booking.dto.PageResponse;
+import com.ptithcm.clinic_booking.dto.PaginationRequest;
 import com.ptithcm.clinic_booking.dto.specialty.MedicalSpecialtyRequestDTO;
 import com.ptithcm.clinic_booking.dto.specialty.MedicalSpecialtyResponseDTO;
 import com.ptithcm.clinic_booking.model.ApiResponse;
@@ -28,6 +30,12 @@ public class SpecialtyManageController {
     public ResponseEntity<ApiResponse<List<MedicalSpecialtyResponseDTO>>> getAllMSpecialties(){
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,
                 mSpecialtyService.getAllMSpecialties()));
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<ApiResponse<PageResponse<MedicalSpecialtyResponseDTO>>> getPageMSpecialties(@ModelAttribute @Valid PaginationRequest pageRequest){
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,
+                mSpecialtyService.getPageMSpecialties(pageRequest)));
     }
 
     @PutMapping("/update")

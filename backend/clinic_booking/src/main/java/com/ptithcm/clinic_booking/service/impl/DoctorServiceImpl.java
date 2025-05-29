@@ -1,12 +1,17 @@
 package com.ptithcm.clinic_booking.service.impl;
 
+import com.ptithcm.clinic_booking.dto.PageResponse;
+import com.ptithcm.clinic_booking.dto.PaginationRequest;
 import com.ptithcm.clinic_booking.dto.doctor.DoctorCreateDTO;
 import com.ptithcm.clinic_booking.dto.doctor.DoctorSimpleResponseDTO;
 import com.ptithcm.clinic_booking.dto.doctor.DoctorResponseDTO;
+import com.ptithcm.clinic_booking.dto.manager.ManagerResponseDTO;
 import com.ptithcm.clinic_booking.mapper.DoctorMapper;
 import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
+import com.ptithcm.clinic_booking.mapper.ManagerMapper;
 import com.ptithcm.clinic_booking.model.Account;
 import com.ptithcm.clinic_booking.model.Doctor;
+import com.ptithcm.clinic_booking.model.Manager;
 import com.ptithcm.clinic_booking.model.MedicalSpecialty;
 import com.ptithcm.clinic_booking.repository.DoctorRepository;
 import com.ptithcm.clinic_booking.service.AccountService;
@@ -14,10 +19,13 @@ import com.ptithcm.clinic_booking.service.DoctorService;
 import com.ptithcm.clinic_booking.service.FirebaseService;
 import com.ptithcm.clinic_booking.service.MedicalSpecialtyService;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -85,6 +93,18 @@ public class DoctorServiceImpl implements DoctorService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public PageResponse<DoctorResponseDTO> getPageDoctors(PaginationRequest pageRequest) {
+        Pageable pageable = pageRequest.toPageable();
+
+        Page<Doctor> page = doctorRepository.findAll(pageable);
+        List<DoctorResponseDTO> doctors = page.stream()
+                .map(DoctorMapper::toDoctorDTO)
+                .collect(Collectors.toList());
+
+        return new PageResponse<>(doctors, page);
+    }
+
     @Transactional
     @Override
     public void addDoctor(DoctorCreateDTO doctorDTO) {
@@ -108,7 +128,15 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     private String addDoctorImage(MultipartFile imageFile, String fileName) {
-        if (imageFile == null || !imageFile.isEmpty()) return null;
+        if (imageFile == null || imageFile.isEmpty())
+            throw new IllegalArgumentException("Ảnh không được để trống.");
+
+
+        String contentType = imageFile.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new IllegalArgumentException("Chỉ chấp nhận file ảnh (jpeg, png, gif, ...).");
+        }
+
         String originalFilename = imageFile.getOriginalFilename();
         String extension = "";
         if (originalFilename != null && originalFilename.contains(".")) {
@@ -117,12 +145,23 @@ public class DoctorServiceImpl implements DoctorService {
         fileName = "doctors/" + fileName + extension;
 
         try {
-            firebaseService.uploadObject(fileName, imageFile.getInputStream(), imageFile.getContentType());
-            String imageUrl = firebaseService.getObjectUrl(fileName);
-            return imageUrl;
+            firebaseService.uploadObject(fileName, imageFile.getInputStream(), contentType);
+            return firebaseService.getObjectUrl(fileName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public PageResponse<DoctorSimpleResponseDTO> getPageActiveDoctors(PaginationRequest pageRequest) {
+        Pageable pageable = pageRequest.toPageable();
+
+        Page<Doctor> page = doctorRepository.findByStatus("ACTIVE", pageable);
+        List<DoctorSimpleResponseDTO> doctors = page.stream()
+                .map(DoctorMapper::toDoctorSimpleDTO)
+                .collect(Collectors.toList());
+
+        return new PageResponse<>(doctors, page);
     }
 
     @Transactional
@@ -139,8 +178,19 @@ public class DoctorServiceImpl implements DoctorService {
             doctor.setEmail(doctorDTO.getEmail());
             doctor.setAddress(doctorDTO.getAddress());
             doctor.setGender(doctorDTO.getGender());
-            doctor.setStatus(doctorDTO.getStatus());
             doctorRepository.save(doctor);
+    }
+
+    @Transactional
+    @Override
+    public void uploadDoctorImage(String doctorId, MultipartFile imageFile)  {
+        Doctor doctor = doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy bác sĩ với ID: " + doctorId));
+//        firebaseService.uploadObject(imageFile.getName(),imageFile.getInputStream(), imageFile.getContentType());
+//        String imageLink = firebaseService.getObjectUrl(imageFile.getName());
+        String imageLink = addDoctorImage(imageFile, doctorId);
+        doctor.setImageLink(imageLink);
+        doctorRepository.save(doctor);
     }
 
     @Transactional

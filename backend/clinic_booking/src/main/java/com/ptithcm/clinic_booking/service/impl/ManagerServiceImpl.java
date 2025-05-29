@@ -1,18 +1,24 @@
 package com.ptithcm.clinic_booking.service.impl;
 
+import com.ptithcm.clinic_booking.dto.PaginationRequest;
 import com.ptithcm.clinic_booking.dto.manager.ManagerRequestDTO;
 import com.ptithcm.clinic_booking.dto.manager.ManagerResponseDTO;
 import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
 import com.ptithcm.clinic_booking.mapper.ManagerMapper;
 import com.ptithcm.clinic_booking.model.Manager;
+import com.ptithcm.clinic_booking.dto.PageResponse;
 import com.ptithcm.clinic_booking.repository.ManagerRepository;
 import com.ptithcm.clinic_booking.service.AccountService;
 import com.ptithcm.clinic_booking.service.ManagerService;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class ManagerServiceImpl implements ManagerService {
     private final ManagerRepository managerRepository;
     private final AccountService accountService;
@@ -27,9 +33,8 @@ public class ManagerServiceImpl implements ManagerService {
         Manager manager = ManagerMapper.toManager(managerRequestDTO);
         manager.setId(createManagerId());
         if(managerRequestDTO.getAccount().getRoleId()!=2) throw new IllegalArgumentException("Account role must be manager (roleId = 2)");
-
         accountService.addAccount(managerRequestDTO.getAccount());
-        manager.setStatus("ACTIVE");
+
         managerRepository.save(manager);
     }
 
@@ -65,6 +70,18 @@ public class ManagerServiceImpl implements ManagerService {
         return managers.stream()
                 .map(ManagerMapper::toManagerDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public PageResponse<ManagerResponseDTO> getPageManagers(PaginationRequest pageRequest) {
+        Pageable pageable = pageRequest.toPageable();
+
+        Page<Manager> page = managerRepository.findAll(pageable);
+        List<ManagerResponseDTO> managers = page.stream()
+                .map(ManagerMapper::toManagerDTO)
+                .collect(Collectors.toList());
+
+        return new PageResponse<>(managers, page);
     }
 
     @Override

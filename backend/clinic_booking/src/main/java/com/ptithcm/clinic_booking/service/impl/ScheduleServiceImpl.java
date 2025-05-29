@@ -1,5 +1,7 @@
 package com.ptithcm.clinic_booking.service.impl;
 
+import com.ptithcm.clinic_booking.dto.PageResponse;
+import com.ptithcm.clinic_booking.dto.PaginationRequest;
 import com.ptithcm.clinic_booking.dto.schedule.ScheduleCreateDTO;
 import com.ptithcm.clinic_booking.dto.schedule.ScheduleDTO;
 import com.ptithcm.clinic_booking.mapper.ScheduleMapper;
@@ -43,13 +45,13 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public List<ScheduleDTO> getAllSchedules(Pageable pageable) {
-        Page<Schedule> schedules = scheduleRepository.findAll(pageable);
-
-        return schedules.getContent()
-                .stream()
-                .map(ScheduleMapper::toScheduleDTO)
-                .collect(Collectors.toList());
+    public   PageResponse<ScheduleDTO> getPageSchedules(PaginationRequest pageRequest) {
+        Pageable pageable = pageRequest.toPageable();
+        Page<Schedule> page = scheduleRepository.findAll(pageable);
+        List<ScheduleDTO> scheduleDTO = page.getContent().stream()
+                            .map(ScheduleMapper::toScheduleDTO)
+                            .collect(Collectors.toList());
+        return new PageResponse<>(scheduleDTO, page);
     }
 
     @Override

@@ -19,7 +19,7 @@ public class EmailOtpServiceImpl implements EmailOtpService {
     @Transactional
     @Override
     public void saveEmailOtp(String email, String otp, EmailOtp.OtpPurpose purpose) {
-        EmailOtp emailOtp = emailOtpRepository.findByEmailAndPurpose(email, EmailOtp.OtpPurpose.ACCOUNT_VERIFY).orElse(null);
+        EmailOtp emailOtp = emailOtpRepository.findByEmailAndPurpose(email, purpose).orElse(null);
         if(emailOtp != null) {
             if (emailOtp.getCreatedAt() != null
                     && emailOtp.getCreatedAt().isAfter(LocalDateTime.now().minusMinutes(1))
@@ -34,7 +34,7 @@ public class EmailOtpServiceImpl implements EmailOtpService {
         emailOtp.setVerified(false);
         emailOtp.setCreatedAt(LocalDateTime.now());
         emailOtp.setExpireAt(emailOtp.getCreatedAt().plusMinutes(5));
-        emailOtp.setPurpose(EmailOtp.OtpPurpose.ACCOUNT_VERIFY);
+        emailOtp.setPurpose(purpose);
         emailOtpRepository.save(emailOtp);
     }
 

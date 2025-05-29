@@ -1,5 +1,7 @@
 package com.ptithcm.clinic_booking.service;
 
+import com.ptithcm.clinic_booking.dto.PageResponse;
+import com.ptithcm.clinic_booking.dto.PaginationRequest;
 import com.ptithcm.clinic_booking.dto.appointment.AppointmentCreateDTO;
 import com.ptithcm.clinic_booking.dto.appointment.AppointmentDTO;
 import com.ptithcm.clinic_booking.model.AppointmentStatus;
@@ -12,12 +14,12 @@ import java.util.List;
 public interface AppointmentService {
     //Chung
     AppointmentDTO getAppointmentById(String id);
-    Page<AppointmentDTO> getAppointmentsByDate(LocalDate date, Pageable pageable);
+    PageResponse<AppointmentDTO> getAppointmentsByDate(LocalDate date, PaginationRequest pageRequest);
 
     // Quản lý: phân trang
-    Page<AppointmentDTO> getAllAppointments(Pageable pageable);
-    Page<AppointmentDTO> getAppointmentsByStatus(AppointmentStatus status, Pageable pageable);
-    Page<AppointmentDTO> searchAppointments(String keyword, Pageable pageable);
+    PageResponse<AppointmentDTO> getPageAppointments(PaginationRequest pageRequest);
+    PageResponse<AppointmentDTO> getAppointmentsByStatus(AppointmentStatus status, PaginationRequest pageRequest);
+    PageResponse<AppointmentDTO> searchAppointments(String keyword, PaginationRequest pageRequest);
     void softDeleteAppointment(String appointmentId);
 
     // Khách hàng-public

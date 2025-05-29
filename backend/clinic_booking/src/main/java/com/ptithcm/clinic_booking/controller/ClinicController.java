@@ -1,5 +1,7 @@
 package com.ptithcm.clinic_booking.controller;
 
+import com.ptithcm.clinic_booking.dto.PageResponse;
+import com.ptithcm.clinic_booking.dto.PaginationRequest;
 import com.ptithcm.clinic_booking.dto.clinic.ClinicDTO;
 import com.ptithcm.clinic_booking.model.ApiResponse;
 import jakarta.validation.constraints.NotBlank;
@@ -29,9 +31,14 @@ public class ClinicController {
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, clinic));
     }
 
-    @GetMapping("/active")
+    @GetMapping("/active/all")
     public ResponseEntity<ApiResponse<List<ClinicDTO>>> getAllClinicActive() {
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, clinicService.getAllActiveClinics()));
+    }
+
+    @GetMapping("/active/page")
+    public ResponseEntity<ApiResponse<PageResponse<ClinicDTO>>> getAllClinicActive(PaginationRequest pageRequest) {
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, clinicService.getPageActiveClinics(pageRequest)));
     }
 
 }

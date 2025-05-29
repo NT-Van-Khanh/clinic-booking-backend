@@ -10,6 +10,7 @@ public class DoctorSimpleResponseDTO {
     private String id;
     @Schema(description = "Mã chuyên khoa", example = "MS01")
     private String medicalSpecialtyId;
+
     @Schema(description = "Họ tên bác sĩ", example = "Nguyễn Văn A")
     private String name;
 
@@ -23,12 +24,22 @@ public class DoctorSimpleResponseDTO {
     @Schema(description = "Địa chỉ", example = "123 Đường ABC, Quận 1, TP.HCM")
     private String address;
 
-    private Boolean gender;
-    @Schema(description = "Trạng thái bác sĩ", example = "ACTIVE")
-    private String status;
+    private Boolean gender;;
+
+    @Schema(description = "Trạng thái bác sĩ", example = "doctor.com")
+    private String imageLink;
+
     private LocalDateTime createdAt;
 
     public DoctorSimpleResponseDTO() {
+    }
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
     }
 
     public String getId() {
@@ -87,13 +98,6 @@ public class DoctorSimpleResponseDTO {
         this.gender = gender;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;

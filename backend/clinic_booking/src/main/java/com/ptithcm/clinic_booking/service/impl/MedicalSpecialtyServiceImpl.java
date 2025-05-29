@@ -1,14 +1,21 @@
 package com.ptithcm.clinic_booking.service.impl;
 
+import com.ptithcm.clinic_booking.dto.PageResponse;
+import com.ptithcm.clinic_booking.dto.PaginationRequest;
+import com.ptithcm.clinic_booking.dto.manager.ManagerResponseDTO;
 import com.ptithcm.clinic_booking.dto.specialty.BaseMedicalSpecialtyDTO;
 import com.ptithcm.clinic_booking.dto.specialty.MedicalSpecialtyRequestDTO;
 import com.ptithcm.clinic_booking.dto.specialty.MedicalSpecialtyResponseDTO;
 import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
+import com.ptithcm.clinic_booking.mapper.ManagerMapper;
 import com.ptithcm.clinic_booking.mapper.MedicalSpecialtyMapper;
+import com.ptithcm.clinic_booking.model.Manager;
 import com.ptithcm.clinic_booking.model.MedicalSpecialty;
 import com.ptithcm.clinic_booking.repository.MedicalSpecialtyRepository;
 import com.ptithcm.clinic_booking.service.MedicalSpecialtyService;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +43,18 @@ public class MedicalSpecialtyServiceImpl implements MedicalSpecialtyService {
         MedicalSpecialty medicalSpecialty = specialtyRepository.findById(id)
                 .orElseThrow(() ->new ResourceNotFoundException("Không tìm thấy chuyên khoa với ID: " + id));
         return MedicalSpecialtyMapper.toResponseDTO(medicalSpecialty);
+    }
+
+    @Override
+    public PageResponse<MedicalSpecialtyResponseDTO> getPageMSpecialties(PaginationRequest pageRequest) {
+        Pageable pageable = pageRequest.toPageable();
+
+        Page<MedicalSpecialty> page = specialtyRepository.findAll(pageable);
+        List<MedicalSpecialtyResponseDTO> medicalSpecialties = page.stream()
+                .map(MedicalSpecialtyMapper::toResponseDTO)
+                .collect(Collectors.toList());
+
+        return new PageResponse<>(medicalSpecialties, page);
     }
 
     @Override
@@ -81,5 +100,17 @@ public class MedicalSpecialtyServiceImpl implements MedicalSpecialtyService {
         return activeSpecialties.stream()
                 .map(MedicalSpecialtyMapper::toBaseDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public PageResponse<BaseMedicalSpecialtyDTO> getPageActiveMSpecialties(PaginationRequest pageRequest) {
+        Pageable pageable = pageRequest.toPageable();
+
+        Page<MedicalSpecialty> page = specialtyRepository.findByStatus("ACTIVE", pageable);
+        List<BaseMedicalSpecialtyDTO> medicalSpecialties = page.stream()
+                .map(MedicalSpecialtyMapper::toResponseDTO)
+                .collect(Collectors.toList());
+
+        return new PageResponse<>(medicalSpecialties, page);
     }
 }

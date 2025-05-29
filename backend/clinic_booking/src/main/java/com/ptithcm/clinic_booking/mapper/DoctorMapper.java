@@ -18,7 +18,7 @@ public class DoctorMapper {
         d.setEmail(doctor.getEmail());
         d.setAddress(doctor.getAddress());
         d.setGender(doctor.getGender());
-        d.setStatus(doctor.getStatus());
+        d.setImageLink(doctor.getImageLink());
         d.setCreatedAt(doctor.getCreatedAt());
         return d;
     }
@@ -33,6 +33,7 @@ public class DoctorMapper {
         d.setEmail(doctor.getEmail());
         d.setAddress(doctor.getAddress());
         d.setGender(doctor.getGender());
+        d.setImageLink(doctor.getImageLink());
         d.setStatus(doctor.getStatus());
         d.setCreatedAt(doctor.getCreatedAt());
         return d;
@@ -54,7 +55,6 @@ public class DoctorMapper {
         d.setAddress(doctorDTO.getAddress());
         d.setGender(doctorDTO.getGender());
         d.setStatus(doctorDTO.getStatus());
-//        d.setImageLink(doctorDTO.getImageLink());
         d.setBirthday(doctorDTO.getBirthday());
         d.setDescription(doctorDTO.getDescription());
         d.setQualification(doctorDTO.getQualification());
@@ -68,13 +68,12 @@ public class DoctorMapper {
         MedicalSpecialty specialty = new MedicalSpecialty();
         specialty.setId(doctorDTO.getMedicalSpecialtyId());
         d.setMedicalSpecialty(specialty);
-
+        d.setImageLink(doctorDTO.getImageLink());
         d.setName(doctorDTO.getName());
         d.setPhone(doctorDTO.getPhone());
         d.setEmail(doctorDTO.getEmail());
         d.setAddress(doctorDTO.getAddress());
         d.setGender(doctorDTO.getGender());
-        d.setStatus(doctorDTO.getStatus());
         return d;
     }
 }

@@ -1,5 +1,7 @@
 package com.ptithcm.clinic_booking.controller.manager;
 
+import com.ptithcm.clinic_booking.dto.PageResponse;
+import com.ptithcm.clinic_booking.dto.PaginationRequest;
 import com.ptithcm.clinic_booking.dto.service.ServiceCreateDTO;
 import com.ptithcm.clinic_booking.dto.service.ServiceDTO;
 import com.ptithcm.clinic_booking.model.ApiResponse;
@@ -27,7 +29,10 @@ public class OfferingManageController {
     public ResponseEntity<ApiResponse<List<ServiceDTO>>> getAllService() {
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, offeringService.getAllServices()));
     }
-
+    @GetMapping("/page")
+    public ResponseEntity<ApiResponse<PageResponse<ServiceDTO>>> getPageService(@ModelAttribute @Valid PaginationRequest pageRequest) {
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, offeringService.getPageServices(pageRequest)));
+    }
     @PostMapping("/add")
     public ResponseEntity<ApiResponse<String>> addService(@RequestBody @Valid ServiceCreateDTO serviceDTO) {
         offeringService.addService(serviceDTO);

@@ -1,5 +1,7 @@
 package com.ptithcm.clinic_booking.controller;
 
+import com.ptithcm.clinic_booking.dto.PageResponse;
+import com.ptithcm.clinic_booking.dto.PaginationRequest;
 import com.ptithcm.clinic_booking.dto.schedule.ScheduleDTO;
 import com.ptithcm.clinic_booking.model.ApiResponse;
 import com.ptithcm.clinic_booking.model.ScheduleStatus;
@@ -36,8 +38,8 @@ public class ScheduleController {
     }
 
     @GetMapping("/page")
-    public ResponseEntity<ApiResponse<List<ScheduleDTO>>> getSchedulesPage(Pageable pageable){
-        List<ScheduleDTO> schedules = scheduleService.getAllSchedules(pageable);
+    public ResponseEntity<ApiResponse<PageResponse<ScheduleDTO>>> getSchedulesPage(@ModelAttribute PaginationRequest page){
+        PageResponse<ScheduleDTO> schedules = scheduleService.getPageSchedules(page);
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, schedules));
     }
 

@@ -1,9 +1,10 @@
 package com.ptithcm.clinic_booking.controller.shared;
 
+import com.ptithcm.clinic_booking.dto.PaginationRequest;
 import com.ptithcm.clinic_booking.dto.appointment.AppointmentDTO;
 import com.ptithcm.clinic_booking.model.ApiResponse;
 import com.ptithcm.clinic_booking.model.AppointmentStatus;
-import com.ptithcm.clinic_booking.model.PageResponse;
+import com.ptithcm.clinic_booking.dto.PageResponse;
 import com.ptithcm.clinic_booking.service.AppointmentService;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,29 +44,25 @@ public class AppointmentManageController {
     }
 
     @GetMapping("/page")
-    public ResponseEntity<ApiResponse<PageResponse<AppointmentDTO>>> getAppointmentsPage(
-            @PageableDefault(size = 20, sort = "date", direction = Sort.Direction.DESC) Pageable pageable){
-        Page<AppointmentDTO> pageAppointments = appointmentService.getAllAppointments(pageable);
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,  new PageResponse<>(pageAppointments)));
+    public ResponseEntity<ApiResponse<PageResponse<AppointmentDTO>>> getAppointmentsPage(PaginationRequest pageRequest){
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,
+                appointmentService.getPageAppointments(pageRequest)));
     }
 
     @GetMapping("/by-status/{status}")
-    public ResponseEntity<ApiResponse<PageResponse<AppointmentDTO>>> getAppointmentsByStatus(@PathVariable AppointmentStatus status, Pageable pageable){
-        Page<AppointmentDTO> pageAppointments = appointmentService.getAppointmentsByStatus(status, pageable);
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,  new PageResponse<>(pageAppointments)));
+    public ResponseEntity<ApiResponse<PageResponse<AppointmentDTO>>> getAppointmentsByStatus(@PathVariable AppointmentStatus status, PaginationRequest pageRequest){
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, appointmentService.getAppointmentsByStatus(status, pageRequest)));
     }
 
     @GetMapping("/by-date")
-    public ResponseEntity<ApiResponse<PageResponse<AppointmentDTO>>> getAppointmentsByDate(@RequestParam @NotBlank String date, Pageable pageable){
+    public ResponseEntity<ApiResponse<PageResponse<AppointmentDTO>>> getAppointmentsByDate(@RequestParam @NotBlank String date, PaginationRequest pageRequest){
         LocalDate localDate = LocalDate.parse(date);
-        Page<AppointmentDTO> pageAppointments = appointmentService.getAppointmentsByDate(localDate, pageable);
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,  new PageResponse<>(pageAppointments)));
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,appointmentService.getAppointmentsByDate(localDate, pageRequest)));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<PageResponse<AppointmentDTO>>> searchAppointments(@NotBlank String keyword, Pageable pageable){
-        Page<AppointmentDTO> pageAppointments = appointmentService.searchAppointments(keyword, pageable);
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,  new PageResponse<>(pageAppointments)));
+    public ResponseEntity<ApiResponse<PageResponse<AppointmentDTO>>> searchAppointments(@NotBlank String keyword, PaginationRequest pageRequest){
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,  appointmentService.searchAppointments(keyword, pageRequest)));
     }
 
 

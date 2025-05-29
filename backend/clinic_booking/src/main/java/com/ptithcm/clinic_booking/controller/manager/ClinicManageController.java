@@ -1,5 +1,7 @@
 package com.ptithcm.clinic_booking.controller.manager;
 
+import com.ptithcm.clinic_booking.dto.PageResponse;
+import com.ptithcm.clinic_booking.dto.PaginationRequest;
 import com.ptithcm.clinic_booking.dto.clinic.ClinicDTO;
 import com.ptithcm.clinic_booking.dto.clinic.ClinicCreateDTO;
 import com.ptithcm.clinic_booking.model.ApiResponse;
@@ -26,8 +28,13 @@ public class ClinicManageController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<ApiResponse<List<ClinicDTO>>> getAllClinic() {
+    public ResponseEntity<ApiResponse<List<ClinicDTO>>> getAllClinics() {
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, clinicService.getAllClinics()));
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<ApiResponse<PageResponse<ClinicDTO>>> getPageClinics(@ModelAttribute @Valid PaginationRequest pageRequest) {
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, clinicService.getPageClinics(pageRequest)));
     }
 
     @PostMapping("/add")

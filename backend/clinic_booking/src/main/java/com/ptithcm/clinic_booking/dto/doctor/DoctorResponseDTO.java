@@ -24,13 +24,25 @@ public class DoctorResponseDTO {
 
     @Schema(description = "Địa chỉ", example = "123 Đường ABC, Quận 1, TP.HCM")
     private String address;
+
     private Boolean gender;
 
     @Schema(description = "Trạng thái bác sĩ", example = "ACTIVE")
     private String status;
+    @Schema(description = "Trạng thái bác sĩ", example = "doctor.com")
+    private String imageLink;
+
     private LocalDateTime createdAt;
 
     public DoctorResponseDTO() {
+    }
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
     }
 
     public String getId() {

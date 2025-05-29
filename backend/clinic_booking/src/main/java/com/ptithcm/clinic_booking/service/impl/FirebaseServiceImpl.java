@@ -14,6 +14,8 @@ import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @Service
 public class FirebaseServiceImpl implements FirebaseService {
@@ -55,7 +57,8 @@ public class FirebaseServiceImpl implements FirebaseService {
         try {
             Blob blob = storageClient.bucket().get(fileName);
             if (blob != null && blob.exists()) {
-                return String.format(firebaseStorageImageLink, firebaseStorageBucketName, fileName);
+                String encodedFileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8.toString());
+                return String.format(firebaseStorageImageLink, firebaseStorageBucketName, encodedFileName);
             } else {
                 throw new FileNotFoundException("File " + fileName + " not found in bucket " + firebaseStorageBucketName);
             }

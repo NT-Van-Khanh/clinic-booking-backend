@@ -1,5 +1,8 @@
 package com.ptithcm.clinic_booking.service;
 
+import com.google.api.Page;
+import com.ptithcm.clinic_booking.dto.PageResponse;
+import com.ptithcm.clinic_booking.dto.PaginationRequest;
 import com.ptithcm.clinic_booking.dto.specialty.BaseMedicalSpecialtyDTO;
 import com.ptithcm.clinic_booking.dto.specialty.MedicalSpecialtyRequestDTO;
 import com.ptithcm.clinic_booking.dto.specialty.MedicalSpecialtyResponseDTO;
@@ -16,4 +19,7 @@ public interface MedicalSpecialtyService {
 
 
     List<BaseMedicalSpecialtyDTO> getAllActiveMSpecialties();
+    PageResponse<BaseMedicalSpecialtyDTO> getPageActiveMSpecialties(PaginationRequest pageRequest);
+
+    PageResponse<MedicalSpecialtyResponseDTO> getPageMSpecialties(PaginationRequest pageRequest);
 }

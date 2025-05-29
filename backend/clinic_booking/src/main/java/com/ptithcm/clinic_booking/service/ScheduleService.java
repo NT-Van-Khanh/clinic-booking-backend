@@ -1,5 +1,7 @@
 package com.ptithcm.clinic_booking.service;
 
+import com.ptithcm.clinic_booking.dto.PageResponse;
+import com.ptithcm.clinic_booking.dto.PaginationRequest;
 import com.ptithcm.clinic_booking.dto.schedule.ScheduleCreateDTO;
 import com.ptithcm.clinic_booking.dto.schedule.ScheduleDTO;
 import com.ptithcm.clinic_booking.model.ScheduleStatus;
@@ -11,7 +13,7 @@ import java.util.List;
 public interface ScheduleService {
     ScheduleDTO getScheduleById(Integer id);
     List<ScheduleDTO> getAllSchedules();
-    List<ScheduleDTO> getAllSchedules(Pageable pageable);
+    PageResponse<ScheduleDTO> getPageSchedules(PaginationRequest page);
     List<ScheduleDTO> getSchedulesByStatus(ScheduleStatus status);
     List<ScheduleDTO> getSchedulesByDoctor(String doctorId);
 //    List<ScheduleDTO> getSchedulesByService(String serviceId);

@@ -1,5 +1,7 @@
 package com.ptithcm.clinic_booking.service.impl;
 
+import com.ptithcm.clinic_booking.dto.PageResponse;
+import com.ptithcm.clinic_booking.dto.PaginationRequest;
 import com.ptithcm.clinic_booking.dto.service.ServiceCreateDTO;
 import com.ptithcm.clinic_booking.dto.service.ServiceDTO;
 import com.ptithcm.clinic_booking.mapper.ServiceMapper;
@@ -8,6 +10,8 @@ import com.ptithcm.clinic_booking.model.Service;
 import com.ptithcm.clinic_booking.repository.ServiceRepository;
 import com.ptithcm.clinic_booking.service.OfferingService;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,6 +39,27 @@ public class OfferingServiceImpl implements OfferingService {
         return services.stream()
                 .map(ServiceMapper::toServiceDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public PageResponse<ServiceDTO> getPageServices(PaginationRequest pageRequest) {
+        Pageable pageable = pageRequest.toPageable();
+        Page<Service> page = serviceRepository.findAll(pageable);
+        List<ServiceDTO> services = page.getContent().stream()
+                .map(ServiceMapper::toServiceDTO)
+                .toList();
+        return new PageResponse<>(services, page);
+    }
+
+    @Override
+    public PageResponse<ServiceDTO> getPageActiveServices(PaginationRequest pageRequest) {
+        Pageable pageable = pageRequest.toPageable();
+        Page<Service> page = serviceRepository.findAllByStatus("ACTIVE", pageable);
+
+        List<ServiceDTO> services = page.getContent().stream()
+                .map(ServiceMapper::toServiceDTO)
+                .toList();
+        return new PageResponse<>(services, page);
     }
 
     @Override

@@ -1,22 +1,21 @@
 package com.ptithcm.clinic_booking.service.impl;
 
+import com.ptithcm.clinic_booking.dto.PageResponse;
+import com.ptithcm.clinic_booking.dto.PaginationRequest;
 import com.ptithcm.clinic_booking.dto.appointment.AppointmentCreateDTO;
 import com.ptithcm.clinic_booking.dto.appointment.AppointmentDTO;
 import com.ptithcm.clinic_booking.dto.customer.CustomerDTO;
-import com.ptithcm.clinic_booking.dto.customer.CustomerRequestDTO;
 import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
 import com.ptithcm.clinic_booking.mapper.AppointmentMapper;
 import com.ptithcm.clinic_booking.mapper.CustomerMapper;
 import com.ptithcm.clinic_booking.model.Appointment;
 import com.ptithcm.clinic_booking.model.AppointmentStatus;
-import com.ptithcm.clinic_booking.model.Customer;
 import com.ptithcm.clinic_booking.model.Schedule;
 import com.ptithcm.clinic_booking.repository.AppointmentRepository;
 import com.ptithcm.clinic_booking.repository.ScheduleRepository;
 import com.ptithcm.clinic_booking.service.AppointmentService;
 import com.ptithcm.clinic_booking.service.CustomerService;
 import com.ptithcm.clinic_booking.service.OfferingService;
-import com.ptithcm.clinic_booking.service.ScheduleService;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,27 +48,37 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public Page<AppointmentDTO> getAppointmentsByDate(LocalDate date, Pageable pageable) {
+    public PageResponse<AppointmentDTO> getAppointmentsByDate(LocalDate date, PaginationRequest pageRequest) {
+        Pageable pageable = pageRequest.toPageable();
+
         Page<Appointment> page = appointmentRepository.findByScheduleDate(date, pageable);
-        return page.map(AppointmentMapper::toAppointmentDTO);
+        return new PageResponse<>(page.map(AppointmentMapper::toAppointmentDTO));
     }
 
     @Override
-    public Page<AppointmentDTO> getAllAppointments(Pageable pageable) {
+    public PageResponse<AppointmentDTO> getPageAppointments(PaginationRequest pageRequest) {
+        Pageable pageable = pageRequest.toPageable();
+
         Page<Appointment> page = appointmentRepository.findAll(pageable);
-        return page.map(AppointmentMapper::toAppointmentDTO);
+        List<AppointmentDTO> appointment =page.stream().
+                map(AppointmentMapper::toAppointmentDTO)
+                .toList();
+        return new PageResponse<>(appointment, page);
     }
 
     @Override
-    public Page<AppointmentDTO> getAppointmentsByStatus(AppointmentStatus status, Pageable pageable) {
+    public PageResponse<AppointmentDTO> getAppointmentsByStatus(AppointmentStatus status, PaginationRequest pageRequest) {
+        Pageable pageable = pageRequest.toPageable();
+
         Page<Appointment> page = appointmentRepository.findByStatus(status, pageable);
-        return page.map(AppointmentMapper::toAppointmentDTO);
+        return new PageResponse<>(page.map(AppointmentMapper::toAppointmentDTO));
     }
 
     @Override
-    public Page<AppointmentDTO> searchAppointments(String keyword, Pageable pageable) {
+    public PageResponse<AppointmentDTO> searchAppointments(String keyword, PaginationRequest pageRequest) {
+        Pageable pageable = pageRequest.toPageable();
         Page<Appointment> page = appointmentRepository.searchByKeyword(keyword, pageable);
-        return page.map(AppointmentMapper::toAppointmentDTO);
+        return new PageResponse<>(page.map(AppointmentMapper::toAppointmentDTO));
     }
 
     @Override
@@ -92,7 +101,6 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setSchedule(schedule);
         CustomerDTO savedCustomer = customerService.addCustomer(appointmentDTO.getCustomer());
 
-        System.err.println("thêm cus thành công");
         appointment.setCustomer(CustomerMapper.toCustomer(savedCustomer));
         appointment.setStatus(AppointmentStatus.CONFIRMED);
         appointmentRepository.save(appointment);
