@@ -42,7 +42,7 @@ public class ClinicMapper {
         c.setPhone(clinicDTO.getPhone());
         c.setEmail(clinicDTO.getEmail());
         c.setStatus(clinicDTO.getStatus());
-        c.setCreatedAt(clinicDTO.getCreatedAt());
+//        c.setCreatedAt(clinicDTO.getCreatedAt());
         return c;
     }
 }

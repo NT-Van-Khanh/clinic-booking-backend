@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ManagerService {
     void addManager(ManagerRequestDTO managerRequestDTO);
-    void updateManager(ManagerRequestDTO managerRequestDTO);
+    void updateManager(ManagerResponseDTO managerResponseDTO);
     void softDeleteManager(String id);
 
     List<ManagerResponseDTO> getAllManagers();

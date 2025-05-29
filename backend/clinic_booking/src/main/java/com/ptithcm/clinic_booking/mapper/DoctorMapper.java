@@ -41,7 +41,7 @@ public class DoctorMapper {
     public static Doctor toDoctor(DoctorCreateDTO doctorDTO){
         if(doctorDTO == null) return null;
         Doctor d = new Doctor();
-        d.setId(doctorDTO.getId());
+//        d.setId(doctorDTO.getId());
         d.setAccount(AccountMapper.toAccount(doctorDTO.getAccount()));
 
         MedicalSpecialty specialty = new MedicalSpecialty();

@@ -24,6 +24,21 @@ public class ManagerMapper {
     public static Manager toManager(ManagerRequestDTO dto) {
         if(dto == null) return null;
         Manager manager = new Manager();
+//        manager.setId(dto.getId());
+        manager.setName(dto.getName());
+        manager.setPhone(dto.getPhone());
+        manager.setEmail(dto.getEmail());
+        manager.setAddress(dto.getAddress());
+        manager.setGender(dto.getGender());
+        manager.setStatus(dto.getStatus());
+
+        manager.setAccount(AccountMapper.toAccount(dto.getAccount()));
+        return manager;
+    }
+
+    public static Manager toManager(ManagerResponseDTO dto) {
+        if(dto == null) return null;
+        Manager manager = new Manager();
         manager.setId(dto.getId());
         manager.setName(dto.getName());
         manager.setPhone(dto.getPhone());

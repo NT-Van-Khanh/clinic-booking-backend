@@ -40,4 +40,13 @@ public class AccountMapper {
         account.setStatus(dto.getStatus());
         return account;
     }
+    public static Account toAccount(AccountResponseDTO dto) {
+        if (dto == null) return null;
+
+        Account account = new Account();
+        account.setUsername(dto.getUsername());
+        account.setRole(new Role(dto.getRole().getId()));
+        account.setStatus(dto.getStatus());
+        return account;
+    }
 }

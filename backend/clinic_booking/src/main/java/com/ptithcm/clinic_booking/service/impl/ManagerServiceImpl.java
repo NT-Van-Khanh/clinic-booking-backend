@@ -26,6 +26,8 @@ public class ManagerServiceImpl implements ManagerService {
     public void addManager(ManagerRequestDTO managerRequestDTO) {
         Manager manager = ManagerMapper.toManager(managerRequestDTO);
         manager.setId(createManagerId());
+        if(managerRequestDTO.getAccount().getRoleId()!=2) throw new IllegalArgumentException("Account role must be manager (roleId = 2)");
+
         accountService.addAccount(managerRequestDTO.getAccount());
         manager.setStatus("ACTIVE");
         managerRepository.save(manager);
@@ -38,11 +40,11 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Transactional
     @Override
-    public void updateManager(ManagerRequestDTO managerRequestDTO) {
-        Manager existing = managerRepository.findById(managerRequestDTO.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy quản lý với ID: " + managerRequestDTO.getId()));
+    public void updateManager(ManagerResponseDTO managerResponseDTO) {
+        Manager existing = managerRepository.findById(managerResponseDTO.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy quản lý với ID: " + managerResponseDTO.getId()));
 
-        Manager updated = ManagerMapper.toManager(managerRequestDTO);
+        Manager updated = ManagerMapper.toManager(managerResponseDTO);
         updated.setStatus(existing.getStatus()); // giữ nguyên trạng thái
         managerRepository.save(updated);
     }

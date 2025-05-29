@@ -91,6 +91,7 @@ public class DoctorServiceImpl implements DoctorService {
         Doctor doctor = DoctorMapper.toDoctor(doctorDTO);
         doctor.setId(createDoctorId());
         specialtyService.getMSpecialtyById(doctorDTO.getMedicalSpecialtyId());
+        if(doctorDTO.getAccount().getRoleId()!=3) throw new IllegalArgumentException("Account role must be doctor (roleId = 3)");
         accountService.addAccount(doctorDTO.getAccount());
 
 //        MultipartFile imageFile = doctorDTO.getImageFile();
