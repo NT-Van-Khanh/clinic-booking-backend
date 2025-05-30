@@ -6,6 +6,7 @@ import com.ptithcm.clinic_booking.dto.doctor.DoctorSimpleResponseDTO;
 import com.ptithcm.clinic_booking.dto.manager.ManagerResponseDTO;
 import com.ptithcm.clinic_booking.dto.auth.AuthResponseDTO;
 import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
+import com.ptithcm.clinic_booking.factory.SendEmailFactory;
 import com.ptithcm.clinic_booking.mapper.DoctorMapper;
 import com.ptithcm.clinic_booking.mapper.ManagerMapper;
 import com.ptithcm.clinic_booking.model.*;
@@ -29,20 +30,22 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
     private final AccountRepository accountRepository;
-    private final EmailService emailService;
+//    private final EmailService emailService;
+    private final SendEmailFactory sendEmailFactory;
     private final EmailOtpService emailOtpService;
     private final PasswordEncoder passwordEncoder;
     private final DoctorRepository doctorRepository;
     private final ManagerRepository managerRepository;
 
     public AuthServiceImpl(JwtUtil jwtUtil, AuthenticationManager authenticationManager,
-                           AccountRepository accountRepository, EmailService emailService,
+                           AccountRepository accountRepository, EmailService emailService, SendEmailFactory sendEmailFactory,
                            EmailOtpService emailOtpService, PasswordEncoder passwordEncoder,
                            DoctorRepository doctorRepository, ManagerRepository managerRepository) {
         this.jwtUtil = jwtUtil;
         this.authenticationManager = authenticationManager;
         this.accountRepository = accountRepository;
-        this.emailService = emailService;
+        this.sendEmailFactory = sendEmailFactory;
+//        this.emailService = emailService;
         this.emailOtpService = emailOtpService;
         this.passwordEncoder = passwordEncoder;
         this.doctorRepository = doctorRepository;
@@ -93,12 +96,14 @@ public class AuthServiceImpl implements AuthService {
                              || managerRepository.findByEmail(email).isPresent();
         if (!exists) throw new IllegalArgumentException("Email này chưa được đăng ký trên hệ thống");
 
-        String subject = "Quên mật khẩu - Mã OTP lấy lại mật khẩu";
-        String otp = emailService.generateOtp();
-        String content = "Mã OTP của bạn là: " + otp + "\nVui lòng không chia sẻ mã này với người khác.";
+        sendEmailFactory.createISendMail(EmailOtp.OtpPurpose.ACCOUNT_VERIFY).sendOtpToEmail(email);
 
-        emailOtpService.saveEmailOtp(email, otp, EmailOtp.OtpPurpose.ACCOUNT_VERIFY);
-        emailService.sendMail(email, subject, content);
+//        String subject = "Quên mật khẩu - Mã OTP lấy lại mật khẩu";
+//        String otp = emailService.generateOtp();
+//        String content = "Mã OTP của bạn là: " + otp + "\nVui lòng không chia sẻ mã này với người khác.";
+
+//        emailOtpService.saveEmailOtp(email, otp, EmailOtp.OtpPurpose.ACCOUNT_VERIFY);
+//        emailService.sendMail(email, subject, content);
     }
 
     @Transactional

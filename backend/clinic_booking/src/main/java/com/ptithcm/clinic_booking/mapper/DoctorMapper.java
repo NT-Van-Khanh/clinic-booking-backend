@@ -20,6 +20,9 @@ public class DoctorMapper {
         d.setGender(doctor.getGender());
         d.setImageLink(doctor.getImageLink());
         d.setCreatedAt(doctor.getCreatedAt());
+        d.setBirthday(doctor.getBirthday());
+        d.setDescription(doctor.getDescription());
+        d.setQualification(doctor.getQualification());
         return d;
     }
     public static DoctorResponseDTO toDoctorDTO(Doctor doctor){
@@ -36,6 +39,9 @@ public class DoctorMapper {
         d.setImageLink(doctor.getImageLink());
         d.setStatus(doctor.getStatus());
         d.setCreatedAt(doctor.getCreatedAt());
+        d.setBirthday(doctor.getBirthday());
+        d.setDescription(doctor.getDescription());
+        d.setQualification(doctor.getQualification());
         return d;
     }
 

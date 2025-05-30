@@ -53,7 +53,7 @@ public class ClinicServiceImpl implements ClinicService {
     public PageResponse<ClinicDTO> getPageActiveClinics(PaginationRequest pageRequest) {
         Pageable pageable = pageRequest.toPageable();
 
-        Page<Clinic> page = clinicRepository.findByStatus("",pageable);
+        Page<Clinic> page = clinicRepository.findByStatus("ACTIVE",pageable);
         List<ClinicDTO> clinics = page.stream()
                 .map(ClinicMapper::toClinicDTO)
                 .collect(Collectors.toList());

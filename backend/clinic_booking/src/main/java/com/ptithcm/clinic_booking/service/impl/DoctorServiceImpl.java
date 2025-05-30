@@ -47,7 +47,9 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public DoctorSimpleResponseDTO getDoctorSimpleById(String id) {
-        return null;
+        Doctor  doctor = doctorRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy bác sĩ với ID: " + id));
+        return DoctorMapper.toDoctorSimpleDTO(doctor);
     }
 
     @Override
