@@ -28,7 +28,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<ScheduleDTO>> getScheduleById(@PathVariable @NotBlank Integer id){
+    public ResponseEntity<ApiResponse<ScheduleDTO>> getScheduleById(@PathVariable Integer id){
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, scheduleService.getScheduleById(id)));
     }
 

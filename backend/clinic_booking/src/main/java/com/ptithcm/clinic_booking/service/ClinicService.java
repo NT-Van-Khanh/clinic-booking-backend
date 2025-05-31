@@ -17,6 +17,5 @@ public interface ClinicService {
     void softDeleteClinic(String clinicId);
 
     PageResponse<ClinicDTO> getPageActiveClinics(PaginationRequest pageRequest);
-
     PageResponse<ClinicDTO> getPageClinics(PaginationRequest pageRequest);
 }
