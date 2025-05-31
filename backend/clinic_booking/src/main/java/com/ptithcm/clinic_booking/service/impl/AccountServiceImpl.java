@@ -9,6 +9,7 @@ import com.ptithcm.clinic_booking.model.Account;
 import com.ptithcm.clinic_booking.repository.AccountRepository;
 import com.ptithcm.clinic_booking.service.AccountService;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +20,8 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Autowired
     public AccountServiceImpl(AccountRepository accountRepository, PasswordEncoder passwordEncoder) {
         this.accountRepository = accountRepository;
         this.passwordEncoder = passwordEncoder;
@@ -64,10 +67,19 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     @Override
     public void changePassword(String username, String currentPassword, String newPassword) {
-        Account account = accountRepository.findByUsernameAndPassword(username, passwordEncoder.encode(currentPassword))
+        Account account = accountRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("Tên tài khoản không hợp lệ"));
+
+        if (!passwordEncoder.matches(currentPassword, account.getPassword())) {
+            throw new ResourceNotFoundException("Mật khẩu hiện tại không chính xác");
+        }
+
         account.setPassword(passwordEncoder.encode(newPassword));
         accountRepository.save(account);
+//        Account account = accountRepository.findByUsernameAndPassword(username, passwordEncoder.encode(currentPassword))
+//                .orElseThrow(() -> new ResourceNotFoundException("Tên tài khoản hoặc mật khẩu không hợp lệ"));
+//        account.setPassword(passwordEncoder.encode(newPassword));
+//        accountRepository.save(account);
     }
 
     @Override

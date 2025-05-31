@@ -55,7 +55,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthResponseDTO login(String username, String password) {
-        System.err.println(passwordEncoder.encode(password));
         Authentication authentication =  authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password));
 
