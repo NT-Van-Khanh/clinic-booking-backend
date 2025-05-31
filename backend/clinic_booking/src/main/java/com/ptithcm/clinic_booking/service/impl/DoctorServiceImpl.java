@@ -210,6 +210,8 @@ public class DoctorServiceImpl implements DoctorService {
     public void softDeletingDoctor(String id) {
         Doctor d = doctorRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không thể xóa. Không tìm thấy phòng khám với ID: " + id));
+
+        accountService.softDeleteAccount(d.getAccount().getUsername());
         d.setStatus("DELETED");
         doctorRepository.save(d);
     }

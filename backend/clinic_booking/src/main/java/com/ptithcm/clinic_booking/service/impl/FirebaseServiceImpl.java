@@ -9,6 +9,7 @@ import com.ptithcm.clinic_booking.service.FirebaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
@@ -96,4 +97,30 @@ public class FirebaseServiceImpl implements FirebaseService {
             throw new IOException("Error deleting file " + fileName + ": " + e.getMessage(), e);
         }
     }
+
+    public String addImage(MultipartFile imageFile) {
+        if (imageFile == null || imageFile.isEmpty())
+            throw new IllegalArgumentException("Ảnh không được để trống.");
+
+
+        String contentType = imageFile.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new IllegalArgumentException("Chỉ chấp nhận file ảnh (jpeg, png, gif, ...).");
+        }
+
+        String originalFilename = imageFile.getOriginalFilename();
+        String extension = "";
+        if (originalFilename != null && originalFilename.contains(".")) {
+            extension = originalFilename.substring(originalFilename.lastIndexOf('.'));
+        }
+        String fileName = "doctors/" + imageFile.getName() + extension;
+
+        try {
+            uploadObject(fileName, imageFile.getInputStream(), contentType);
+            return getObjectUrl(fileName);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

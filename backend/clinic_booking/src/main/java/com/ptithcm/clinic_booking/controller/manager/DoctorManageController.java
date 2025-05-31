@@ -6,7 +6,6 @@ import com.ptithcm.clinic_booking.dto.doctor.DoctorCreateDTO;
 import com.ptithcm.clinic_booking.dto.doctor.DoctorSimpleResponseDTO;
 import com.ptithcm.clinic_booking.dto.doctor.DoctorResponseDTO;
 import com.ptithcm.clinic_booking.model.ApiResponse;
-import com.ptithcm.clinic_booking.service.AccountService;
 import com.ptithcm.clinic_booking.service.DoctorService;
 import com.ptithcm.clinic_booking.service.FirebaseService;
 import jakarta.validation.Valid;
