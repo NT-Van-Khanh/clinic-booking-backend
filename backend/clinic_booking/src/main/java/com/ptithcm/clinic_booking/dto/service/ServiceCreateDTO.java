@@ -3,7 +3,15 @@ package com.ptithcm.clinic_booking.dto.service;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ServiceCreateDTO {
 
     @NotBlank(message = "Mã người tạo không được để trống")
@@ -26,47 +34,4 @@ public class ServiceCreateDTO {
     @Size(max = 15, message = "Trạng thái tối đa 15 ký tự")
     @Schema(description = "Trạng thái dịch vụ", example = "ACTIVE")
     private String status;
-
-    public ServiceCreateDTO() {
-    }
-
-    public @NotBlank(message = "Mã người tạo không được để trống") String getCreatorId() {
-        return creatorId;
-    }
-
-    public void setCreatorId(@NotBlank(message = "Mã người tạo không được để trống") String creatorId) {
-        this.creatorId = creatorId;
-    }
-
-    public @NotBlank(message = "Mã chuyên khoa không được để trống") String getMedicalSpecialtyId() {
-        return medicalSpecialtyId;
-    }
-
-    public void setMedicalSpecialtyId(@NotBlank(message = "Mã chuyên khoa không được để trống") String medicalSpecialtyId) {
-        this.medicalSpecialtyId = medicalSpecialtyId;
-    }
-
-    public @NotBlank(message = "Tên dịch vụ không được để trống") @Size(max = 100, message = "Tên dịch vụ tối đa 100 ký tự") String getName() {
-        return name;
-    }
-
-    public void setName(@NotBlank(message = "Tên dịch vụ không được để trống") @Size(max = 100, message = "Tên dịch vụ tối đa 100 ký tự") String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public @NotBlank(message = "Trạng thái không được để trống") @Size(max = 15, message = "Trạng thái tối đa 15 ký tự") String getStatus() {
-        return status;
-    }
-
-    public void setStatus(@NotBlank(message = "Trạng thái không được để trống") @Size(max = 15, message = "Trạng thái tối đa 15 ký tự") String status) {
-        this.status = status;
-    }
 }

@@ -4,11 +4,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
+@Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ClinicCreateDTO {
     @NotNull(message = "Tên phòng khám không được để trống.")
     @Size(min = 3, max = 100, message = "Tên phòng khám phải có độ dài từ 3 đến 100 ký tự")
@@ -32,56 +36,4 @@ public class ClinicCreateDTO {
 
     @Schema(description = "Trạng thái phòng khám", example = "active")
     private String status = "ACTIVE";
-
-    public ClinicCreateDTO() {
-    }
-
-    public @NotNull(message = "Tên phòng khám không được để trống.") @Size(min = 3, max = 100, message = "Tên phòng khám phải có độ dài từ 3 đến 100 ký tự") String getName() {
-        return name;
-    }
-
-    public void setName(@NotNull(message = "Tên phòng khám không được để trống.") @Size(min = 3, max = 100, message = "Tên phòng khám phải có độ dài từ 3 đến 100 ký tự") String name) {
-        this.name = name;
-    }
-
-    public @NotNull(message = "Địa chỉ không được để trống.") String getAddress() {
-        return address;
-    }
-
-    public void setAddress(@NotNull(message = "Địa chỉ không được để trống.") String address) {
-        this.address = address;
-    }
-
-    public @NotNull(message = "Số điện thoại không được để trống.") String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(@NotNull(message = "Số điện thoại không được để trống.") String phone) {
-        this.phone = phone;
-    }
-
-    public @Email(message = "Email không hợp lệ.") String getEmail() {
-        return email;
-    }
-
-    public void setEmail(@Email(message = "Email không hợp lệ.") String email) {
-        this.email = email;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
 }

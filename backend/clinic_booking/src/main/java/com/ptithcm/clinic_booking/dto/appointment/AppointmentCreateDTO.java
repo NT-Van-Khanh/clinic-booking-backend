@@ -7,7 +7,15 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class AppointmentCreateDTO {
 
     @NotNull(message = "Dịch vụ không được để trống.")
@@ -37,64 +45,4 @@ public class AppointmentCreateDTO {
 
     @Schema(description = "Người cập nhật", example = "null")
     private String updatedByUser;
-
-    public AppointmentCreateDTO() {
-    }
-
-    public @NotNull(message = "Dịch vụ không được để trống.") String getServiceId() {
-        return serviceId;
-    }
-
-    @NotNull(message = "Lịch hẹn không được để trống.")
-    public Integer getScheduleId() {
-        return scheduleId;
-    }
-
-    public void setScheduleId(@NotNull(message = "Lịch hẹn không được để trống.") Integer scheduleId) {
-        this.scheduleId = scheduleId;
-    }
-
-    public void setServiceId(@NotNull(message = "Dịch vụ không được để trống.") String serviceId) {
-        this.serviceId = serviceId;
-    }
-
-    public @NotNull(message = "Khách hàng không được để trống.") CustomerRequestDTO getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(@NotNull(message = "Khách hàng không được để trống.") CustomerRequestDTO customer) {
-        this.customer = customer;
-    }
-
-    public @NotNull(message = "Số thứ tự không được để trống.") @Min(value = 1, message = "Số thứ tự phải lớn hơn hoặc bằng 1.") Short getNumericalOrder() {
-        return numericalOrder;
-    }
-
-    public void setNumericalOrder(@NotNull(message = "Số thứ tự không được để trống.") @Min(value = 1, message = "Số thứ tự phải lớn hơn hoặc bằng 1.") Short numericalOrder) {
-        this.numericalOrder = numericalOrder;
-    }
-
-    public @NotBlank(message = "Ghi chú không được để trống.") @Size(max = 255, message = "Ghi chú không được vượt quá 255 ký tự.") String getNote() {
-        return note;
-    }
-
-    public void setNote(@NotBlank(message = "Ghi chú không được để trống.") @Size(max = 255, message = "Ghi chú không được vượt quá 255 ký tự.") String note) {
-        this.note = note;
-    }
-
-    public AppointmentStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(AppointmentStatus status) {
-        this.status = status;
-    }
-
-    public String getUpdatedByUser() {
-        return updatedByUser;
-    }
-
-    public void setUpdatedByUser(String updatedByUser) {
-        this.updatedByUser = updatedByUser;
-    }
 }

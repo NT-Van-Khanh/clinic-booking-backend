@@ -5,10 +5,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ScheduleCreateDTO {
 
         @NotNull(message = "ID bác sĩ không được để trống")
@@ -39,63 +46,4 @@ public class ScheduleCreateDTO {
 
         @Schema(description = "Trạng thái lịch khám", example = "PENDING")
         private ScheduleStatus status = ScheduleStatus.PENDING;
-
-        public ScheduleCreateDTO() {
-        }
-
-        public @NotNull(message = "ID bác sĩ không được để trống") String getDoctorId() {
-                return doctorId;
-        }
-
-        public void setDoctorId(@NotNull(message = "ID bác sĩ không được để trống") String doctorId) {
-                this.doctorId = doctorId;
-        }
-
-        public @NotNull(message = "ID phòng khám không được để trống") String getClinicId() {
-                return clinicId;
-        }
-
-        public void setClinicId(@NotNull(message = "ID phòng khám không được để trống") String clinicId) {
-                this.clinicId = clinicId;
-        }
-
-        public @NotNull(message = "Ngày không được để trống") @FutureOrPresent(message = "Ngày phải là hôm nay hoặc trong tương lai") LocalDate getDate() {
-                return date;
-        }
-
-        public void setDate(@NotNull(message = "Ngày không được để trống") @FutureOrPresent(message = "Ngày phải là hôm nay hoặc trong tương lai") LocalDate date) {
-                this.date = date;
-        }
-
-        public @NotNull(message = "Thời gian bắt đầu không được để trống") LocalTime getTimeStart() {
-                return timeStart;
-        }
-
-        public void setTimeStart(@NotNull(message = "Thời gian bắt đầu không được để trống") LocalTime timeStart) {
-                this.timeStart = timeStart;
-        }
-
-        public @NotNull(message = "Thời gian kết thúc không được để trống") LocalTime getTimeEnd() {
-                return timeEnd;
-        }
-
-        public void setTimeEnd(@NotNull(message = "Thời gian kết thúc không được để trống") LocalTime timeEnd) {
-                this.timeEnd = timeEnd;
-        }
-
-        public @NotNull(message = "Số lượt đặt tối đa không được để trống") @Min(value = 1, message = "Số lượt đặt tối thiểu là 1") Short getMaxBooking() {
-                return maxBooking;
-        }
-
-        public void setMaxBooking(@NotNull(message = "Số lượt đặt tối đa không được để trống") @Min(value = 1, message = "Số lượt đặt tối thiểu là 1") Short maxBooking) {
-                this.maxBooking = maxBooking;
-        }
-
-        public ScheduleStatus getStatus() {
-                return status;
-        }
-
-        public void setStatus(ScheduleStatus status) {
-                this.status = status;
-        }
 }

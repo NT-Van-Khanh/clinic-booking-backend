@@ -7,15 +7,16 @@ import com.ptithcm.clinic_booking.model.Clinic;
 public class ClinicMapper {
     public static ClinicDTO toClinicDTO(Clinic clinic){
         if( clinic == null) return null;
-        ClinicDTO c = new ClinicDTO();
-        c.setId(clinic.getId() != null ? clinic.getId().toString() : null);
-        c.setName(clinic.getName());
-        c.setAddress(clinic.getAddress());
-        c.setDescription(clinic.getDescription());
-        c.setPhone(clinic.getPhone());
-        c.setEmail(clinic.getEmail());
-        c.setStatus(clinic.getStatus());
-        c.setCreatedAt(clinic.getCreatedAt());
+        ClinicDTO c = ClinicDTO.builder()
+                .id(clinic.getId())
+                .name(clinic.getName())
+                .address(clinic.getAddress())
+                .email(clinic.getEmail())
+                .phone(clinic.getPhone())
+                .description(clinic.getDescription())
+                .status(clinic.getStatus())
+                .createdAt(clinic.getCreatedAt())
+                .build();
         return c;
     }
 

@@ -1,6 +1,11 @@
 package com.ptithcm.clinic_booking.dto.specialty;
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
+import java.time.LocalDateTime;
+@Data
+@AllArgsConstructor
 public class MedicalSpecialtyResponseDTO extends BaseMedicalSpecialtyDTO{
     private String status;
     private LocalDateTime createdAt;
@@ -12,22 +17,6 @@ public class MedicalSpecialtyResponseDTO extends BaseMedicalSpecialtyDTO{
     public MedicalSpecialtyResponseDTO(String id, String name, String description, String status, LocalDateTime createdAt) {
         super(id, name, description);
         this.status = status;
-        this.createdAt = createdAt;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 }

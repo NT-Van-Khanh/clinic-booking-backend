@@ -4,10 +4,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Pageable;
-
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class PaginationRequest {
     @Schema(description = "Số trang (bắt đầu từ 0)", example = "0", minimum = "0")
     @Min(value = 0, message = "Page không được nhỏ hơn 0")
@@ -32,36 +39,10 @@ public class PaginationRequest {
         return PageRequest.of(this.page, this.size, sort);
     }
 
-    public PaginationRequest() {
-    }
-
     public PaginationRequest(int page, int size, String sortBy) {
         this.page = page;
         this.size = size;
         this.sortBy = sortBy;
     }
 
-    public int getPage() {
-        return page;
-    }
-
-    public void setPage(int page) {
-        this.page = page;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    public String getSortBy() {
-        return sortBy;
-    }
-
-    public void setSortBy(String sortBy) {
-        this.sortBy = sortBy;
-    }
 }

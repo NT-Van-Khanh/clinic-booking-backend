@@ -4,10 +4,18 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ptithcm.clinic_booking.dto.account.AccountResponseDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class DoctorResponseDTO {
     @Schema(description = "ID bác sĩ", example = "D001")
     private String id;
@@ -51,118 +59,4 @@ public class DoctorResponseDTO {
 
     private LocalDateTime createdAt;
 
-    public DoctorResponseDTO() {
-    }
-
-    public LocalDate getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(LocalDate birthday) {
-        this.birthday = birthday;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getQualification() {
-        return qualification;
-    }
-
-    public void setQualification(String qualification) {
-        this.qualification = qualification;
-    }
-
-    public String getImageLink() {
-        return imageLink;
-    }
-
-    public void setImageLink(String imageLink) {
-        this.imageLink = imageLink;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public AccountResponseDTO getAccount() {
-        return account;
-    }
-
-    public void setAccount(AccountResponseDTO account) {
-        this.account = account;
-    }
-
-    public String getMedicalSpecialtyId() {
-        return medicalSpecialtyId;
-    }
-
-    public void setMedicalSpecialtyId(String medicalSpecialtyId) {
-        this.medicalSpecialtyId = medicalSpecialtyId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public Boolean getGender() {
-        return gender;
-    }
-
-    public void setGender(Boolean gender) {
-        this.gender = gender;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 }

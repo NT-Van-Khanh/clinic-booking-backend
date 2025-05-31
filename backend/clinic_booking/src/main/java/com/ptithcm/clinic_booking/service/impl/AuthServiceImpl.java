@@ -65,10 +65,10 @@ public class AuthServiceImpl implements AuthService {
         
         if (userDetails instanceof DoctorDetails doctorDetails) {
             DoctorResponseDTO doctorDTO = DoctorMapper.toDoctorDTO(doctorDetails.getDoctor());
-            authResponse.setUserData(doctorDTO);
+            authResponse.setUser(doctorDTO);
         } else if (userDetails instanceof ManagerDetails managerDetails) {
             ManagerResponseDTO managerDTO = ManagerMapper.toManagerDTO(managerDetails.getManager());
-            authResponse.setUserData(managerDTO);
+            authResponse.setUser(managerDTO);
         }
         authResponse.setToken(authToken);
         return authResponse;

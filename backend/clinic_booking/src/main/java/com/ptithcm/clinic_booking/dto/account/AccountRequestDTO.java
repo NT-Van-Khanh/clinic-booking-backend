@@ -5,7 +5,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class AccountRequestDTO {
     @Schema(description = "Tên đăng nhập của tài khoản",
             example = "manager123", minLength = 8, maxLength = 100)
@@ -28,39 +36,4 @@ public class AccountRequestDTO {
     @Size(max = 15)
     @Pattern(regexp = "^(ACTIVE|BLOCKED|DELETED)$", message = "Trạng thái phải là ACTIVE, BLOCKED hoặc DELETED")
     private String status;
-
-    public AccountRequestDTO() {
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Short getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Short roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 }

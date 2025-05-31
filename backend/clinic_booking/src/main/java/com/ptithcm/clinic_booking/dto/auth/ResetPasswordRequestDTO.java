@@ -8,8 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(name = "ResetPasswordRequestDTO", description = "DTO dùng để reset mật khẩu với email, otp và mật khẩu mới")
@@ -17,7 +16,7 @@ public class ResetPasswordRequestDTO {
 
     @Email(message = "Email không hợp lệ")
     @NotBlank(message = "Email không được để trống")
-    @Schema(description = "Email người dùng", example = "user@example.com", required = true)
+    @Schema(description = "Email người dùng", example = "user@example.com")
     private String email;
 
     @NotBlank(message = "OTP không được để trống")
@@ -29,27 +28,4 @@ public class ResetPasswordRequestDTO {
     @Schema(description = "Mật khẩu mới của người dùng", example = "newPassword123", required = true)
     private String newPassword;
 
-    public @Email(message = "Email không hợp lệ") @NotBlank(message = "Email không được để trống") String getEmail() {
-        return email;
-    }
-
-    public void setEmail(@Email(message = "Email không hợp lệ") @NotBlank(message = "Email không được để trống") String email) {
-        this.email = email;
-    }
-
-    public @NotBlank(message = "OTP không được để trống") String getOtp() {
-        return otp;
-    }
-
-    public void setOtp(@NotBlank(message = "OTP không được để trống") String otp) {
-        this.otp = otp;
-    }
-
-    public @NotBlank(message = "Mật khẩu mới không được để trống") @Size(min = 8, max = 100, message = "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ thường, chữ hoa và số.") String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(@NotBlank(message = "Mật khẩu mới không được để trống") @Size(min = 8, max = 100, message = "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ thường, chữ hoa và số.") String newPassword) {
-        this.newPassword = newPassword;
-    }
 }

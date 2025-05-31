@@ -1,10 +1,11 @@
 package com.ptithcm.clinic_booking.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
-
+@Data
 public class PageResponse<T> {
     @Schema(description = "Danh sách dữ liệu của trang hiện tại")
     private List<T> data;
@@ -37,37 +38,5 @@ public class PageResponse<T> {
         this.currentPage = page.getNumber();
         this.totalPages = page.getTotalPages();
         this.totalItems = page.getTotalElements();
-    }
-
-    public List<T> getData() {
-        return data;
-    }
-
-    public void setData(List<T> data) {
-        this.data = data;
-    }
-
-    public int getCurrentPage() {
-        return currentPage;
-    }
-
-    public void setCurrentPage(int currentPage) {
-        this.currentPage = currentPage;
-    }
-
-    public int getTotalPages() {
-        return totalPages;
-    }
-
-    public void setTotalPages(int totalPages) {
-        this.totalPages = totalPages;
-    }
-
-    public long getTotalItems() {
-        return totalItems;
-    }
-
-    public void setTotalItems(long totalItems) {
-        this.totalItems = totalItems;
     }
 }
