@@ -16,4 +16,6 @@ public interface OfferingService {
     void addService(ServiceCreateDTO serviceDTO);
     void updateService(ServiceDTO serviceDTO);
     void softDeleteService(String id);
+
+    PageResponse<ServiceDTO> searchServices(String keyword, PaginationRequest pageRequest);
 }

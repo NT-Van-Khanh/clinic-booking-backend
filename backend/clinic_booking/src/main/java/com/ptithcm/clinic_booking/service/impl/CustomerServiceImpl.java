@@ -1,5 +1,7 @@
 package com.ptithcm.clinic_booking.service.impl;
 
+import com.ptithcm.clinic_booking.dto.PageResponse;
+import com.ptithcm.clinic_booking.dto.PaginationRequest;
 import com.ptithcm.clinic_booking.dto.appointment.AppointmentDTO;
 import com.ptithcm.clinic_booking.dto.customer.CustomerDTO;
 import com.ptithcm.clinic_booking.dto.customer.CustomerRequestDTO;
@@ -16,6 +18,8 @@ import com.ptithcm.clinic_booking.service.CustomerService;
 import com.ptithcm.clinic_booking.service.EmailOtpService;
 import com.ptithcm.clinic_booking.service.EmailService;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,14 +60,18 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<CustomerDTO> searchCustomers(String keyword) {
-        List<Customer> customers = customerRepository
-                .findByNameContainingIgnoreCaseOrPhoneContainingIgnoreCaseOrEmailContainingIgnoreCase(
-                        keyword, keyword, keyword);
+    public PageResponse<CustomerDTO> getPageCustomers(PaginationRequest pageRequest) {
+        Pageable pageable = pageRequest.toPageable();
+        Page<Customer> page = customerRepository.findAll(pageable);
+        return new PageResponse<>(page.map(CustomerMapper::toCustomerDTO));
+    }
 
-        return customers.stream()
-                .map(CustomerMapper::toCustomerDTO) // bạn cần có CustomerMapper
-                .collect(Collectors.toList());
+    @Override
+    public PageResponse<CustomerDTO> searchCustomers(String keyword, PaginationRequest pageRequest) {
+        Pageable pageable = pageRequest.toPageable();
+        Page<Customer> page = customerRepository.searchByKeyword(keyword, pageable);
+
+        return new PageResponse<>(page.map(CustomerMapper::toCustomerDTO));
     }
 
     @Override
@@ -76,7 +84,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDTO addCustomer(CustomerRequestDTO customerDTO) {
         Customer customer = CustomerMapper.toCustomer(customerDTO);
-        customer.setStatus("ACTIVE"); // hoặc trạng thái mặc định
+        customer.setStatus("ACTIVE");
         customerRepository.save(customer);
         return CustomerMapper.toCustomerDTO(customer);
     }

@@ -2,6 +2,7 @@ package com.ptithcm.clinic_booking.controller.manager;
 
 import com.ptithcm.clinic_booking.dto.PageResponse;
 import com.ptithcm.clinic_booking.dto.PaginationRequest;
+import com.ptithcm.clinic_booking.dto.appointment.AppointmentDTO;
 import com.ptithcm.clinic_booking.dto.clinic.ClinicDTO;
 import com.ptithcm.clinic_booking.dto.clinic.ClinicCreateDTO;
 import com.ptithcm.clinic_booking.model.ApiResponse;
@@ -53,5 +54,10 @@ public class ClinicManageController {
     public ResponseEntity<ApiResponse<String>> softDeleteClinic(@PathVariable  @NotBlank String id){
         clinicService.softDeleteClinic(id);
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Phòng khám đã được xóa."));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<PageResponse<ClinicDTO>>> searchClinics(@NotBlank String keyword, @ModelAttribute @Valid  PaginationRequest pageRequest){
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,  clinicService.searchClinics(keyword, pageRequest)));
     }
 }

@@ -21,11 +21,13 @@ public interface DoctorService {
 
     void addDoctor(DoctorCreateDTO doctorDTO);
     void updateDoctor(DoctorSimpleResponseDTO doctor);
-    void blockDoctor(String id);
+    void changeDoctorStatus(String id, String status);
     void softDeletingDoctor(String id);
 
     PageResponse<DoctorResponseDTO> getPageDoctors(PaginationRequest pageRequest);
 
     PageResponse<DoctorSimpleResponseDTO> getPageActiveDoctors(PaginationRequest pageRequest);
     void uploadDoctorImage(String doctorId, MultipartFile imageFile);
+
+    PageResponse<DoctorResponseDTO> searchDoctors(String keyword, PaginationRequest pageRequest);
 }

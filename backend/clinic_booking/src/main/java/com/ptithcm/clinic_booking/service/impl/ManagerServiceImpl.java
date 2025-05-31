@@ -73,6 +73,14 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     @Override
+    public PageResponse<ManagerResponseDTO> searchManagers(String keyword, PaginationRequest pageRequest) {
+        Pageable pageable = pageRequest.toPageable();
+
+        Page<Manager> page = managerRepository.searchByKeyword(keyword, pageable);
+        return new PageResponse<>(page.map(ManagerMapper::toManagerDTO));
+    }
+
+    @Override
     public PageResponse<ManagerResponseDTO> getPageManagers(PaginationRequest pageRequest) {
         Pageable pageable = pageRequest.toPageable();
 

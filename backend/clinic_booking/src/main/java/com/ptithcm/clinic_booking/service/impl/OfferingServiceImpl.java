@@ -63,6 +63,13 @@ public class OfferingServiceImpl implements OfferingService {
     }
 
     @Override
+    public PageResponse<ServiceDTO> searchServices(String keyword, PaginationRequest pageRequest) {
+        Pageable pageable = pageRequest.toPageable();
+        Page<Service> page = serviceRepository.searchByKeyword(keyword, pageable);
+        return new PageResponse<>(page.map(ServiceMapper::toServiceDTO));
+    }
+
+    @Override
     public List<ServiceDTO> getAllActiveServices() {
         List<Service> services = serviceRepository.findAllByStatus("ACTIVE");
         if(services == null)

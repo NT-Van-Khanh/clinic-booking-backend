@@ -1,5 +1,7 @@
 package com.ptithcm.clinic_booking.service;
 
+import com.ptithcm.clinic_booking.dto.PageResponse;
+import com.ptithcm.clinic_booking.dto.PaginationRequest;
 import com.ptithcm.clinic_booking.dto.appointment.AppointmentDTO;
 import com.ptithcm.clinic_booking.dto.customer.CustomerDTO;
 import com.ptithcm.clinic_booking.dto.customer.CustomerRequestDTO;
@@ -9,7 +11,8 @@ import java.util.List;
 public interface CustomerService {
     List<CustomerDTO> getAllCustomers();
     List<CustomerDTO> getAllCustomersByStatus(String status);
-    List<CustomerDTO> searchCustomers(String keyword);
+    PageResponse<CustomerDTO> getPageCustomers(PaginationRequest pageRequest);
+    PageResponse<CustomerDTO> searchCustomers(String keyword, PaginationRequest pageRequest);
     CustomerDTO getCustomerById(String id);
 
     CustomerDTO addCustomer(CustomerRequestDTO customerDTO);

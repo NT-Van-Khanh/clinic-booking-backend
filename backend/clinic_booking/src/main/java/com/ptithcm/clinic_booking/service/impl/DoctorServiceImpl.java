@@ -172,15 +172,22 @@ public class DoctorServiceImpl implements DoctorService {
         Doctor doctor = doctorRepository.findById( doctorDTO.getId())
            .orElseThrow(() ->new ResourceNotFoundException("Không tìm thấy phòng khám với ID: " +  doctorDTO.getId()));
 //            Doctor doctor = DoctorMapper.toDoctor(doctorDTO);
-            MedicalSpecialty specialty = new MedicalSpecialty();
-            specialty.setId(doctorDTO.getMedicalSpecialtyId());
-            doctor.setMedicalSpecialty(specialty);
-            doctor.setName(doctorDTO.getName());
-            doctor.setPhone(doctorDTO.getPhone());
-            doctor.setEmail(doctorDTO.getEmail());
-            doctor.setAddress(doctorDTO.getAddress());
-            doctor.setGender(doctorDTO.getGender());
-            doctorRepository.save(doctor);
+        String medicalSpecialtyId =doctorDTO.getMedicalSpecialtyId();
+        specialtyService.getMSpecialtyById(medicalSpecialtyId);
+
+        MedicalSpecialty specialty = new MedicalSpecialty();
+        specialty.setId(medicalSpecialtyId);
+        doctor.setMedicalSpecialty(specialty);
+        doctor.setName(doctorDTO.getName());
+        doctor.setPhone(doctorDTO.getPhone());
+        doctor.setEmail(doctorDTO.getEmail());
+        doctor.setAddress(doctorDTO.getAddress());
+        doctor.setGender(doctorDTO.getGender());
+        doctor.setDescription(doctorDTO.getDescription());
+        doctor.setQualification(doctorDTO.getQualification());
+        doctor.setBirthday(doctorDTO.getBirthday());
+        doctor.setImageLink(doctorDTO.getImageLink());
+        doctorRepository.save(doctor);
     }
 
     @Transactional
@@ -195,14 +202,27 @@ public class DoctorServiceImpl implements DoctorService {
         doctorRepository.save(doctor);
     }
 
+    @Override
+    public PageResponse<DoctorResponseDTO> searchDoctors(String keyword, PaginationRequest pageRequest) {
+        Pageable pageable = pageRequest.toPageable();
+        Page<Doctor> page = doctorRepository.searchByKeyword(keyword, pageable);
+
+        return new PageResponse<>(page.map(DoctorMapper::toDoctorDTO));
+    }
+
+
     @Transactional
     @Override
-    public void blockDoctor(String id) {
-            Doctor d = doctorRepository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("Không thể xóa. Không tìm thấy phòng khám với ID: " + id));
-            d.setStatus("BLOCKED");
-
-            doctorRepository.save(d);
+    public void changeDoctorStatus(String id, String status) {
+        if (!status.equals("ACTIVE") && !status.equals("BLOCKED")) {
+            throw new IllegalStateException("Trạng thái hiện tại không hợp lệ để đổi trạng thái.");
+        }
+        Doctor d = doctorRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Không thể đổi trạng thái. Không tìm thấy bác sĩ với ID: " + id));
+        if(d.getStatus().equals("DELETED"))
+            throw new ResourceNotFoundException("Đối tượng này đã bị xóa.");
+        d.setStatus(status);
+        doctorRepository.save(d);
     }
 
     @Transactional

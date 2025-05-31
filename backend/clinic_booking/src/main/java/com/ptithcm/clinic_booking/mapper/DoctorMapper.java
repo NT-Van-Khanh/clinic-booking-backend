@@ -64,6 +64,8 @@ public class DoctorMapper {
         d.setBirthday(doctorDTO.getBirthday());
         d.setDescription(doctorDTO.getDescription());
         d.setQualification(doctorDTO.getQualification());
+
+        d.setImageLink(doctorDTO.getLink());
         return d;
     }
 
@@ -80,6 +82,8 @@ public class DoctorMapper {
         d.setEmail(doctorDTO.getEmail());
         d.setAddress(doctorDTO.getAddress());
         d.setGender(doctorDTO.getGender());
+        d.setQualification(doctorDTO.getQualification());
+        d.setDescription(doctorDTO.getDescription());
         return d;
     }
 }

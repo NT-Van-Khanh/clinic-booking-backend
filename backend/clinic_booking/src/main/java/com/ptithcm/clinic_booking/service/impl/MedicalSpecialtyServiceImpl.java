@@ -113,4 +113,12 @@ public class MedicalSpecialtyServiceImpl implements MedicalSpecialtyService {
 
         return new PageResponse<>(medicalSpecialties, page);
     }
+
+    @Override
+    public PageResponse<MedicalSpecialtyResponseDTO> searchMSpecialties(String keyword, PaginationRequest pageRequest) {
+        Pageable pageable = pageRequest.toPageable();
+        Page<MedicalSpecialty> page = specialtyRepository.searchByKeyword(keyword, pageable);
+
+        return new PageResponse<>(page.map(MedicalSpecialtyMapper::toResponseDTO));
+    }
 }

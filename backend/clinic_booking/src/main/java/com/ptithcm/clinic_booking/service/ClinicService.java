@@ -2,6 +2,7 @@ package com.ptithcm.clinic_booking.service;
 
 import com.ptithcm.clinic_booking.dto.PageResponse;
 import com.ptithcm.clinic_booking.dto.PaginationRequest;
+import com.ptithcm.clinic_booking.dto.appointment.AppointmentDTO;
 import com.ptithcm.clinic_booking.dto.clinic.ClinicDTO;
 import com.ptithcm.clinic_booking.dto.clinic.ClinicCreateDTO;
 
@@ -18,4 +19,6 @@ public interface ClinicService {
 
     PageResponse<ClinicDTO> getPageActiveClinics(PaginationRequest pageRequest);
     PageResponse<ClinicDTO> getPageClinics(PaginationRequest pageRequest);
+
+    PageResponse<ClinicDTO> searchClinics(String keyword, PaginationRequest pageRequest);
 }

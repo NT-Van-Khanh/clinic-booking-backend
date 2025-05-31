@@ -71,4 +71,6 @@ public class DoctorCreateDTO {
 
     @Schema(description = "Trình độ chuyên môn", example = "Bác sĩ Chuyên khoa I")
     private String qualification;
+
+    private String link;
 }

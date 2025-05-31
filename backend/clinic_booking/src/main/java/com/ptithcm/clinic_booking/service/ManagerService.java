@@ -15,4 +15,6 @@ public interface ManagerService {
     List<ManagerResponseDTO> getAllManagers();
     PageResponse<ManagerResponseDTO> getPageManagers(PaginationRequest pageable);
     ManagerResponseDTO getManagerById(String id);
+
+    PageResponse<ManagerResponseDTO> searchManagers(String keyword, PaginationRequest pageRequest);
 }

@@ -2,6 +2,7 @@ package com.ptithcm.clinic_booking.controller.manager;
 
 import com.ptithcm.clinic_booking.dto.PageResponse;
 import com.ptithcm.clinic_booking.dto.PaginationRequest;
+import com.ptithcm.clinic_booking.dto.appointment.AppointmentDTO;
 import com.ptithcm.clinic_booking.dto.doctor.DoctorCreateDTO;
 import com.ptithcm.clinic_booking.dto.doctor.DoctorSimpleResponseDTO;
 import com.ptithcm.clinic_booking.dto.doctor.DoctorResponseDTO;
@@ -58,6 +59,13 @@ public class DoctorManageController {
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Cập nhật bác sĩ thành công"));
     }
 
+    @PutMapping("/update/status/{id}")
+    public ResponseEntity<ApiResponse<String>> updateDoctor(@PathVariable String id, String status){
+        doctorService.changeDoctorStatus(id, status);
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Cập nhật bác sĩ thành công"));
+    }
+
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ApiResponse<String>> softDeleteDoctor(@PathVariable  @NotBlank String id){
         doctorService.softDeletingDoctor(id);
@@ -68,5 +76,10 @@ public class DoctorManageController {
     public ResponseEntity<ApiResponse<String>> addDoctorImage(@PathVariable String id,@RequestParam("image")  MultipartFile image){
         doctorService.uploadDoctorImage(id, image);
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Cập nhật ảnh bác sĩ thành công"));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<PageResponse<DoctorResponseDTO>>> searchDoctors(@NotBlank String keyword,@ModelAttribute @Valid  PaginationRequest pageRequest){
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,  doctorService.searchDoctors(keyword, pageRequest)));
     }
 }

@@ -6,6 +6,7 @@ import com.ptithcm.clinic_booking.model.ApiResponse;
 import com.ptithcm.clinic_booking.model.AppointmentStatus;
 import com.ptithcm.clinic_booking.dto.PageResponse;
 import com.ptithcm.clinic_booking.service.AppointmentService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -44,13 +45,13 @@ public class AppointmentManageController {
     }
 
     @GetMapping("/page")
-    public ResponseEntity<ApiResponse<PageResponse<AppointmentDTO>>> getAppointmentsPage(PaginationRequest pageRequest){
+    public ResponseEntity<ApiResponse<PageResponse<AppointmentDTO>>> getAppointmentsPage(@ModelAttribute @Valid PaginationRequest pageRequest){
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,
                 appointmentService.getPageAppointments(pageRequest)));
     }
 
     @GetMapping("/by-status/{status}")
-    public ResponseEntity<ApiResponse<PageResponse<AppointmentDTO>>> getAppointmentsByStatus(@PathVariable AppointmentStatus status, PaginationRequest pageRequest){
+    public ResponseEntity<ApiResponse<PageResponse<AppointmentDTO>>> getAppointmentsByStatus(@PathVariable AppointmentStatus status,@ModelAttribute @Valid PaginationRequest pageRequest){
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, appointmentService.getAppointmentsByStatus(status, pageRequest)));
     }
 
@@ -61,7 +62,8 @@ public class AppointmentManageController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<PageResponse<AppointmentDTO>>> searchAppointments(@NotBlank String keyword, PaginationRequest pageRequest){
+    public ResponseEntity<ApiResponse<PageResponse<AppointmentDTO>>> searchAppointments(@NotBlank String keyword, @ModelAttribute @Valid
+    PaginationRequest pageRequest){
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,  appointmentService.searchAppointments(keyword, pageRequest)));
     }
 

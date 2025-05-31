@@ -55,5 +55,10 @@ public class SpecialtyManageController {
         mSpecialtyService.softDeleteMSpecialty(id);
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Chuyên khoa đã được xóa."));
     }
-
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<PageResponse<MedicalSpecialtyResponseDTO>>> searchMSpecialties( @RequestParam String keyword,
+                                                                                                     @ModelAttribute @Valid PaginationRequest pageRequest){
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,
+                mSpecialtyService.searchMSpecialties(keyword, pageRequest)));
+    }
 }

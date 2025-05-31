@@ -2,6 +2,7 @@ package com.ptithcm.clinic_booking.service.impl;
 
 import com.ptithcm.clinic_booking.dto.PageResponse;
 import com.ptithcm.clinic_booking.dto.PaginationRequest;
+import com.ptithcm.clinic_booking.dto.appointment.AppointmentDTO;
 import com.ptithcm.clinic_booking.dto.clinic.ClinicDTO;
 import com.ptithcm.clinic_booking.dto.clinic.ClinicCreateDTO;
 import com.ptithcm.clinic_booking.dto.manager.ManagerResponseDTO;
@@ -70,6 +71,13 @@ public class ClinicServiceImpl implements ClinicService {
                 .collect(Collectors.toList());
 
         return new PageResponse<>(clinics, page);
+    }
+
+    @Override
+        public PageResponse<ClinicDTO> searchClinics(String keyword, PaginationRequest pageRequest) {
+        Pageable pageable = pageRequest.toPageable();
+        Page<Clinic> page = clinicRepository.searchByKeyword(keyword, pageable);
+        return new PageResponse<>(page .map(ClinicMapper::toClinicDTO));
     }
 
     @Override

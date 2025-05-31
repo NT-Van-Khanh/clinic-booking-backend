@@ -1,10 +1,14 @@
 package com.ptithcm.clinic_booking.controller.manager;
 
+import com.ptithcm.clinic_booking.dto.PageResponse;
+import com.ptithcm.clinic_booking.dto.PaginationRequest;
 import com.ptithcm.clinic_booking.dto.customer.CustomerDTO;
 import com.ptithcm.clinic_booking.model.ApiResponse;
 import com.ptithcm.clinic_booking.service.CustomerService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -30,6 +34,12 @@ public class CustomerManageController {
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, customers));
     }
 
+    @GetMapping("/page")
+    public ResponseEntity<ApiResponse<PageResponse<CustomerDTO>>> getPageCustomers(@ModelAttribute @Valid PaginationRequest pageRequest){
+        PageResponse<CustomerDTO> customers = customerService.getPageCustomers(pageRequest);
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, customers));
+    }
+
     @GetMapping("/all/{status}")
     public ResponseEntity<ApiResponse<List<CustomerDTO>>> getAllCustomersByStatus(@PathVariable @NotBlank String status){
         List<CustomerDTO> customers = customerService.getAllCustomersByStatus(status);
@@ -43,8 +53,8 @@ public class CustomerManageController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<List<CustomerDTO>>> searchCustomers(@RequestParam @NotBlank String keyword) {
-        List<CustomerDTO> customers = customerService.searchCustomers(keyword);
+    public ResponseEntity<ApiResponse<PageResponse<CustomerDTO>>> searchCustomers(@RequestParam @NotBlank String keyword,@ModelAttribute @Valid PaginationRequest pageRequest) {
+        PageResponse<CustomerDTO> customers = customerService.searchCustomers(keyword, pageRequest);
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, customers));
     }
 

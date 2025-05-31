@@ -22,4 +22,6 @@ public interface MedicalSpecialtyService {
     PageResponse<BaseMedicalSpecialtyDTO> getPageActiveMSpecialties(PaginationRequest pageRequest);
 
     PageResponse<MedicalSpecialtyResponseDTO> getPageMSpecialties(PaginationRequest pageRequest);
+
+    PageResponse<MedicalSpecialtyResponseDTO> searchMSpecialties(String keyword, PaginationRequest pageRequest);
 }

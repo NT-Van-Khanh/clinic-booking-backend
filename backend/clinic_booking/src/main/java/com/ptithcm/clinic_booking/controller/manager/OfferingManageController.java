@@ -26,13 +26,19 @@ public class OfferingManageController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<ApiResponse<List<ServiceDTO>>> getAllService() {
+    public ResponseEntity<ApiResponse<List<ServiceDTO>>> getAllServices() {
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, offeringService.getAllServices()));
     }
     @GetMapping("/page")
-    public ResponseEntity<ApiResponse<PageResponse<ServiceDTO>>> getPageService(@ModelAttribute @Valid PaginationRequest pageRequest) {
+    public ResponseEntity<ApiResponse<PageResponse<ServiceDTO>>> getPageServices(@ModelAttribute @Valid PaginationRequest pageRequest) {
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, offeringService.getPageServices(pageRequest)));
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<PageResponse<ServiceDTO>>> searchServices( @RequestParam @NotBlank String keyword, @ModelAttribute @Valid PaginationRequest pageRequest) {
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, offeringService.searchServices(keyword, pageRequest)));
+    }
+
     @PostMapping("/add")
     public ResponseEntity<ApiResponse<String>> addService(@RequestBody @Valid ServiceCreateDTO serviceDTO) {
         offeringService.addService(serviceDTO);

@@ -42,6 +42,12 @@ public class ManagerController {
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, managers));
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<PageResponse<ManagerResponseDTO>>> searchManagers( @RequestParam String keyword, @ModelAttribute @Valid PaginationRequest page) {
+        PageResponse<ManagerResponseDTO> managers = managerService.searchManagers(keyword, page);
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, managers));
+    }
+
     @PostMapping("/add")
     public ResponseEntity<ApiResponse<String>> addManager(@RequestBody @Valid ManagerRequestDTO manager){
         managerService.addManager(manager);
