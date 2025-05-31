@@ -10,7 +10,8 @@ public class SendEmailFactory {
     private final SendMailToGetPassword sendMailToGetPassword;
 
     @Autowired
-    public SendEmailFactory(SendMailToAuth sendMailToAuth, SendMailToGetPassword sendMailToGetPassword) {
+    public SendEmailFactory(SendMailToAuth sendMailToAuth,
+                            SendMailToGetPassword sendMailToGetPassword) {
         this.sendMailToAuth = sendMailToAuth;
         this.sendMailToGetPassword = sendMailToGetPassword;
     }

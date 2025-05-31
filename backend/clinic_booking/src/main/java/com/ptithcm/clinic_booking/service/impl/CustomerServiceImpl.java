@@ -4,6 +4,7 @@ import com.ptithcm.clinic_booking.dto.appointment.AppointmentDTO;
 import com.ptithcm.clinic_booking.dto.customer.CustomerDTO;
 import com.ptithcm.clinic_booking.dto.customer.CustomerRequestDTO;
 import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
+import com.ptithcm.clinic_booking.factory.SendEmailFactory;
 import com.ptithcm.clinic_booking.mapper.AppointmentMapper;
 import com.ptithcm.clinic_booking.mapper.CustomerMapper;
 import com.ptithcm.clinic_booking.model.Appointment;
@@ -26,13 +27,16 @@ public class CustomerServiceImpl implements CustomerService {
     private final EmailService emailService;
     private final EmailOtpService emailOtpService;
     private final AppointmentRepository appointmentRepository;
+    private final SendEmailFactory sendEmailFactory;
 
     public CustomerServiceImpl(CustomerRepository customerRepository, EmailService emailService,
-                               EmailOtpService emailOtpService, AppointmentRepository appointmentRepository) {
+                               EmailOtpService emailOtpService, AppointmentRepository appointmentRepository,
+                               SendEmailFactory sendEmailFactory) {
         this.customerRepository = customerRepository;
         this.emailService = emailService;
         this.emailOtpService = emailOtpService;
         this.appointmentRepository = appointmentRepository;
+        this.sendEmailFactory = sendEmailFactory;
     }
 
     @Override
@@ -97,10 +101,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void sendOtpToEmail(String email) {
-        String otp = emailService.generateOtp();
-        String content = "Mã OTP của bạn là: " + otp + ". Vui lòng không chia sẻ mã này với người khác.";
-        emailOtpService.saveEmailOtp(email, otp, EmailOtp.OtpPurpose.APPOINTMENT);
-        emailService.sendMail(email,"Đặt lịch khám bệnh - Mã OTP xác minh email",content);
+//        String otp = emailService.generateOtp();
+//        String content = "Mã OTP của bạn là: " + otp + ". Vui lòng không chia sẻ mã này với người khác.";
+//        emailOtpService.saveEmailOtp(email, otp, EmailOtp.OtpPurpose.APPOINTMENT);
+//        emailService.sendMail(email,"Đặt lịch khám bệnh - Mã OTP xác minh email",content);
+        sendEmailFactory.createISendMail(EmailOtp.OtpPurpose.APPOINTMENT).sendOtpToEmail(email);
     }
 
     @Override

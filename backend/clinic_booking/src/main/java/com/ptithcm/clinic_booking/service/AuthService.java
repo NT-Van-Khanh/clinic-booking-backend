@@ -9,5 +9,7 @@ public interface AuthService{
     void logout();
     void changePassword(String username, String currentPassword, String newPassword);
     void sendOtpToEmail(String email);
+    void resetPasswordByToken(String token, String newPassword);
     void resetPassword(String email, String otp, String newPassword);
+    String verifyOtpEmail(String email, String otp);
 }

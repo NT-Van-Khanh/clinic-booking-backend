@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.ptithcm.clinic_booking.model.ApiResponse;
 import jakarta.validation.ValidationException;
 import org.apache.coyote.BadRequestException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -54,13 +55,14 @@ public class GlobalExceptionHandler {
     // Xử lý lỗi máy chủ (500 Internal Server Error)
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<String>> handleGenericException(Exception ex) {
-        ApiResponse<String> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
+        ApiResponse<String> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR,
+                "Internal Server Error: " + ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
     @ExceptionHandler(MailSendException.class)
     public ResponseEntity<ApiResponse<String>> handleMailSendException(MailSendException ex) {
-        ApiResponse<String> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "Lỗi khi gửi email: " + ex.getMessage());
+        ApiResponse<String> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "Error when send email: " + ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
@@ -77,7 +79,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiResponse> handleBadCredentials(BadCredentialsException ex) {
-        ApiResponse response = new ApiResponse(HttpStatus.UNAUTHORIZED, "Sai tên đăng nhập hoặc mật khẩu");
+        ApiResponse response = new ApiResponse(HttpStatus.UNAUTHORIZED, "Username or password is incorrect");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
@@ -97,6 +99,15 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<String>> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex) {
         ApiResponse<String> response = new ApiResponse<>(HttpStatus.CONFLICT, ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(IncorrectResultSizeDataAccessException.class)
+    public ResponseEntity<ApiResponse<String>> handleIncorrectResultSizeDataAccessException(IncorrectResultSizeDataAccessException ex) {
+        ApiResponse<String> response = new ApiResponse<>(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Data error: The query returned more than one result. Details: " + ex.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
     @ExceptionHandler(FileNotFoundException.class)

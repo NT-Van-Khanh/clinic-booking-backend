@@ -41,7 +41,7 @@ public class EmailOtpServiceImpl implements EmailOtpService {
     @Override
     public void checkEmailOtp(String email, String otp, EmailOtp.OtpPurpose purpose) {
         EmailOtp emailOtp = emailOtpRepository.findByEmailAndOtpAndPurpose(email, otp, purpose)
-                .orElseThrow(() -> new IllegalArgumentException("OTP không hợp lệ"));
+                .orElseThrow(() -> new IllegalArgumentException("Email hoặc OTP không hợp lệ"));
         if (emailOtp.isVerified())
             throw new IllegalStateException("OTP này đã được sử dụng.");
 

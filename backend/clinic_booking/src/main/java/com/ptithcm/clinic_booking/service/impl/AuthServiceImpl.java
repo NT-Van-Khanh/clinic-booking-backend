@@ -124,4 +124,27 @@ public class AuthServiceImpl implements AuthService {
         account.setPassword(passwordEncoder.encode(newPassword));
         accountRepository.save(account);
     }
+
+    @Override
+    public String verifyOtpEmail(String email, String otp) {
+        emailOtpService.checkEmailOtp(email, otp, EmailOtp.OtpPurpose.ACCOUNT_VERIFY);
+        return jwtUtil.generateResetPasswordToken(email);
+    }
+
+    @Override
+    public void resetPasswordByToken(String token, String newPassword) {
+        String email = jwtUtil.validateResetPasswordToken(token);
+        Doctor doctor = doctorRepository.findByEmail(email).orElse(null);
+        Account account;
+        if (doctor != null) {
+            account = doctor.getAccount();
+        } else {
+            Manager manager = managerRepository.findByEmail(email).orElse(null);
+            if (manager == null)    throw new IllegalArgumentException("Email không hợp lệ");
+            account = manager.getAccount();
+        }
+
+        account.setPassword(passwordEncoder.encode(newPassword));
+        accountRepository.save(account);
+    }
 }
