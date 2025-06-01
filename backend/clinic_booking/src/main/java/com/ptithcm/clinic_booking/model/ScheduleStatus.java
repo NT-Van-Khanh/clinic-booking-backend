@@ -10,9 +10,6 @@ public enum ScheduleStatus {
     @Schema(description = "Lịch trình làm việc đã được tạo")
     ACTIVE("Đã xác nhận"),
 
-    @Schema(description = "Lịch trình làm việc sắp tới, cho phép đặt nếu trống")
-    UPCOMING("Sắp diễn ra"),
-
     @Schema(description = "Lịch trình làm việc đang diễn ra, cho phép đặt nếu trống")
     ONGOING("Đang diễn ra"),
 

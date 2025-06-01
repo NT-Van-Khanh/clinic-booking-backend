@@ -78,6 +78,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         if(scheduleDTO == null) throw new IllegalArgumentException("Dữ liệu lịch trình không hợp lệ.");
         Schedule schedule = ScheduleMapper.toSchedule(scheduleDTO);
+        schedule.setStatus(ScheduleStatus.ACTIVE);
 //        schedule.setId(createScheduleId());
         scheduleRepository.save(schedule);
     }
@@ -140,9 +141,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                     throw new IllegalStateException("Không thể thay đổi trạng thái vì lịch trình này đã bị xóa.");
                 }
                 // Tự động tính lại trạng thái theo thời gian
-                if (now.isBefore(startDateTime)) {
-                    return ScheduleStatus.UPCOMING;
-                } else if (now.isAfter(endDateTime)) {
+                if (now.isAfter(endDateTime)) {
                     return ScheduleStatus.EXPIRED;
                 } else {
                     return ScheduleStatus.ONGOING;

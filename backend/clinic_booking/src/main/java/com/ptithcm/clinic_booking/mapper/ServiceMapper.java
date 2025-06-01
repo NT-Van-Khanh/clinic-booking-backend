@@ -9,53 +9,42 @@ import com.ptithcm.clinic_booking.model.Service;
 public class ServiceMapper {
     public static ServiceDTO toServiceDTO(Service service){
         if(service == null) return null;
-        ServiceDTO dto = new ServiceDTO();
-        dto.setId(service.getId());
-//        dto.setCreatorId(service.getCreator().getId());
-        dto.setMedicalSpecialty(MedicalSpecialtyMapper.toResponseDTO(service.getMedicalSpecialty()));
-        dto.setName(service.getName());
-        dto.setDescription(service.getDescription());
-        dto.setStatus(service.getStatus());
-        dto.setCreatedAt(service.getCreatedAt());
-
-        return dto;
+        return ServiceDTO.builder()
+                .id(service.getId())
+                // .creatorId(service.getCreator().getId())
+                .medicalSpecialty(MedicalSpecialtyMapper.toResponseDTO(service.getMedicalSpecialty()))
+                .name(service.getName())
+                .description(service.getDescription())
+                .status(service.getStatus())
+                .createdAt(service.getCreatedAt())
+                .build();
     }
 
     public static Service toService(ServiceDTO serviceDTO){
         if(serviceDTO == null) return null;
-        Service service = new Service();
-        service.setId(serviceDTO.getId());
 
-        Manager creator = new Manager();
-        service.setCreator(creator);
-
-//        MedicalSpecialty specialty = new MedicalSpecialty();
-//        specialty.setId();
-//        service.setMedicalSpecialty(MedicalSpecialtyMapper.toEntity(serviceDTO.getMedicalSpecialtyResponseDTO()));
-
-        service.setName(serviceDTO.getName());
-        service.setDescription(serviceDTO.getDescription());
-        service.setStatus(serviceDTO.getStatus());
-
-        return service;
+        return Service.builder()
+                .id(serviceDTO.getId())
+                .creator(new Manager())
+                .medicalSpecialty(MedicalSpecialtyMapper.toEntity(serviceDTO.getMedicalSpecialty()))
+                .name(serviceDTO.getName())
+                .description(serviceDTO.getDescription())
+                .status(serviceDTO.getStatus())
+                .build();
     }
 
     public static Service toService(ServiceCreateDTO serviceDTO){
         if(serviceDTO == null) return null;
-        Service service = new Service();
+        Manager creator = new Manager(serviceDTO.getCreatorId());
 
-        Manager creator = new Manager();
-        creator.setId(serviceDTO.getCreatorId());
-        service.setCreator(creator);
+        MedicalSpecialty specialty = new MedicalSpecialty(serviceDTO.getMedicalSpecialtyId());
 
-        MedicalSpecialty specialty = new MedicalSpecialty();
-        specialty.setId(serviceDTO.getMedicalSpecialtyId());
-        service.setMedicalSpecialty(specialty);
-
-        service.setName(serviceDTO.getName());
-        service.setDescription(serviceDTO.getDescription());
-        service.setStatus(serviceDTO.getStatus());
-
-        return service;
+        return Service.builder()
+                .creator(creator)
+                .medicalSpecialty(specialty)
+                .name(serviceDTO.getName())
+                .description(serviceDTO.getDescription())
+                .status(serviceDTO.getStatus())
+                .build();
     }
 }

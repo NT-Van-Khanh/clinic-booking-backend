@@ -2,11 +2,14 @@ package com.ptithcm.clinic_booking.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
+import lombok.Builder;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@SuperBuilder
 @MappedSuperclass
 public abstract class Person {
 

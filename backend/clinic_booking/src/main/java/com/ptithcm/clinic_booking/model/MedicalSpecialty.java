@@ -1,11 +1,14 @@
 package com.ptithcm.clinic_booking.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
+@Builder
+@AllArgsConstructor
 @Entity
 @Table(name = "medical_specialty")
 public class MedicalSpecialty {
@@ -34,6 +37,10 @@ public class MedicalSpecialty {
     private List<Service> services;
 
     public MedicalSpecialty() {
+    }
+
+    public MedicalSpecialty(String id) {
+        this.id = id;
     }
 
     public String getId() {

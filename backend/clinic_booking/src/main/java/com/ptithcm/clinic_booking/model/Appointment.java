@@ -1,11 +1,15 @@
 package com.ptithcm.clinic_booking.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
+@Builder
+@AllArgsConstructor
 @Entity
 @Table(name = "appointment", uniqueConstraints = {
 @UniqueConstraint(columnNames = {"customer_id", "schedule_id"}) })

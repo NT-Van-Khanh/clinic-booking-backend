@@ -2,8 +2,11 @@ package com.ptithcm.clinic_booking.dto.specialty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+
+@SuperBuilder
 @Data
 @AllArgsConstructor
 public class MedicalSpecialtyResponseDTO extends BaseMedicalSpecialtyDTO{

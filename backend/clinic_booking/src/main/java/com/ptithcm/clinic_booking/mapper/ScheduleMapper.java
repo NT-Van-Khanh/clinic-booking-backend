@@ -10,55 +10,47 @@ import com.ptithcm.clinic_booking.model.ScheduleStatus;
 public class ScheduleMapper {
     public static ScheduleDTO toScheduleDTO(Schedule schedule) {
         if (schedule == null) return null;
-        ScheduleDTO dto = new ScheduleDTO();
-        dto.setId(schedule.getId());
-        dto.setDoctor(DoctorMapper.toDoctorSimpleDTO(schedule.getDoctor()));
-        dto.setClinic(ClinicMapper.toClinicDTO(schedule.getClinic()));
-        dto.setDate(schedule.getDate());
-        dto.setTimeStart(schedule.getTimeStart());
-        dto.setTimeEnd(schedule.getTimeEnd());
-        dto.setMaxBooking(schedule.getMaxBooking());
-        dto.setStatus(schedule.getStatus());
-        dto.setCreatedAt(schedule.getCreatedAt());
-        return dto;
+        return ScheduleDTO.builder()
+                .id(schedule.getId())
+                .doctor(DoctorMapper.toDoctorSimpleDTO(schedule.getDoctor()))
+                .clinic(ClinicMapper.toClinicDTO(schedule.getClinic()))
+                .date(schedule.getDate())
+                .timeStart(schedule.getTimeStart())
+                .timeEnd(schedule.getTimeEnd())
+                .maxBooking(schedule.getMaxBooking())
+                .status(schedule.getStatus())
+                .createdAt(schedule.getCreatedAt())
+                .build();
     }
 
     public static Schedule toSchedule(ScheduleDTO dto) {
         if (dto == null) return null;
-        Schedule schedule = new Schedule();
-        schedule.setId(dto.getId());
-        schedule.setDate(dto.getDate());
-        schedule.setTimeStart(dto.getTimeStart());
-        schedule.setTimeEnd(dto.getTimeEnd());
-        schedule.setMaxBooking(dto.getMaxBooking());
-        schedule.setStatus(dto.getStatus() != null ? dto.getStatus() : ScheduleStatus.UPCOMING);
-        if (dto.getDoctor() != null && dto.getDoctor().getId() != null) {
-            Doctor doctor = new Doctor();
-            doctor.setId(dto.getDoctor().getId());
-            schedule.setDoctor(doctor);
-        }
-        if (dto.getClinic() != null && dto.getClinic().getId() != null) {
-            Clinic clinic = new Clinic();
-            clinic.setId(dto.getClinic().getId());
-            schedule.setClinic(clinic);
-        }
-        return schedule;
+
+        return Schedule.builder()
+                .id(dto.getId())
+                .date(dto.getDate())
+                .timeStart(dto.getTimeStart())
+                .timeEnd(dto.getTimeEnd())
+                .maxBooking(dto.getMaxBooking())
+                .status(dto.getStatus() != null ? dto.getStatus() : ScheduleStatus.PENDING)
+                .doctor(DoctorMapper.toDoctor(dto.getDoctor()))
+                .clinic(ClinicMapper.toClinic(dto.getClinic()))
+                .build();
     }
 
     public static Schedule toSchedule(ScheduleCreateDTO dto) {
         if (dto == null) return null;
-        Schedule schedule = new Schedule();
-        schedule.setDate(dto.getDate());
-        schedule.setTimeStart(dto.getTimeStart());
-        schedule.setTimeEnd(dto.getTimeEnd());
-        schedule.setMaxBooking(dto.getMaxBooking());
-        schedule.setStatus(dto.getStatus() != null ? dto.getStatus() : ScheduleStatus.UPCOMING);
 
         Doctor doctor = new Doctor(dto.getDoctorId());
-        schedule.setDoctor(doctor);
-
         Clinic clinic = new Clinic(dto.getClinicId());
-        schedule.setClinic(clinic);
-        return schedule;
+        return Schedule.builder()
+                .date(dto.getDate())
+                .timeStart(dto.getTimeStart())
+                .timeEnd(dto.getTimeEnd())
+                .maxBooking(dto.getMaxBooking())
+                .status(dto.getStatus() != null ? dto.getStatus() : ScheduleStatus.PENDING)
+                .doctor(doctor)
+                .clinic(clinic)
+                .build();
     }
 }

@@ -11,12 +11,14 @@ import com.ptithcm.clinic_booking.mapper.CustomerMapper;
 import com.ptithcm.clinic_booking.model.Appointment;
 import com.ptithcm.clinic_booking.model.AppointmentStatus;
 import com.ptithcm.clinic_booking.model.Schedule;
+import com.ptithcm.clinic_booking.model.ScheduleStatus;
 import com.ptithcm.clinic_booking.repository.AppointmentRepository;
 import com.ptithcm.clinic_booking.repository.ScheduleRepository;
 import com.ptithcm.clinic_booking.service.AppointmentService;
 import com.ptithcm.clinic_booking.service.CustomerService;
 import com.ptithcm.clinic_booking.service.OfferingService;
 import jakarta.transaction.Transactional;
+import org.checkerframework.checker.units.qual.s;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -97,14 +99,21 @@ public class AppointmentServiceImpl implements AppointmentService {
         Schedule schedule = scheduleRepository.findById(appointmentDTO.getScheduleId())
                 .orElseThrow(() -> new RuntimeException("Schedule not found"));
 
-        Appointment appointment = AppointmentMapper.toAppointment(appointmentDTO);
-        appointment.setSchedule(schedule);
+        if(schedule.getStatus()!= ScheduleStatus.ONGOING || schedule.getStatus() != ScheduleStatus.ACTIVE)
+            throw new RuntimeException("Schedule is not available for booking");
+
+        Integer bookedCount = appointmentRepository.countByScheduleId(schedule.getId());
+        if (schedule.getMaxBooking() <= bookedCount) {
+            throw new RuntimeException("Maximum number of bookings for this schedule has been reached");
+        }
+
         CustomerDTO savedCustomer = customerService.addCustomer(appointmentDTO.getCustomer());
 
+        Appointment appointment = AppointmentMapper.toAppointment(appointmentDTO);
+        appointment.setSchedule(schedule);
         appointment.setCustomer(CustomerMapper.toCustomer(savedCustomer));
         appointment.setStatus(AppointmentStatus.CONFIRMED);
         appointmentRepository.save(appointment);
-        System.err.println("save thành công");
     }
 
     @Override

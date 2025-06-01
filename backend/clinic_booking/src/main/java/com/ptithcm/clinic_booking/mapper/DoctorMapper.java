@@ -10,80 +10,82 @@ public class DoctorMapper {
 
     public static DoctorSimpleResponseDTO toDoctorSimpleDTO(Doctor doctor){
         if(doctor == null) return null;
-        DoctorSimpleResponseDTO d = new DoctorSimpleResponseDTO();
-        d.setId(doctor.getId());
-        d.setMedicalSpecialtyId(doctor.getMedicalSpecialty().getId());
-        d.setName(doctor.getName());
-        d.setPhone(doctor.getPhone());
-        d.setEmail(doctor.getEmail());
-        d.setAddress(doctor.getAddress());
-        d.setGender(doctor.getGender());
-        d.setImageLink(doctor.getImageLink());
-        d.setCreatedAt(doctor.getCreatedAt());
-        d.setBirthday(doctor.getBirthday());
-        d.setDescription(doctor.getDescription());
-        d.setQualification(doctor.getQualification());
-        return d;
+        return DoctorSimpleResponseDTO.builder()
+                .id(doctor.getId())
+                .medicalSpecialtyId(doctor.getMedicalSpecialty().getId())
+                .name(doctor.getName())
+                .phone(doctor.getPhone())
+                .email(doctor.getEmail())
+                .address(doctor.getAddress())
+                .gender(doctor.getGender())
+                .imageLink(doctor.getImageLink())
+                .createdAt(doctor.getCreatedAt())
+                .birthday(doctor.getBirthday())
+                .description(doctor.getDescription())
+                .qualification(doctor.getQualification())
+                .build();
     }
     public static DoctorResponseDTO toDoctorDTO(Doctor doctor){
         if(doctor == null) return null;
-        DoctorResponseDTO d = new DoctorResponseDTO();
-        d.setId(doctor.getId());
-        d.setAccount(AccountMapper.toAccountResponseDTO(doctor.getAccount()));
-        d.setMedicalSpecialtyId(doctor.getMedicalSpecialty().getId());
-        d.setName(doctor.getName());
-        d.setPhone(doctor.getPhone());
-        d.setEmail(doctor.getEmail());
-        d.setAddress(doctor.getAddress());
-        d.setGender(doctor.getGender());
-        d.setImageLink(doctor.getImageLink());
-        d.setStatus(doctor.getStatus());
-        d.setCreatedAt(doctor.getCreatedAt());
-        d.setBirthday(doctor.getBirthday());
-        d.setDescription(doctor.getDescription());
-        d.setQualification(doctor.getQualification());
-        return d;
+        return DoctorResponseDTO.builder()
+                .id(doctor.getId())
+                .account(AccountMapper.toAccountResponseDTO(doctor.getAccount()))
+                .medicalSpecialtyId(doctor.getMedicalSpecialty().getId())
+                .name(doctor.getName())
+                .phone(doctor.getPhone())
+                .email(doctor.getEmail())
+                .address(doctor.getAddress())
+                .gender(doctor.getGender())
+                .imageLink(doctor.getImageLink())
+                .status(doctor.getStatus())
+                .createdAt(doctor.getCreatedAt())
+                .birthday(doctor.getBirthday())
+                .description(doctor.getDescription())
+                .qualification(doctor.getQualification())
+                .build();
     }
 
     public static Doctor toDoctor(DoctorCreateDTO doctorDTO){
-        if(doctorDTO == null) return null;
-        Doctor d = new Doctor();
-//        d.setId(doctorDTO.getId());
-        d.setAccount(AccountMapper.toAccount(doctorDTO.getAccount()));
+        if (doctorDTO == null) return null;
 
-        MedicalSpecialty specialty = new MedicalSpecialty();
-        specialty.setId(doctorDTO.getMedicalSpecialtyId());
-        d.setMedicalSpecialty(specialty);
-
-        d.setName(doctorDTO.getName());
-        d.setPhone(doctorDTO.getPhone());
-        d.setEmail(doctorDTO.getEmail());
-        d.setAddress(doctorDTO.getAddress());
-        d.setGender(doctorDTO.getGender());
-        d.setStatus(doctorDTO.getStatus());
-        d.setBirthday(doctorDTO.getBirthday());
-        d.setDescription(doctorDTO.getDescription());
-        d.setQualification(doctorDTO.getQualification());
-
-        d.setImageLink(doctorDTO.getLink());
-        return d;
+        MedicalSpecialty specialty = MedicalSpecialty.builder()
+                .id(doctorDTO.getMedicalSpecialtyId())
+                .build();
+        //.id(doctorDTO.getId())
+        return Doctor.builder()
+                .account(AccountMapper.toAccount(doctorDTO.getAccount()))
+                .medicalSpecialty(specialty)
+                .name(doctorDTO.getName())
+                .phone(doctorDTO.getPhone())
+                .email(doctorDTO.getEmail())
+                .address(doctorDTO.getAddress())
+                .gender(doctorDTO.getGender())
+                .status(doctorDTO.getStatus())
+                .birthday(doctorDTO.getBirthday())
+                .description(doctorDTO.getDescription())
+                .qualification(doctorDTO.getQualification())
+                .imageLink(doctorDTO.getLink())
+                .build();
     }
 
     public static Doctor toDoctor(DoctorSimpleResponseDTO doctorDTO){
-        if(doctorDTO == null) return null;
-        Doctor d = new Doctor();
-        d.setId(doctorDTO.getId());
-        MedicalSpecialty specialty = new MedicalSpecialty();
-        specialty.setId(doctorDTO.getMedicalSpecialtyId());
-        d.setMedicalSpecialty(specialty);
-        d.setImageLink(doctorDTO.getImageLink());
-        d.setName(doctorDTO.getName());
-        d.setPhone(doctorDTO.getPhone());
-        d.setEmail(doctorDTO.getEmail());
-        d.setAddress(doctorDTO.getAddress());
-        d.setGender(doctorDTO.getGender());
-        d.setQualification(doctorDTO.getQualification());
-        d.setDescription(doctorDTO.getDescription());
-        return d;
+        if (doctorDTO == null) return null;
+
+        MedicalSpecialty specialty = MedicalSpecialty.builder()
+                .id(doctorDTO.getMedicalSpecialtyId())
+                .build();
+
+        return Doctor.builder()
+                .id(doctorDTO.getId())
+                .medicalSpecialty(specialty)
+                .imageLink(doctorDTO.getImageLink())
+                .name(doctorDTO.getName())
+                .phone(doctorDTO.getPhone())
+                .email(doctorDTO.getEmail())
+                .address(doctorDTO.getAddress())
+                .gender(doctorDTO.getGender())
+                .qualification(doctorDTO.getQualification())
+                .description(doctorDTO.getDescription())
+                .build();
     }
 }

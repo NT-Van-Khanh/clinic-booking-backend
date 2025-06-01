@@ -8,46 +8,45 @@ import com.ptithcm.clinic_booking.model.Role;
 
 public class ManagerMapper {
     public static ManagerResponseDTO toManagerDTO(Manager manager){
-        if(manager == null) return null;
-        ManagerResponseDTO dto = new ManagerResponseDTO();
-        dto.setId(manager.getId());
-        dto.setAccount(AccountMapper.toAccountResponseDTO(manager.getAccount()));
-        dto.setName(manager.getName());
-        dto.setPhone(manager.getPhone());
-        dto.setEmail(manager.getEmail());
-        dto.setAddress(manager.getAddress());
-        dto.setGender(manager.getGender());
-        dto.setStatus(manager.getStatus());
-        dto.setCreatedAt(manager.getCreatedAt());
-        return dto;
+        if (manager == null) return null;
+
+        return ManagerResponseDTO.builder()
+                .id(manager.getId())
+                .account(AccountMapper.toAccountResponseDTO(manager.getAccount()))
+                .name(manager.getName())
+                .phone(manager.getPhone())
+                .email(manager.getEmail())
+                .address(manager.getAddress())
+                .gender(manager.getGender())
+                .status(manager.getStatus())
+                .createdAt(manager.getCreatedAt())
+                .build();
     }
     public static Manager toManager(ManagerRequestDTO dto) {
         if(dto == null) return null;
-        Manager manager = new Manager();
-//        manager.setId(dto.getId());
-        manager.setName(dto.getName());
-        manager.setPhone(dto.getPhone());
-        manager.setEmail(dto.getEmail());
-        manager.setAddress(dto.getAddress());
-        manager.setGender(dto.getGender());
-        manager.setStatus(dto.getStatus());
-
-        manager.setAccount(AccountMapper.toAccount(dto.getAccount()));
-        return manager;
+        return Manager.builder()
+                //.id(dto.getId())
+                .name(dto.getName())
+                .phone(dto.getPhone())
+                .email(dto.getEmail())
+                .address(dto.getAddress())
+                .gender(dto.getGender())
+                .status(dto.getStatus())
+                .account(AccountMapper.toAccount(dto.getAccount()))
+                .build();
     }
 
     public static Manager toManager(ManagerResponseDTO dto) {
         if(dto == null) return null;
-        Manager manager = new Manager();
-        manager.setId(dto.getId());
-        manager.setName(dto.getName());
-        manager.setPhone(dto.getPhone());
-        manager.setEmail(dto.getEmail());
-        manager.setAddress(dto.getAddress());
-        manager.setGender(dto.getGender());
-        manager.setStatus(dto.getStatus());
-
-        manager.setAccount(AccountMapper.toAccount(dto.getAccount()));
-        return manager;
+        return Manager.builder()
+                .id(dto.getId())
+                .name(dto.getName())
+                .phone(dto.getPhone())
+                .email(dto.getEmail())
+                .address(dto.getAddress())
+                .gender(dto.getGender())
+                .status(dto.getStatus())
+                .account(AccountMapper.toAccount(dto.getAccount()))
+                .build();
     }
 }

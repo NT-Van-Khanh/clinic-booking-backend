@@ -97,7 +97,7 @@ CREATE TABLE schedule(
     time_start time NOT NULL,
     time_end time NOT NULL,
     max_booking SMALLINT NOT NULL,
-    status VARCHAR(15) NOT NULL CHECK (status in ('ACTIVE', 'ONGOING', 'DELETED', 'UPCOMING', 'PAUSED','EXPIRED', 'CANCELED' )),
+    status VARCHAR(15) NOT NULL CHECK (status in ('ACTIVE', 'ONGOING', 'DELETED', 'PAUSED','EXPIRED', 'CANCELED' )),
     created_at datetime NOT NULL DEFAULT NOW(),
     FOREIGN KEY (doctor_id) REFERENCES doctor(id),
     FOREIGN KEY (clinic_id) REFERENCES clinic(id)
@@ -301,16 +301,16 @@ INSERT INTO clinic (id, name, address, description, phone, email, status) VALUES
 INSERT INTO schedule (doctor_id, clinic_id, date, time_start, time_end, max_booking, status)
 VALUES 
 ( 'D001', 'CL01', '2025-06-04', '08:00:00', '11:00:00', 10, 'ACTIVE'),
-('D002', 'CL02', '2025-06-04', '09:00:00', '12:00:00', 12, 'UPCOMING'),
-( 'D003', 'CL03', '2025-06-05', '10:00:00', '13:00:00', 8, 'UPCOMING'),
-( 'D004', 'CL04', '2025-06-06', '14:00:00', '17:00:00', 12, 'UPCOMING'),
-( 'D005', 'CL05', '2025-06-07', '08:30:00', '11:30:00', 10, 'UPCOMING'),
-( 'D001', 'CL06', '2025-06-08', '08:00:00', '11:00:00', 15, 'UPCOMING'),  -- D001 có lịch chung với CL06
-( 'D002', 'CL07', '2025-06-08', '08:00:00', '11:00:00', 15, 'UPCOMING'),  -- D002 cũng có lịch chung với CL06
-('D006', 'CL06', '2025-06-08', '09:00:00', '12:00:00', 10, 'UPCOMING'),
-('D007', 'CL07', '2025-06-09', '10:00:00', '13:00:00', 10, 'UPCOMING'),
-('D008', 'CL08', '2025-06-09', '08:00:00', '11:00:00', 12, 'UPCOMING'),
-('D009', 'CL09', '2025-06-10', '09:00:00', '12:00:00', 10, 'UPCOMING'),
+('D002', 'CL02', '2025-06-04', '09:00:00', '12:00:00', 12, 'ACTIVE'),
+( 'D003', 'CL03', '2025-06-05', '10:00:00', '13:00:00', 8, 'ACTIVE'),
+( 'D004', 'CL04', '2025-06-06', '14:00:00', '17:00:00', 12, 'ACTIVE'),
+( 'D005', 'CL05', '2025-06-07', '08:30:00', '11:30:00', 10, 'ACTIVE'),
+( 'D001', 'CL06', '2025-06-08', '08:00:00', '11:00:00', 15, 'ACTIVE'),  -- D001 có lịch chung với CL06
+( 'D002', 'CL07', '2025-06-08', '08:00:00', '11:00:00', 15, 'ACTIVE'),  -- D002 cũng có lịch chung với CL06
+('D006', 'CL06', '2025-06-08', '09:00:00', '12:00:00', 10, 'ACTIVE'),
+('D007', 'CL07', '2025-06-09', '10:00:00', '13:00:00', 10, 'ACTIVE'),
+('D008', 'CL08', '2025-06-09', '08:00:00', '11:00:00', 12, 'ACTIVE'),
+('D009', 'CL09', '2025-06-10', '09:00:00', '12:00:00', 10, 'ACTIVE'),
 ('D010', 'CL10', '2025-06-10', '14:00:00', '17:00:00', 15, 'ACTIVE'),
 ('D003', 'CL02', '2025-06-11', '08:00:00', '11:00:00', 8, 'ACTIVE'),  -- D003 có lịch riêng tại CL02
 ('D005', 'CL03', '2025-06-12', '10:00:00', '13:00:00', 12, 'ACTIVE'),
@@ -338,17 +338,93 @@ DELIMITER $$
 		WHERE start_time <= NOW() AND end_time >= NOW()
 		  AND status NOT IN ('CANCELED', 'DELETED', 'ONGOING', 'PAUSED');
 
-
-		UPDATE schedule
-		SET status = 'UPCOMING'
-		WHERE start_time > NOW()
-		  AND status NOT IN ('CANCELED', 'DELETED', 'UPCOMING', 'PAUSED');
 	END$$
 DELIMITER ;
 SET GLOBAL event_scheduler = ON;
 
 SHOW VARIABLES LIKE 'event_scheduler';
 
+
+DELIMITER $$
+CREATE TRIGGER trg_check_duplicate_in_doctor
+BEFORE INSERT ON manager
+FOR EACH ROW
+BEGIN
+    IF EXISTS (SELECT 1 FROM doctor WHERE phone = NEW.phone) THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Số điện thoại đã tồn tại trong bảng doctor';
+    END IF;
+
+    IF EXISTS (SELECT 1 FROM doctor WHERE email = NEW.email) THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Email đã tồn tại trong bảng doctor';
+    END IF;
+END$$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE TRIGGER trg_update_check_duplicate_in_doctor
+BEFORE UPDATE ON manager
+FOR EACH ROW
+BEGIN
+    IF NEW.phone <> OLD.phone AND EXISTS (
+        SELECT 1 FROM doctor WHERE phone = NEW.phone
+    ) THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Số điện thoại đã tồn tại trong bảng doctor';
+    END IF;
+
+    IF NEW.email <> OLD.email AND EXISTS (
+        SELECT 1 FROM doctor WHERE email = NEW.email
+    ) THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Email đã tồn tại trong bảng doctor';
+    END IF;
+END$$
+
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE TRIGGER trg_check_duplicate_in_manager
+BEFORE INSERT ON doctor
+FOR EACH ROW
+BEGIN
+    IF EXISTS (SELECT 1 FROM manager WHERE phone = NEW.phone) THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Số điện thoại đã tồn tại trong bảng manager';
+    END IF;
+
+    IF EXISTS (SELECT 1 FROM manager WHERE email = NEW.email) THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Email đã tồn tại trong bảng manager';
+    END IF;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER trg_update_check_duplicate_in_manager
+BEFORE UPDATE ON doctor
+FOR EACH ROW
+BEGIN
+    IF NEW.phone <> OLD.phone AND EXISTS (
+        SELECT 1 FROM manager WHERE phone = NEW.phone
+    ) THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Số điện thoại đã tồn tại trong bảng manager';
+    END IF;
+
+    IF NEW.email <> OLD.email AND EXISTS (
+        SELECT 1 FROM manager WHERE email = NEW.email
+    ) THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Email đã tồn tại trong bảng manager';
+    END IF;
+END$$
+
+DELIMITER ;
 
 -- DELIMITER $$
 

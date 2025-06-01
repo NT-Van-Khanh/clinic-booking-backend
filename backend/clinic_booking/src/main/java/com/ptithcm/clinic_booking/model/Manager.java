@@ -1,11 +1,14 @@
 package com.ptithcm.clinic_booking.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDateTime;
-
+@SuperBuilder
+@AllArgsConstructor
 @Entity
 @Table(name = "manager")
 public class Manager extends Person {
@@ -41,6 +44,12 @@ public class Manager extends Person {
 //    private LocalDateTime createdAt;
 
     public Manager() {
+        super();
+    }
+
+    public Manager(String id) {
+        super();
+        this.id = id;
     }
 
     public Account getAccount() {

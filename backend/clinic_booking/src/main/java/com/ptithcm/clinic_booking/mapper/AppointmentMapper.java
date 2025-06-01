@@ -9,53 +9,48 @@ import com.ptithcm.clinic_booking.model.Service;
 public class AppointmentMapper {
     public static Appointment toAppointment(AppointmentDTO dto){
         if (dto == null) return null;
-        Appointment appointment = new Appointment();
 
-        appointment.setId(dto.getId());
-        appointment.setService(ServiceMapper.toService(dto.getService()));
-        appointment.setSchedule(ScheduleMapper.toSchedule(dto.getSchedule()));
-        appointment.setCustomer(CustomerMapper.toCustomer(dto.getCustomer()));
-        appointment.setNumericalOrder(dto.getNumericalOrder());
-        appointment.setNote(dto.getNote());
-        appointment.setStatus(dto.getStatus());
-        appointment.setUpdatedAt(dto.getUpdatedAt());
-        appointment.setUpdatedBy(dto.getUpdatedBy());
-        return appointment;
+        return Appointment.builder()
+                .id(dto.getId())
+                .service(ServiceMapper.toService(dto.getService()))
+                .schedule(ScheduleMapper.toSchedule(dto.getSchedule()))
+                .customer(CustomerMapper.toCustomer(dto.getCustomer()))
+                .numericalOrder(dto.getNumericalOrder())
+                .note(dto.getNote())
+                .status(dto.getStatus())
+                .updatedAt(dto.getUpdatedAt())
+                .updatedBy(dto.getUpdatedBy())
+                .build();
     }
 
     public static AppointmentDTO toAppointmentDTO(Appointment appointment){
         if (appointment == null) return null;
-        AppointmentDTO dto = new AppointmentDTO();
 
-        dto.setId(appointment.getId());
-        dto.setService(ServiceMapper.toServiceDTO(appointment.getService()));
-        dto.setSchedule(ScheduleMapper.toScheduleDTO(appointment.getSchedule()));
-        dto.setCustomer(CustomerMapper.toCustomerDTO(appointment.getCustomer()));
-        dto.setNumericalOrder(appointment.getNumericalOrder());
-        dto.setNote(appointment.getNote());
-        dto.setStatus(appointment.getStatus());
-        dto.setUpdatedAt(appointment.getUpdatedAt());
-        dto.setUpdatedBy(appointment.getUpdatedBy());
-        dto.setCreatedAt(appointment.getCreatedAt());
-
-        return dto;
+        return AppointmentDTO.builder()
+                .id(appointment.getId())
+                .service(ServiceMapper.toServiceDTO(appointment.getService()))
+                .schedule(ScheduleMapper.toScheduleDTO(appointment.getSchedule()))
+                .customer(CustomerMapper.toCustomerDTO(appointment.getCustomer()))
+                .numericalOrder(appointment.getNumericalOrder())
+                .note(appointment.getNote())
+                .status(appointment.getStatus())
+                .updatedAt(appointment.getUpdatedAt())
+                .updatedBy(appointment.getUpdatedBy())
+                .createdAt(appointment.getCreatedAt())
+                .build();
     }
 
     public static Appointment toAppointment(AppointmentCreateDTO dto){
         if (dto == null) return null;
-        Appointment appointment = new Appointment();
 
-        Service service = new Service(dto.getServiceId());
-        appointment.setService(service);
-
-        Schedule schedule = new Schedule(dto.getScheduleId());
-        appointment.setSchedule(schedule);
-
-        appointment.setCustomer(CustomerMapper.toCustomer(dto.getCustomer()));
-        appointment.setNumericalOrder(dto.getNumericalOrder());
-        appointment.setNote(dto.getNote());
-        appointment.setStatus(dto.getStatus());
-        appointment.setUpdatedBy(dto.getUpdatedByUser());
-        return appointment;
+        return Appointment.builder()
+                .service(new Service(dto.getServiceId()))
+                .schedule(new Schedule(dto.getScheduleId()))
+                .customer(CustomerMapper.toCustomer(dto.getCustomer()))
+                .numericalOrder(dto.getNumericalOrder())
+                .note(dto.getNote())
+                .status(dto.getStatus())
+                .updatedBy(dto.getUpdatedByUser())
+                .build();
     }
 }

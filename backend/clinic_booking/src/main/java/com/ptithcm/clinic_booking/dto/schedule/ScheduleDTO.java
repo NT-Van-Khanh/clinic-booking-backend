@@ -49,8 +49,8 @@ public class ScheduleDTO {
     @Schema(description = "Số lượt đặt tối đa", example = "10")
     private Short maxBooking;
 
-    @Schema(description = "Trạng thái lịch khám", example = "UPCOMING")
-    private ScheduleStatus status = ScheduleStatus.UPCOMING;
+    @Schema(description = "Trạng thái lịch khám", example = "ACTIVE")
+    private ScheduleStatus status = ScheduleStatus.ACTIVE;
 
     @Schema(description = "Ngày tạo", example = "2025-05-22T10:00:00")
     private LocalDateTime createdAt;

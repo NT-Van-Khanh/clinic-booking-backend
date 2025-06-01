@@ -1,12 +1,13 @@
 package com.ptithcm.clinic_booking.model;
 
 import jakarta.persistence.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-
+@SuperBuilder
 @Entity
 @Table(name = "doctor")
 public class Doctor  extends Person{
