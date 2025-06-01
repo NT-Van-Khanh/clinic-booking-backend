@@ -99,7 +99,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         Schedule schedule = scheduleRepository.findById(appointmentDTO.getScheduleId())
                 .orElseThrow(() -> new RuntimeException("Schedule not found"));
 
-        if(schedule.getStatus()!= ScheduleStatus.ONGOING || schedule.getStatus() != ScheduleStatus.ACTIVE)
+        if(schedule.getStatus()!= ScheduleStatus.ONGOING && schedule.getStatus() != ScheduleStatus.ACTIVE)
             throw new RuntimeException("Schedule is not available for booking");
 
         Integer bookedCount = appointmentRepository.countByScheduleId(schedule.getId());
