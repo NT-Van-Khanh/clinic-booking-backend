@@ -214,7 +214,7 @@ public class DoctorServiceImpl implements DoctorService {
     @Transactional
     @Override
     public void changeStatusDoctor(String id, String status) {
-        if (!status.equals("ACTIVE") && !status.equals("BLOCKED")) {
+        if (!status.equals("ACTIVE") && !status.equals("DELETED")) {
             throw new IllegalStateException("Trạng thái hiện tại không hợp lệ để đổi trạng thái.");
         }
         Doctor d = doctorRepository.findById(id)
