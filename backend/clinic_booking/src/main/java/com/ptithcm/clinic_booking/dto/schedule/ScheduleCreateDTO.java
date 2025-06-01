@@ -44,6 +44,6 @@ public class ScheduleCreateDTO {
         @Schema(description = "Số lượt đặt tối đa", example = "10")
         private Short maxBooking;
 
-        @Schema(description = "Trạng thái lịch khám", example = "PENDING")
-        private ScheduleStatus status = ScheduleStatus.PENDING;
+        @Schema(description = "Trạng thái lịch khám", example = "ACTIVE")
+        private ScheduleStatus status;
 }

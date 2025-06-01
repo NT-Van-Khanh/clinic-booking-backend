@@ -32,7 +32,7 @@ public class ScheduleMapper {
                 .timeStart(dto.getTimeStart())
                 .timeEnd(dto.getTimeEnd())
                 .maxBooking(dto.getMaxBooking())
-                .status(dto.getStatus() != null ? dto.getStatus() : ScheduleStatus.PENDING)
+                .status(dto.getStatus())
                 .doctor(DoctorMapper.toDoctor(dto.getDoctor()))
                 .clinic(ClinicMapper.toClinic(dto.getClinic()))
                 .build();
@@ -48,7 +48,7 @@ public class ScheduleMapper {
                 .timeStart(dto.getTimeStart())
                 .timeEnd(dto.getTimeEnd())
                 .maxBooking(dto.getMaxBooking())
-                .status(dto.getStatus() != null ? dto.getStatus() : ScheduleStatus.PENDING)
+                .status(dto.getStatus())
                 .doctor(doctor)
                 .clinic(clinic)
                 .build();

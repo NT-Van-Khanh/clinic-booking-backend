@@ -31,6 +31,7 @@ public class DoctorManageController {
         this.doctorService = doctorService;
         this.firebaseService = firebaseService;
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<DoctorResponseDTO>> getDoctorById(@PathVariable String id) {
         DoctorResponseDTO doctor = doctorService.getDoctorById(id);
@@ -41,6 +42,7 @@ public class DoctorManageController {
     public ResponseEntity<ApiResponse<List<DoctorResponseDTO>>> getAllDoctors(){
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, doctorService.getAllDoctors()));
     }
+
     @GetMapping("/page")
     public ResponseEntity<ApiResponse<PageResponse<DoctorResponseDTO>>> getPageDoctors(PaginationRequest pageRequest){
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, doctorService.getPageDoctors(pageRequest)));
@@ -60,7 +62,7 @@ public class DoctorManageController {
     }
 
     @PutMapping("/update/status/{id}")
-    public ResponseEntity<ApiResponse<String>> updateDoctor(@PathVariable String id, String status){
+    public ResponseEntity<ApiResponse<String>> updateDoctor(@PathVariable String id, @RequestBody String status){
         doctorService.changeDoctorStatus(id, status);
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Cập nhật bác sĩ thành công"));
     }

@@ -4,8 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 public enum ScheduleStatus {
 
-    @Schema(description = "Lịch trình đã được tạo và đang chờ xác nhận từ hệ thống")
-    PENDING("Đang chờ xác nhận"),
+//    @Schema(description = "Lịch trình đã được tạo và đang chờ xác nhận từ hệ thống")
+//    PENDING("Đang chờ xác nhận"),
 
     @Schema(description = "Lịch trình làm việc đã được tạo")
     ACTIVE("Đã xác nhận"),
