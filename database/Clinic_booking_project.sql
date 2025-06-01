@@ -18,7 +18,7 @@ CREATE TABLE account(
     username VARCHAR(50) PRIMARY KEY,
     password VARCHAR(255) NOT NULL,
     role_id SMALLINT NOT NULL,
-    status VARCHAR(15) NOT NULL CHECK (status IN ('ACTIVE', 'BLOCKED', 'DELETED')),
+    status VARCHAR(15) NOT NULL CHECK (status IN ('ACTIVE','DELETED')),
     created_at DATETIME NOT NULL DEFAULT NOW(),
     
     FOREIGN KEY (role_id) REFERENCES role(id)
@@ -93,14 +93,19 @@ CREATE TABLE schedule(
 	id INT PRIMARY KEY AUTO_INCREMENT,
     doctor_id VARCHAR(10) NOT NULL,
     clinic_id VARCHAR(10) NOT NULL,
-    date date NOT NULL,
+    date date NOT NULL ,
     time_start time NOT NULL,
     time_end time NOT NULL,
     max_booking SMALLINT NOT NULL,
     status VARCHAR(15) NOT NULL CHECK (status in ('ACTIVE', 'ONGOING', 'DELETED', 'PAUSED','EXPIRED', 'CANCELED' )),
     created_at datetime NOT NULL DEFAULT NOW(),
     FOREIGN KEY (doctor_id) REFERENCES doctor(id),
-    FOREIGN KEY (clinic_id) REFERENCES clinic(id)
+    FOREIGN KEY (clinic_id) REFERENCES clinic(id),
+    
+    UNIQUE (clinic_id, date, time_start, time_end),
+	UNIQUE (doctor_id, date, time_start, time_end),
+    CHECK (time_start < time_end),
+    CHECK (max_booking > 0)
 );  
 
 CREATE TABLE service(
@@ -153,7 +158,7 @@ INSERT INTO role(name,status) VALUES
 INSERT INTO account(username, password, role_id, status) VALUES
 ('admin1', '$2a$10$EzDLzuQ3s2nhRUjIp/lDieVFG8Nx/dAuxGT.d/A9h366yusDUzazm', 3, 'ACTIVE'),
 ('manager1', '$2a$10$EzDLzuQ3s2nhRUjIp/lDieVFG8Nx/dAuxGT.d/A9h366yusDUzazm', 2, 'ACTIVE'),
-('doctor0', '$2a$10$EzDLzuQ3s2nhRUjIp/lDieVFG8Nx/dAuxGT.d/A9h366yusDUzazm', 3, 'BLOCKED'),
+('doctor0', '$2a$10$EzDLzuQ3s2nhRUjIp/lDieVFG8Nx/dAuxGT.d/A9h366yusDUzazm', 3, 'DELETED'),
 ('doctor1', '$2a$10$EzDLzuQ3s2nhRUjIp/lDieVFG8Nx/dAuxGT.d/A9h366yusDUzazm', 3, 'ACTIVE'),
 ('doctor2', '$2a$10$EzDLzuQ3s2nhRUjIp/lDieVFG8Nx/dAuxGT.d/A9h366yusDUzazm', 3, 'ACTIVE'),
 ('doctor3', '$2a$10$EzDLzuQ3s2nhRUjIp/lDieVFG8Nx/dAuxGT.d/A9h366yusDUzazm', 3, 'ACTIVE'),
@@ -425,6 +430,69 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER check_schedule_overlap_before_insert
+BEFORE INSERT ON schedule
+FOR EACH ROW
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM schedule
+        WHERE doctor_id = NEW.doctor_id
+          AND date = NEW.date
+          AND NOT (NEW.time_end <= time_start OR NEW.time_start >= time_end)
+    ) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Lịch trình bị chồng lấn với lịch hiện có cho bác sĩ này';
+    END IF;
+
+    IF EXISTS (
+        SELECT 1 FROM schedule
+        WHERE clinic_id = NEW.clinic_id
+          AND date = NEW.date
+          AND NOT (NEW.time_end <= time_start OR NEW.time_start >= time_end)
+    ) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Lịch trình bị chồng lấn với lịch hiện có cho phòng khám này';
+    END IF;
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER check_schedule_overlap_before_update
+BEFORE UPDATE ON schedule
+FOR EACH ROW
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM schedule
+        WHERE doctor_id = NEW.doctor_id
+          AND date = NEW.date
+          AND NOT (NEW.time_end <= time_start OR NEW.time_start >= time_end)
+    ) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Lịch trình bị chồng lấn với lịch hiện có cho bác sĩ này';
+    END IF;
+
+    IF EXISTS (
+        SELECT 1 FROM schedule
+        WHERE clinic_id = NEW.clinic_id
+          AND date = NEW.date
+          AND NOT (NEW.time_end <= time_start OR NEW.time_start >= time_end)
+    ) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Lịch trình bị chồng lấn với lịch hiện có cho phòng khám này';
+    END IF;
+END$$
+
+DELIMITER ;
+
+
+
+
+
+
+
+
+
 
 -- DELIMITER $$
 

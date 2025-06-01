@@ -16,7 +16,7 @@ public interface MedicalSpecialtyService {
     void addMSpecialty(MedicalSpecialtyRequestDTO specialtyRequestDTO);
     void updateMSpecialty(MedicalSpecialtyRequestDTO specialtyRequestDTO);
     void softDeleteMSpecialty(String specialtyId);
-
+    void changeStatusMSpecialty(String id, String status);
 
     List<BaseMedicalSpecialtyDTO> getAllActiveMSpecialties();
     PageResponse<BaseMedicalSpecialtyDTO> getPageActiveMSpecialties(PaginationRequest pageRequest);

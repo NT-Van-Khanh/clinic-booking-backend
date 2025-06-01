@@ -5,6 +5,7 @@ import com.ptithcm.clinic_booking.dto.doctor.DoctorResponseDTO;
 import com.ptithcm.clinic_booking.dto.doctor.DoctorSimpleResponseDTO;
 import com.ptithcm.clinic_booking.dto.manager.ManagerResponseDTO;
 import com.ptithcm.clinic_booking.dto.auth.AuthResponseDTO;
+import com.ptithcm.clinic_booking.exception.AccountDeletedException;
 import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
 import com.ptithcm.clinic_booking.factory.SendEmailFactory;
 import com.ptithcm.clinic_booking.mapper.DoctorMapper;
@@ -62,11 +63,17 @@ public class AuthServiceImpl implements AuthService {
         String authToken = jwtUtil.generateToken(userDetails);
 
         AuthResponseDTO authResponse = new AuthResponseDTO();
-        
+
         if (userDetails instanceof DoctorDetails doctorDetails) {
+            if ("DELETED".equals(doctorDetails.getDoctor().getStatus())){
+                throw new AccountDeletedException("Your account has been deleted.");
+            }
             DoctorResponseDTO doctorDTO = DoctorMapper.toDoctorDTO(doctorDetails.getDoctor());
             authResponse.setUser(doctorDTO);
         } else if (userDetails instanceof ManagerDetails managerDetails) {
+            if ("DELETED".equals(managerDetails.getManager().getStatus())){
+                throw new AccountDeletedException("Your account has been deleted.");
+            }
             ManagerResponseDTO managerDTO = ManagerMapper.toManagerDTO(managerDetails.getManager());
             authResponse.setUser(managerDTO);
         }
@@ -88,9 +95,26 @@ public class AuthServiceImpl implements AuthService {
         accountRepository.save(account);
     }
 
+    private void checkAvailableEmail(String email){
+        Doctor doctor = doctorRepository.findByEmail(email).orElse(null);
+        if (doctor == null) {
+            Manager manager = managerRepository.findByEmail(email).orElse(null);
+            if (manager == null)
+                throw new IllegalArgumentException("Email chưa được đăng ký trên hệ thống");
+            else{
+                if("DELETED".equals(manager.getStatus())){
+                    throw new AccountDeletedException("Your account has been deleted.");
+                }
+            }
+        }else if("DELETED".equals(doctor.getStatus())){
+            throw new AccountDeletedException("Your account has been deleted.");
+        }
+    }
+
     @Transactional
     @Override
     public void sendOtpToEmail(String email) {
+        checkAvailableEmail(email);
         boolean exists = doctorRepository.findByEmail(email).isPresent()
                              || managerRepository.findByEmail(email).isPresent();
         if (!exists) throw new IllegalArgumentException("Email này chưa được đăng ký trên hệ thống");

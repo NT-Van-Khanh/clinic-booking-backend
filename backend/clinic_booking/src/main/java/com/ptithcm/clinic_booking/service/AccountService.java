@@ -11,7 +11,7 @@ public  interface AccountService {
     void addAccount(AccountRequestDTO accountRequestDTO);
     void updateAccount(AccountRequestDTO accountRequestDTO);
     void softDeleteAccount(String username);
-
+    void changeStatusAccount(String username, String status);
     void changePassword(String username,String currentPassword, String newPassword);
 
     Page<AccountResponseDTO> getAllAccounts(Pageable pageable) ;

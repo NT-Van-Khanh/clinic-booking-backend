@@ -16,7 +16,7 @@ public interface ClinicService {
     void addClinic(ClinicCreateDTO clinicDTO);
     void updateClinic(ClinicDTO clinicDTO);
     void softDeleteClinic(String clinicId);
-
+    void changeStatusClinic(String id, String status);
     PageResponse<ClinicDTO> getPageActiveClinics(PaginationRequest pageRequest);
     PageResponse<ClinicDTO> getPageClinics(PaginationRequest pageRequest);
 

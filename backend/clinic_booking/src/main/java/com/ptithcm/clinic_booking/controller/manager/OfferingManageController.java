@@ -50,10 +50,14 @@ public class OfferingManageController {
         offeringService.updateService(serviceDTO);
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Cập nhật dịch vụ thành công."));
     }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse<String>> softDeleteService(@PathVariable  @NotBlank String id) {
-        offeringService.softDeleteService(id);
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Dịch vụ đã được xóa."));
+    @PutMapping("/update/status/{id}")
+    public ResponseEntity<ApiResponse<String>> updateStatusClinic(@PathVariable @NotBlank String id, @NotBlank String status){
+        offeringService.changeStatusService(id, status);
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Cập nhật trạng thái dịch vụ thành công."));
     }
+//    @DeleteMapping("/delete/{id}")
+//    public ResponseEntity<ApiResponse<String>> softDeleteService(@PathVariable  @NotBlank String id) {
+//        offeringService.softDeleteService(id);
+//        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Dịch vụ đã được xóa."));
+//    }
 }

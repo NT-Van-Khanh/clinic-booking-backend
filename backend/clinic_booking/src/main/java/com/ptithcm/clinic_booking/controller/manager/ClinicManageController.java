@@ -50,11 +50,17 @@ public class ClinicManageController {
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Cập nhật phòng khám thành công."));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse<String>> softDeleteClinic(@PathVariable  @NotBlank String id){
-        clinicService.softDeleteClinic(id);
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Phòng khám đã được xóa."));
+    @PutMapping("/update/status/{id}")
+    public ResponseEntity<ApiResponse<String>> updateStatusClinic(@PathVariable @NotBlank String id, @NotBlank String status){
+        clinicService.changeStatusClinic(id, status);
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Cập nhật trạng thái phòng khám thành công."));
     }
+
+//    @DeleteMapping("/delete/{id}")
+//    public ResponseEntity<ApiResponse<String>> softDeleteClinic(@PathVariable  @NotBlank String id){
+//        clinicService.softDeleteClinic(id);
+//        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Phòng khám đã được xóa."));
+//    }
 
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<PageResponse<ClinicDTO>>> searchClinics(@NotBlank String keyword, @ModelAttribute @Valid  PaginationRequest pageRequest){

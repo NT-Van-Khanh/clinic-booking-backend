@@ -213,14 +213,16 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Transactional
     @Override
-    public void changeDoctorStatus(String id, String status) {
+    public void changeStatusDoctor(String id, String status) {
         if (!status.equals("ACTIVE") && !status.equals("BLOCKED")) {
             throw new IllegalStateException("Trạng thái hiện tại không hợp lệ để đổi trạng thái.");
         }
         Doctor d = doctorRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Không thể đổi trạng thái. Không tìm thấy bác sĩ với ID: " + id));
-        if(d.getStatus().equals("DELETED"))
-            throw new ResourceNotFoundException("Đối tượng này đã bị xóa.");
+//        if(d.getStatus().equals("DELETED"))
+//            throw new ResourceNotFoundException("Đối tượng này đã bị xóa.");
+        Account a = d.getAccount();
+        accountService.changeStatusAccount(a.getUsername(), status);
         d.setStatus(status);
         doctorRepository.save(d);
     }

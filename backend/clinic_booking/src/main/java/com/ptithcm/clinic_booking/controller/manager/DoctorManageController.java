@@ -63,16 +63,16 @@ public class DoctorManageController {
 
     @PutMapping("/update/status/{id}")
     public ResponseEntity<ApiResponse<String>> updateDoctor(@PathVariable String id, @RequestBody String status){
-        doctorService.changeDoctorStatus(id, status);
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Cập nhật bác sĩ thành công"));
+        doctorService.changeStatusDoctor(id, status);
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Cập nhật trạng thái bác sĩ thành công"));
     }
 
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse<String>> softDeleteDoctor(@PathVariable  @NotBlank String id){
-        doctorService.softDeletingDoctor(id);
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Bác sĩ đã được xóa."));
-    }
+//    @DeleteMapping("/delete/{id}")
+//    public ResponseEntity<ApiResponse<String>> softDeleteDoctor(@PathVariable  @NotBlank String id){
+//        doctorService.softDeletingDoctor(id);
+//        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Bác sĩ đã được xóa."));
+//    }
 
     @PostMapping("/upload-image/{id}")
     public ResponseEntity<ApiResponse<String>> addDoctorImage(@PathVariable String id,@RequestParam("image")  MultipartFile image){

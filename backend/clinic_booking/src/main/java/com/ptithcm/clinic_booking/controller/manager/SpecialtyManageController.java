@@ -50,11 +50,18 @@ public class SpecialtyManageController {
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.CREATED,"Thêm chuyên khoa thành công."));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse<String>> softDeleteSpecialty(@PathVariable @NotBlank String id){
-        mSpecialtyService.softDeleteMSpecialty(id);
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Chuyên khoa đã được xóa."));
+//    @DeleteMapping("/delete/{id}")
+//    public ResponseEntity<ApiResponse<String>> softDeleteSpecialty(@PathVariable @NotBlank String id){
+//        mSpecialtyService.softDeleteMSpecialty(id);
+//        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Chuyên khoa đã được xóa."));
+//    }
+
+    @PutMapping("/update/status/{id}")
+    public ResponseEntity<ApiResponse<String>> updateStatusClinic(@PathVariable @NotBlank String id, @NotBlank String status){
+        mSpecialtyService.changeStatusMSpecialty(id, status);
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Cập nhật trạng thái chuyên khoa thành công."));
     }
+
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<PageResponse<MedicalSpecialtyResponseDTO>>> searchMSpecialties( @RequestParam String keyword,
                                                                                                      @ModelAttribute @Valid PaginationRequest pageRequest){

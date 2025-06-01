@@ -11,6 +11,7 @@ public interface ManagerService {
     void addManager(ManagerRequestDTO managerRequestDTO);
     void updateManager(ManagerResponseDTO managerResponseDTO);
     void softDeleteManager(String id);
+    void changeStatusManager(String id, String status);
 
     List<ManagerResponseDTO> getAllManagers();
     PageResponse<ManagerResponseDTO> getPageManagers(PaginationRequest pageable);

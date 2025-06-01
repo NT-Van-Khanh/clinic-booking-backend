@@ -104,6 +104,14 @@ public class OfferingServiceImpl implements OfferingService {
 
     }
 
+    @Override
+    public void changeStatusService(String id, String status) {
+        Service service = serviceRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dịch vụ có id: "+ id));
+        service.setStatus(status);
+        serviceRepository.save(service);
+    }
+
     @Transactional
     @Override
     public void softDeleteService(String id) {

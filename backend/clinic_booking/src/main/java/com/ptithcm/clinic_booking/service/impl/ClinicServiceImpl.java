@@ -111,4 +111,13 @@ public class ClinicServiceImpl implements ClinicService {
         c.setStatus("DELETED");
         clinicRepository.save(c);
     }
+
+    @Override
+    public void changeStatusClinic(String id, String status) {
+        Clinic c = clinicRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không thể xóa. Không tìm thấy phòng khám với ID: " + id));
+        c.setStatus(status);
+        clinicRepository.save(c);
+
+    }
 }

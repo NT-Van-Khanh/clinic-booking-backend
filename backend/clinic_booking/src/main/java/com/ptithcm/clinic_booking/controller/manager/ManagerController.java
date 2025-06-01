@@ -60,9 +60,15 @@ public class ManagerController {
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Cập nhật thành công"));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse<String>> softDeleteManager(@PathVariable String id){
-        managerService.softDeleteManager(id);
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,"Xóa thành công"));
+    @PutMapping("/update/status/{id}")
+    public ResponseEntity<ApiResponse<String>> updateStatusManager(@PathVariable String id, @RequestBody String status){
+        managerService.changeStatusManager(id, status);
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, "Cập nhật trạng thái quản lý thành công"));
     }
+
+//    @DeleteMapping("/delete/{id}")
+//    public ResponseEntity<ApiResponse<String>> softDeleteManager(@PathVariable String id){
+//        managerService.softDeleteManager(id);
+//        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,"Xóa thành công"));
+//    }
 }

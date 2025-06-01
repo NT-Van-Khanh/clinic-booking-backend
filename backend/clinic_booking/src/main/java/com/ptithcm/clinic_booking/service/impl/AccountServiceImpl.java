@@ -83,6 +83,17 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public void changeStatusAccount(String username, String status) {
+        if (!status.equals("ACTIVE") && !status.equals("BLOCKED") &&!status.equals("DELETED")) {
+            throw new IllegalStateException("Trạng thái không hợp lệ.");
+        }
+        Account account = accountRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy tài khoản cần cập nhật"));
+        account.setStatus(status);
+        accountRepository.save(account);
+    }
+
+    @Override
     public Page<AccountResponseDTO> getAllAccounts(Pageable pageable)  {
         return accountRepository.findAll(pageable)
                 .map(AccountMapper::toAccountResponseDTO);

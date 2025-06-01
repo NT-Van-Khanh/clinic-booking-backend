@@ -21,7 +21,7 @@ public interface DoctorService {
 
     void addDoctor(DoctorCreateDTO doctorDTO);
     void updateDoctor(DoctorSimpleResponseDTO doctor);
-    void changeDoctorStatus(String id, String status);
+    void changeStatusDoctor(String id, String status);
     void softDeletingDoctor(String id);
 
     PageResponse<DoctorResponseDTO> getPageDoctors(PaginationRequest pageRequest);

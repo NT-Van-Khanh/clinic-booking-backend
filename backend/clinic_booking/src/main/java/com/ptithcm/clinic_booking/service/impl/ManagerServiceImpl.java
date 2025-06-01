@@ -13,6 +13,8 @@ import com.ptithcm.clinic_booking.service.ManagerService;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,10 +59,38 @@ public class ManagerServiceImpl implements ManagerService {
     @Transactional
     @Override
     public void softDeleteManager(String id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+
+        Manager currentManager = managerRepository.findByAccountUsername(currentUsername)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy người dùng hiện tại"));
+
+        if (currentManager.getId().equals(id)) {
+            throw new IllegalArgumentException("Bạn không thể tự xóa tài khoản của mình.");
+        }
         Manager manager = managerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy quản lý với ID: " + id));
 
         manager.setStatus("DELETED");
+        managerRepository.save(manager);
+    }
+    @Transactional
+    @Override
+    public void changeStatusManager(String id, String status) {
+        if(status.equals("DELETED")){
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String currentUsername = authentication.getName();
+
+            Manager currentManager = managerRepository.findByAccountUsername(currentUsername)
+                    .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy người dùng hiện tại"));
+
+            if (currentManager.getId().equals(id))
+                throw new IllegalArgumentException("Bạn không thể tự xóa tài khoản của mình.");
+        }
+        Manager manager = managerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy quản lý với ID: " + id));
+
+        manager.setStatus(status);
         managerRepository.save(manager);
     }
 

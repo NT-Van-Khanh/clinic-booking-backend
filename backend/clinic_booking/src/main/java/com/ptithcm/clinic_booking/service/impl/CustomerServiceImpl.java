@@ -135,4 +135,13 @@ public class CustomerServiceImpl implements CustomerService {
                 .map(AppointmentMapper::toAppointmentDTO)
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    @Override
+    public void changeStatusCustomer(String id, String status) {
+        Customer customer = customerRepository.findById(Integer.valueOf(id))
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy khách hàng với ID: " + id));
+        customer.setStatus(status);
+        customerRepository.save(customer);
+    }
 }

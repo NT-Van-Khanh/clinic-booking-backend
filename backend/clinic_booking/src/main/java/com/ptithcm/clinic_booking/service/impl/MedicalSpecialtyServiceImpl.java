@@ -86,11 +86,19 @@ public class MedicalSpecialtyServiceImpl implements MedicalSpecialtyService {
     @Transactional
     @Override
     public void softDeleteMSpecialty(String specialtyId) {
-
         MedicalSpecialty specialty = specialtyRepository.findById(specialtyId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không thể xóa. Không tìm thấy chuyên khoa với ID: " + specialtyId));
 
         specialty.setStatus("DELETED");
+        specialtyRepository.save(specialty);
+    }
+
+    @Override
+    public void changeStatusMSpecialty(String id, String status) {
+        MedicalSpecialty specialty = specialtyRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không thể xóa. Không tìm thấy chuyên khoa với ID: " + id));
+
+        specialty.setStatus(status);
         specialtyRepository.save(specialty);
     }
 
