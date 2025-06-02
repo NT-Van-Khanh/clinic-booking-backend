@@ -30,10 +30,10 @@ public class AppointmentCreateDTO {
     @Schema(description = "Thông tin khách hàng")
     private CustomerRequestDTO customer;
 
-    @NotNull(message = "Số thứ tự không được để trống.")
-    @Min(value = 1, message = "Số thứ tự phải lớn hơn hoặc bằng 1.")
-    @Schema(description = "Số thứ tự trong danh sách", example = "1")
-    private Short numericalOrder;
+//    @NotNull(message = "Số thứ tự không được để trống.")
+//    @Min(value = 1, message = "Số thứ tự phải lớn hơn hoặc bằng 1.")
+//    @Schema(description = "Số thứ tự trong danh sách", example = "1")
+//    private Short numericalOrder;
 
     @NotBlank(message = "Ghi chú không được để trống.")
     @Size(max = 255, message = "Ghi chú không được vượt quá 255 ký tự.")

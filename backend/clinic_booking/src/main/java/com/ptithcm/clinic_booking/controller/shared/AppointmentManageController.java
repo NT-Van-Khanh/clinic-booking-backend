@@ -33,13 +33,13 @@ public class AppointmentManageController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<AppointmentDTO>> getAppointmentById(@PathVariable @NotBlank String id){
+    public ResponseEntity<ApiResponse<AppointmentDTO>> getAppointmentById(@PathVariable Integer id){
         AppointmentDTO appointment = appointmentService.getAppointmentById(id);
         return ResponseEntity.ok( new ApiResponse<>(HttpStatus.OK, appointment));
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse<String>> deleteAppointment(@NotBlank String id){
+    public ResponseEntity<ApiResponse<String>> deleteAppointment(@PathVariable Integer id){
         appointmentService.softDeleteAppointment(id);
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,"Xóa lịch hẹn thành công."));
     }

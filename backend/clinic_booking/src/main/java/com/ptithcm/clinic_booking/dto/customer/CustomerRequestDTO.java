@@ -3,6 +3,7 @@ package com.ptithcm.clinic_booking.dto.customer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,11 +17,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CustomerRequestDTO {
     @NotBlank(message = "Tên khách hàng không được để trống.")
-    @Size(max = 100, message = "Tên khách hàng không được vượt quá 100 ký tự.")
+    @Schema(description = "Tên khách hàng", example = "Nguyễn Văn A", maxLength = 100)
+    @Size(min = 1, max = 100, message = "Tên khách hàng không được vượt quá 100 ký tự.")
     private String name;
 
-    @NotBlank(message = "Số điện thoại không được để trống.")
-    @Size(max = 15, message = "Số điện thoại không được vượt quá 15 ký tự.")
+    @Schema(description = "Số điện thoại", example = "0912345678", pattern = "^(0|\\+84)[0-9]{9,10}$")
+    @NotBlank(message = "Số điện thoại không được để trống")
+    @Pattern(regexp = "^(0|\\+84)[0-9]{9,10}$", message = "Số điện thoại không hợp lệ")
+    @Size(min = 8, max = 15, message = "Số điện thoại không được vượt quá 15 ký tự.")
     private String phone;
 
     @NotBlank(message = "Email không được để trống.")

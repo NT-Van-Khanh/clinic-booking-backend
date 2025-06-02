@@ -1,5 +1,6 @@
 package com.ptithcm.clinic_booking.repository;
 
+import com.ptithcm.clinic_booking.dto.customer.CustomerDTO;
 import com.ptithcm.clinic_booking.model.Appointment;
 import com.ptithcm.clinic_booking.model.AppointmentStatus;
 import org.springframework.data.domain.Page;
@@ -14,11 +15,12 @@ import java.util.Optional;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Integer> {
     List<Appointment> findAllByCustomerId(Integer customerId);
+    boolean existsByCustomerIdAndScheduleId (Integer customerId, Integer scheduleId);
 
     Page<Appointment> findByScheduleDate(LocalDate date, Pageable pageable);
     Page<Appointment> findByStatus(AppointmentStatus status, Pageable pageable);
     List<Appointment> findByScheduleId(Integer scheduleId);
-    int countByScheduleId(Integer scheduleId);
+    short countByScheduleId(Integer scheduleId);
 
     @Query("SELECT a FROM Appointment a WHERE a.note LIKE %:keyword% OR a.customer.name LIKE %:keyword%")
     Page<Appointment> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);

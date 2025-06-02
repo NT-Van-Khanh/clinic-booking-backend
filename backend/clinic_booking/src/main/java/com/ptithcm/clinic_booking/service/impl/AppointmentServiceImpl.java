@@ -5,6 +5,7 @@ import com.ptithcm.clinic_booking.dto.PaginationRequest;
 import com.ptithcm.clinic_booking.dto.appointment.AppointmentCreateDTO;
 import com.ptithcm.clinic_booking.dto.appointment.AppointmentDTO;
 import com.ptithcm.clinic_booking.dto.customer.CustomerDTO;
+import com.ptithcm.clinic_booking.dto.service.ServiceDTO;
 import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
 import com.ptithcm.clinic_booking.mapper.AppointmentMapper;
 import com.ptithcm.clinic_booking.mapper.CustomerMapper;
@@ -14,6 +15,7 @@ import com.ptithcm.clinic_booking.model.Schedule;
 import com.ptithcm.clinic_booking.model.ScheduleStatus;
 import com.ptithcm.clinic_booking.repository.AppointmentRepository;
 import com.ptithcm.clinic_booking.repository.ScheduleRepository;
+import com.ptithcm.clinic_booking.repository.ServiceRepository;
 import com.ptithcm.clinic_booking.service.AppointmentService;
 import com.ptithcm.clinic_booking.service.CustomerService;
 import com.ptithcm.clinic_booking.service.OfferingService;
@@ -31,20 +33,22 @@ import java.util.stream.Collectors;
 public class AppointmentServiceImpl implements AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final CustomerService customerService;
-    private final OfferingService offeringService;
+    private final ServiceRepository serviceRepository;
     private final ScheduleRepository scheduleRepository;
 
-    public AppointmentServiceImpl(AppointmentRepository appointmentRepository, CustomerService customerService,
-                                  OfferingService offeringService, ScheduleRepository scheduleRepository) {
+    public AppointmentServiceImpl(AppointmentRepository appointmentRepository,
+                                  CustomerService customerService,
+                                  ServiceRepository serviceRepository,
+                                  ScheduleRepository scheduleRepository) {
         this.appointmentRepository = appointmentRepository;
         this.customerService = customerService;
-        this.offeringService = offeringService;
+        this.serviceRepository = serviceRepository;
         this.scheduleRepository = scheduleRepository;
     }
 
     @Override
-    public AppointmentDTO getAppointmentById(String id) {
-        Appointment appointment = appointmentRepository.findById(Integer.valueOf(id))
+    public AppointmentDTO getAppointmentById(Integer id) {
+        Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment not found with id: " + id));
         return AppointmentMapper.toAppointmentDTO(appointment);
     }
@@ -93,8 +97,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Transactional
     @Override
-    public void addAppointment(AppointmentCreateDTO appointmentDTO) {
-        offeringService.getServiceById(appointmentDTO.getServiceId());
+    public AppointmentDTO addAppointment(AppointmentCreateDTO appointmentDTO) {
+        com.ptithcm.clinic_booking.model.Service service = serviceRepository.findById(appointmentDTO.getServiceId())
+                .orElseThrow(() -> new RuntimeException("Service not found"));
 
         Schedule schedule = scheduleRepository.findById(appointmentDTO.getScheduleId())
                 .orElseThrow(() -> new RuntimeException("Schedule not found"));
@@ -102,18 +107,23 @@ public class AppointmentServiceImpl implements AppointmentService {
         if(schedule.getStatus()!= ScheduleStatus.ONGOING && schedule.getStatus() != ScheduleStatus.ACTIVE)
             throw new RuntimeException("Schedule is not available for booking");
 
-        Integer bookedCount = appointmentRepository.countByScheduleId(schedule.getId());
+        Short bookedCount = appointmentRepository.countByScheduleId(schedule.getId());
         if (schedule.getMaxBooking() <= bookedCount) {
             throw new RuntimeException("Maximum number of bookings for this schedule has been reached");
         }
-
         CustomerDTO savedCustomer = customerService.addCustomer(appointmentDTO.getCustomer());
-
+        if(appointmentRepository.existsByCustomerIdAndScheduleId(savedCustomer.getId(), schedule.getId())){
+            throw new IllegalStateException("This customer already has an appointment in this schedule.");
+        }
         Appointment appointment = AppointmentMapper.toAppointment(appointmentDTO);
         appointment.setSchedule(schedule);
+        appointment.setService(service);
         appointment.setCustomer(CustomerMapper.toCustomer(savedCustomer));
+        appointment.setNumericalOrder((short) (bookedCount + 1));
         appointment.setStatus(AppointmentStatus.CONFIRMED);
         appointmentRepository.save(appointment);
+
+        return AppointmentMapper.toAppointmentDTO(appointment);
     }
 
     @Override
@@ -146,8 +156,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public void softDeleteAppointment(String id) {
-        Appointment appointment = appointmentRepository.findById(Integer.valueOf(id))
+    public void softDeleteAppointment(Integer id) {
+        Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lịch hẹn với ID: " + id));
         appointment.setStatus(AppointmentStatus.DELETED);
         appointmentRepository.save(appointment);

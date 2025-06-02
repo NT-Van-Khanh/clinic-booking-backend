@@ -9,10 +9,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer,Integer> {
     List<Customer> findAllCustomerByStatus(String status);
+    List<Customer> findByPhoneAndEmail(String phone, String email);
+
+
     @Query("""
     SELECT c FROM Customer c 
     WHERE LOWER(c.name) LIKE LOWER(CONCAT('%', :keyword, '%'))

@@ -14,8 +14,9 @@ public interface CustomerService {
     PageResponse<CustomerDTO> getPageCustomers(PaginationRequest pageRequest);
     PageResponse<CustomerDTO> searchCustomers(String keyword, PaginationRequest pageRequest);
     CustomerDTO getCustomerById(String id);
-    void changeStatusCustomer(String id, String status);
+    List<CustomerDTO> getCustomerByPhoneAndEmail(String phone, String email);
 
+    void changeStatusCustomer(String id, String status);
     CustomerDTO addCustomer(CustomerRequestDTO customerDTO);
     void updateCustomer(CustomerDTO customerDTO);
     void softDeleteCustomer(String id);

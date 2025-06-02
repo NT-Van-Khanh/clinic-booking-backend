@@ -13,18 +13,18 @@ import java.util.List;
 
 public interface AppointmentService {
     //Chung
-    AppointmentDTO getAppointmentById(String id);
+    AppointmentDTO getAppointmentById(Integer id);
     PageResponse<AppointmentDTO> getAppointmentsByDate(LocalDate date, PaginationRequest pageRequest);
 
     // Quản lý: phân trang
     PageResponse<AppointmentDTO> getPageAppointments(PaginationRequest pageRequest);
     PageResponse<AppointmentDTO> getAppointmentsByStatus(AppointmentStatus status, PaginationRequest pageRequest);
     PageResponse<AppointmentDTO> searchAppointments(String keyword, PaginationRequest pageRequest);
-    void softDeleteAppointment(String appointmentId);
+    void softDeleteAppointment(Integer appointmentId);
 
     // Khách hàng-public
     AppointmentDTO getAppointmentByCustomerInfo(String email, String phone, Integer scheduleId);
-    void addAppointment(AppointmentCreateDTO appointmentDTO);
+    AppointmentDTO addAppointment(AppointmentCreateDTO appointmentDTO);
     void updateAppointment(AppointmentDTO appointmentDTO);
 
     // Bác sĩ- Quan lý

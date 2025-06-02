@@ -82,7 +82,25 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public List<CustomerDTO> getCustomerByPhoneAndEmail(String phone, String email) {
+        List<Customer> customers = customerRepository.findByPhoneAndEmail(phone, email);
+//                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy khách hàng với số điện thoại này"));
+        return customers.stream().map(CustomerMapper::toCustomerDTO)
+                        .collect(Collectors.toList());
+    }
+
+    @Override
     public CustomerDTO addCustomer(CustomerRequestDTO customerDTO) {
+        List<Customer> customers = customerRepository.findByPhoneAndEmail(customerDTO.getPhone(), customerDTO.getEmail());
+        if(customers != null) {
+            String newName;
+            for (Customer existingCustomer : customers) {
+                newName = customerDTO.getName();
+                if (existingCustomer.getName().equals(newName) || existingCustomer.getName().toLowerCase().contains(newName.toLowerCase())) {
+                    return CustomerMapper.toCustomerDTO(existingCustomer);
+                }
+            }
+        }
         Customer customer = CustomerMapper.toCustomer(customerDTO);
         customer.setStatus("ACTIVE");
         customerRepository.save(customer);

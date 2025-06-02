@@ -35,15 +35,15 @@ public class AppointmentController {
     }
 
     @GetMapping("/by-schedule")
-    public ResponseEntity<ApiResponse<List<AppointmentDTO>>> getAppointmentsBySchedule(@NotBlank Integer scheduleId){
+    public ResponseEntity<ApiResponse<List<AppointmentDTO>>> getAppointmentsBySchedule(Integer scheduleId){
         List<AppointmentDTO> appointments = appointmentService.getAppointmentsBySchedule(scheduleId);
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, appointments));
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse<String>> addAppointment(@RequestBody @Valid AppointmentCreateDTO appointment){
-        appointmentService.addAppointment(appointment);
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.CREATED, "Đăng ký lịch hẹn khám bệnh thành công."));
+    public ResponseEntity<ApiResponse<AppointmentDTO>> addAppointment(@RequestBody @Valid AppointmentCreateDTO appointment){
+        AppointmentDTO appointmentDTO   = appointmentService.addAppointment(appointment);
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.CREATED, appointmentDTO));
     }
 
     @PutMapping("/update")
@@ -53,7 +53,7 @@ public class AppointmentController {
     }
 
     @PostMapping("/count-by-schedule")
-    public ResponseEntity<ApiResponse<Integer>> countAppointmentsBySchedule(@NotBlank Integer scheduleId){
+    public ResponseEntity<ApiResponse<Integer>> countAppointmentsBySchedule(Integer scheduleId){
         int count = appointmentService.countAppointmentsBySchedule(scheduleId);
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.CREATED, count));
     }

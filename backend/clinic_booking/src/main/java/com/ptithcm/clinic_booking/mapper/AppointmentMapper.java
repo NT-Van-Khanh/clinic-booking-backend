@@ -47,7 +47,7 @@ public class AppointmentMapper {
                 .service(new Service(dto.getServiceId()))
                 .schedule(new Schedule(dto.getScheduleId()))
                 .customer(CustomerMapper.toCustomer(dto.getCustomer()))
-                .numericalOrder(dto.getNumericalOrder())
+//                .numericalOrder(dto.getNumericalOrder())
                 .note(dto.getNote())
                 .status(dto.getStatus())
                 .updatedBy(dto.getUpdatedByUser())
