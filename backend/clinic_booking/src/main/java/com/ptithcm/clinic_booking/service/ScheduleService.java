@@ -24,5 +24,7 @@ public interface ScheduleService {
     void softDeleteSchedule(Integer id);
 
     boolean isDoctorAvailable(String doctorId, LocalDate date);
+
+    PageResponse<ScheduleDTO> searchSchedules(String keyword, PaginationRequest pageRequest);
 //    boolean isServiceAvailable(String serviceId, LocalDateTime time);
 }

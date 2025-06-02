@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SendMailToAuth implements ISendMail {
+public class SendMailToAuth implements ISendMail<String> {
     private final EmailService emailService;
     private final EmailOtpService emailOtpService;
 
@@ -20,8 +20,8 @@ public class SendMailToAuth implements ISendMail {
 
     @Transactional
     @Override
-    public void sendOtpToEmail(String email) {
-        String otp = emailService.generateOtp();
+    public void sendOtpToEmail(String email, String otp) {
+//        String otp = emailService.generateOtp();
         String content = "Mã OTP của bạn là: " + otp + ". Vui lòng không chia sẻ mã này với người khác.";
         emailOtpService.saveEmailOtp(email, otp, EmailOtp.OtpPurpose.APPOINTMENT);
         emailService.sendMail(email,"Đặt lịch khám bệnh - Mã OTP xác minh email", content);

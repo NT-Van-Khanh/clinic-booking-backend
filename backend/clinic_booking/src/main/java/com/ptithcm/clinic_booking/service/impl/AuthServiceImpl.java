@@ -2,7 +2,6 @@ package com.ptithcm.clinic_booking.service.impl;
 
 import com.ptithcm.clinic_booking.config.JwtUtil;
 import com.ptithcm.clinic_booking.dto.doctor.DoctorResponseDTO;
-import com.ptithcm.clinic_booking.dto.doctor.DoctorSimpleResponseDTO;
 import com.ptithcm.clinic_booking.dto.manager.ManagerResponseDTO;
 import com.ptithcm.clinic_booking.dto.auth.AuthResponseDTO;
 import com.ptithcm.clinic_booking.exception.AccountDeletedException;
@@ -17,6 +16,7 @@ import com.ptithcm.clinic_booking.repository.ManagerRepository;
 import com.ptithcm.clinic_booking.service.AuthService;
 import com.ptithcm.clinic_booking.service.EmailOtpService;
 import com.ptithcm.clinic_booking.service.EmailService;
+import com.ptithcm.clinic_booking.util.OTPUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -118,8 +118,8 @@ public class AuthServiceImpl implements AuthService {
         boolean exists = doctorRepository.findByEmail(email).isPresent()
                              || managerRepository.findByEmail(email).isPresent();
         if (!exists) throw new IllegalArgumentException("Email này chưa được đăng ký trên hệ thống");
-
-        sendEmailFactory.createISendMail(EmailOtp.OtpPurpose.ACCOUNT_VERIFY).sendOtpToEmail(email);
+        String otp = OTPUtil.generateOtp();
+        sendEmailFactory.createISendMail(EmailPurpose.ACCOUNT_VERIFY).sendOtpToEmail(email, otp);
 
 //        String subject = "Quên mật khẩu - Mã OTP lấy lại mật khẩu";
 //        String otp = emailService.generateOtp();

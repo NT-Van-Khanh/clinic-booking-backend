@@ -165,6 +165,13 @@ public class ScheduleServiceImpl implements ScheduleService {
         return count == 0; // Bác sĩ có thể tham gia nếu không có lịch nào tại thời gian đ
     }
 
+    @Override
+    public PageResponse<ScheduleDTO> searchSchedules(String keyword, PaginationRequest pageRequest) {
+        Pageable pageable = pageRequest.toPageable();
+        Page<Schedule> page = scheduleRepository.searchByKeyword(keyword, pageable);
+        return new PageResponse<>(page.map(ScheduleMapper::toScheduleDTO));
+    }
+
 //    @Override
 //    public boolean isServiceAvailable(String serviceId, LocalDateTime time) {
 //        long count = scheduleRepository.countByServiceAndTime(serviceId, time);

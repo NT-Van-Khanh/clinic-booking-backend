@@ -215,7 +215,7 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public void changeStatusDoctor(String id, String status) {
         if (!status.equals("ACTIVE") && !status.equals("DELETED")) {
-            throw new IllegalStateException("Trạng thái hiện tại không hợp lệ để đổi trạng thái.");
+            throw new IllegalStateException("Trạng thái hiện tại không hợp lệ.");
         }
         Doctor d = doctorRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Không thể đổi trạng thái. Không tìm thấy bác sĩ với ID: " + id));

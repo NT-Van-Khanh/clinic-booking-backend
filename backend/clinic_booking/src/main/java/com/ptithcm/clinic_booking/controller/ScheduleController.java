@@ -6,6 +6,7 @@ import com.ptithcm.clinic_booking.dto.schedule.ScheduleDTO;
 import com.ptithcm.clinic_booking.model.ApiResponse;
 import com.ptithcm.clinic_booking.model.ScheduleStatus;
 import com.ptithcm.clinic_booking.service.ScheduleService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -41,6 +42,12 @@ public class ScheduleController {
     public ResponseEntity<ApiResponse<PageResponse<ScheduleDTO>>> getSchedulesPage(@ModelAttribute PaginationRequest page){
         PageResponse<ScheduleDTO> schedules = scheduleService.getPageSchedules(page);
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, schedules));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<PageResponse<ScheduleDTO>>> searchSchedulesPage(@RequestParam String keyword,
+                                                                                   @ModelAttribute @Valid PaginationRequest pageRequest){
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, scheduleService.searchSchedules(keyword, pageRequest)));
     }
 
     @GetMapping("/by_status/{status}")

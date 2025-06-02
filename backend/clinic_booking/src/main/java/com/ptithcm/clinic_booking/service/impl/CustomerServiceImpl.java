@@ -12,6 +12,7 @@ import com.ptithcm.clinic_booking.mapper.CustomerMapper;
 import com.ptithcm.clinic_booking.model.Appointment;
 import com.ptithcm.clinic_booking.model.Customer;
 import com.ptithcm.clinic_booking.model.EmailOtp;
+import com.ptithcm.clinic_booking.model.EmailPurpose;
 import com.ptithcm.clinic_booking.repository.AppointmentRepository;
 import com.ptithcm.clinic_booking.repository.CustomerRepository;
 import com.ptithcm.clinic_booking.service.CustomerService;
@@ -127,11 +128,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void sendOtpToEmail(String email) {
-//        String otp = emailService.generateOtp();
+        String otp = emailService.generateOtp();
 //        String content = "Mã OTP của bạn là: " + otp + ". Vui lòng không chia sẻ mã này với người khác.";
 //        emailOtpService.saveEmailOtp(email, otp, EmailOtp.OtpPurpose.APPOINTMENT);
 //        emailService.sendMail(email,"Đặt lịch khám bệnh - Mã OTP xác minh email",content);
-        sendEmailFactory.createISendMail(EmailOtp.OtpPurpose.APPOINTMENT).sendOtpToEmail(email);
+        sendEmailFactory.createISendMail(EmailPurpose.CUSTOMER_VERIFY).sendOtpToEmail(email, otp);
     }
 
     @Override

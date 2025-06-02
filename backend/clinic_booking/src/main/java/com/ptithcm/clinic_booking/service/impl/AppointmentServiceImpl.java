@@ -7,12 +7,11 @@ import com.ptithcm.clinic_booking.dto.appointment.AppointmentDTO;
 import com.ptithcm.clinic_booking.dto.customer.CustomerDTO;
 import com.ptithcm.clinic_booking.dto.service.ServiceDTO;
 import com.ptithcm.clinic_booking.exception.ResourceNotFoundException;
+import com.ptithcm.clinic_booking.factory.ISendMail;
+import com.ptithcm.clinic_booking.factory.SendEmailFactory;
 import com.ptithcm.clinic_booking.mapper.AppointmentMapper;
 import com.ptithcm.clinic_booking.mapper.CustomerMapper;
-import com.ptithcm.clinic_booking.model.Appointment;
-import com.ptithcm.clinic_booking.model.AppointmentStatus;
-import com.ptithcm.clinic_booking.model.Schedule;
-import com.ptithcm.clinic_booking.model.ScheduleStatus;
+import com.ptithcm.clinic_booking.model.*;
 import com.ptithcm.clinic_booking.repository.AppointmentRepository;
 import com.ptithcm.clinic_booking.repository.ScheduleRepository;
 import com.ptithcm.clinic_booking.repository.ServiceRepository;
@@ -35,15 +34,16 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final CustomerService customerService;
     private final ServiceRepository serviceRepository;
     private final ScheduleRepository scheduleRepository;
-
+    private final SendEmailFactory sendEmailFactory;
     public AppointmentServiceImpl(AppointmentRepository appointmentRepository,
                                   CustomerService customerService,
                                   ServiceRepository serviceRepository,
-                                  ScheduleRepository scheduleRepository) {
+                                  ScheduleRepository scheduleRepository, SendEmailFactory sendEmailFactory) {
         this.appointmentRepository = appointmentRepository;
         this.customerService = customerService;
         this.serviceRepository = serviceRepository;
         this.scheduleRepository = scheduleRepository;
+        this.sendEmailFactory = sendEmailFactory;
     }
 
     @Override
@@ -122,7 +122,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setNumericalOrder((short) (bookedCount + 1));
         appointment.setStatus(AppointmentStatus.CONFIRMED);
         appointmentRepository.save(appointment);
-
+        sendEmailFactory.createISendMail(EmailPurpose.APPOINTMENT_CONFIRMATION).sendOtpToEmail(savedCustomer.getEmail(), appointment);
         return AppointmentMapper.toAppointmentDTO(appointment);
     }
 
